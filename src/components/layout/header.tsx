@@ -3,7 +3,7 @@ import CurrentUser from "./current-user"
 import {Layout, Space} from "antd"
 const Header = () => {
     const headerStyles: React.CSSProperties={
-        background: "#fff",
+        background: "#9A031E",
         display:"flex",
         justifyContent: "flex-end",
         alignItems: "center",

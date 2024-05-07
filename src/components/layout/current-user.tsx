@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import CustomAvatar from '../custom-avatar'
 import { useGetIdentity } from '@refinedev/core'
 import { Text } from '../text'
-import { SettingOutlined } from '@ant-design/icons'
+import { LogoutOutlined, SettingOutlined } from '@ant-design/icons'
 
 const CurrentUser = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -20,11 +20,11 @@ const CurrentUser = () => {
         gap: '4px'
     }}>
         <Button style={{ textAlign: "left"}}
-        icon={<SettingOutlined/>}
+        icon={<LogoutOutlined/>}
         type='text'
         block
         onClick={()=>setIsOpen(true)}>
-            Opciones
+            Salir
         </Button>
     </div>
  </div>)

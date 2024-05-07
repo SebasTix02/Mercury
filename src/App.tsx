@@ -41,17 +41,11 @@ function App() {
                 }}
               >
                 <Routes>
-                  <Route index element={<WelcomePage />} />
-                  <Route index element={<Home/>}/>
                   <Route path="/forgotPassword" element={<ForgotPassword/>}/>
                   <Route path="/registrarse" element={<Register/>}/>
                   <Route path="/ingresar" element={<Login/>}/>
                   
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<WelcomePage />} /> {/* Optional for default route */}
-                    <Route path="/dashboard" element={<Home />} />
-                    {/* Add other layout-based routes here */}
-                  </Route>
+                    <Route path="/" element={<Home />} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
