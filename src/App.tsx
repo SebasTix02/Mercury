@@ -5,40 +5,33 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
-import dataProvider, {
-  GraphQLClient,
+import {authProvider, dataProvider,
   liveProvider,
-} from "@refinedev/nestjs-query";
+} from "./providers";
 import routerBindings, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
-import { createClient } from "graphql-ws";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { authProvider } from "./authProvider";
-import { ColorModeContextProvider } from "./contexts/color-mode";
-
-const API_URL = "https://api.nestjs-query.refine.dev/graphql";
-const WS_URL = "wss://api.nestjs-query.refine.dev/graphql";
-
-const gqlClient = new GraphQLClient(API_URL);
-const wsClient = createClient({ url: WS_URL });
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {ForgotPassword, Login, Register, Home} from "./pages"
+import Layout from "./components/layout";
+import { resources } from "./config/resources";
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
-        <ColorModeContextProvider>
+        <>
           <AntdApp>
             <DevtoolsProvider>
               <Refine
-                dataProvider={dataProvider(gqlClient)}
-                liveProvider={liveProvider(wsClient)}
+                dataProvider={dataProvider}
+                liveProvider={liveProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
                 authProvider={authProvider}
+                resources={resources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -49,15 +42,24 @@ function App() {
               >
                 <Routes>
                   <Route index element={<WelcomePage />} />
+                  <Route index element={<Home/>}/>
+                  <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+                  <Route path="/registrarse" element={<Register/>}/>
+                  <Route path="/ingresar" element={<Login/>}/>
+                  
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<WelcomePage />} /> {/* Optional for default route */}
+                    <Route path="/dashboard" element={<Home />} />
+                    {/* Add other layout-based routes here */}
+                  </Route>
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
                 <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
-        </ColorModeContextProvider>
+        </>
       </RefineKbarProvider>
     </BrowserRouter>
   );

@@ -1,0 +1,129 @@
+/* login.module.css */
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url("src/images/fondo.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Adjusted media query for tablets and smaller screens */
+@media (max-width: 768px) {
+  .login-container {
+    /* Adjust background image position for smaller screens */
+    
+    display: flex;
+    flex-direction: column;
+    align-items: top;
+    justify-content: top;
+    background-position: top center; /* Center image vertically */
+    height: 100vh; /* Adjust container height to accommodate the image */
+  }
+  .login-card{
+    margin-bottom: 30% !important;
+  }
+}
+
+.login-card {
+  background-color: #1F2421;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 27rem;
+  margin: 0 auto;
+}
+
+/* Responsive adjustments for login-card */
+@media (max-width: 768px) {
+  .login-card {
+    width: 90%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    width: 95%;
+    max-width: 350px;
+    margin-top: 0;
+  }
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.login-description {
+  font-size: 0.8rem;
+  font-family: Arial, Helvetica, sans-serif;
+  color: rgba(255, 255, 255, 0.59);
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+@media (max-width: 480px) {
+  .login-title,
+  .login-description {
+    font-size: 1rem; /* Adjust font size for smaller screens */
+  }
+}
+
+.login-form {
+  width: 100%;
+  color: white;
+  margin-bottom: 2.5rem;
+}
+
+.login-form-item {
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.ant-form-item-label {
+  color: white;
+}
+
+.login-input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  height: max-content;
+  background-color: #9A031E;
+  border-color: rgb(75, 0, 0);
+  color: #ffffff;
+  padding: 0.8rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button:hover {
+  background-color: #420000 !important;
+  color: #ffffff !important;
+}
+
+/* Added media query for potentially large buttons on smaller screens */
+@media (max-width: 480px) {
+  .login-button {
+    font-size: 0.8rem; /* Adjust font size for smaller screens */
+    padding: 0.5rem; /* Reduce padding for better button size */
+  }
+}
