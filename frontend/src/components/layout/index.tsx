@@ -3,6 +3,7 @@ import Header from "./header"
 import { BugOutlined } from "@ant-design/icons"
 import logo from '../../images/logo.png'
 const Layout = ({children}: React.PropsWithChildren) => {
+
   return (
     <ThemedLayoutV2 
     Header={Header}

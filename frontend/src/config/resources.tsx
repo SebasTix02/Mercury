@@ -1,4 +1,6 @@
-import { BoxPlotOutlined, CopyOutlined, DashboardOutlined, GoldOutlined, ProductOutlined, ShopOutlined, TagOutlined, ToolOutlined, UserSwitchOutlined } from "@ant-design/icons";
+
+import { BoxPlotOutlined, CopyOutlined, DashboardOutlined, FallOutlined, GoldOutlined, HomeOutlined, ProductOutlined, ShopOutlined, TagOutlined, ToolOutlined, UserSwitchOutlined } from "@ant-design/icons";
+
 import { IResourceItem } from "@refinedev/core";
 
 export const resources: IResourceItem[] = [
@@ -7,7 +9,7 @@ export const resources: IResourceItem[] = [
         list: '/',
         meta: {
             label: 'Inicio',
-            icon: <DashboardOutlined/>
+            icon: <HomeOutlined/>
         }
     },
     {
@@ -23,7 +25,7 @@ export const resources: IResourceItem[] = [
       list: '/inventario',
       meta: {
         label: 'Inventario',
-        icon: <ProductOutlined/>
+        icon: <CopyOutlined/>
       }
     },
     {
@@ -39,7 +41,7 @@ export const resources: IResourceItem[] = [
       list: '/reportes',
       meta: {
         label: 'Reportes',
-        icon: <CopyOutlined/>
+        icon: <FallOutlined/>
       }
     },
     {

@@ -14,7 +14,7 @@ import routerBindings, {
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import {ForgotPassword, Login, Register, Home} from "./pages"
+import {ForgotPassword, Login, Register, Home, ListaUsuarios} from "./pages"
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 
@@ -44,8 +44,9 @@ function App() {
                   <Route path="/forgotPassword" element={<ForgotPassword/>}/>
                   <Route path="/registrarse" element={<Register/>}/>
                   <Route path="/ingresar" element={<Login/>}/>
-                  
-                    <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Home />} />
+                  <Route path="/usuarios" element={<ListaUsuarios />} />
+
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
