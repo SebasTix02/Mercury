@@ -12,16 +12,9 @@ export const Login = () => {
     console.log('Login form submitted:', values);
 
     // Assuming successful login, redirect to register page
-    navigate('/dashboard');
+    navigate('/');
   };
-/**
- * 
- * 
- * Minuto 42:56
- * 
- * 
- * 
- */
+
   return (
     <div className="login-container">
       <div className="login-card">
