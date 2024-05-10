@@ -11,7 +11,11 @@ exports.getAssets = async (request, response) => {
                 LEFT JOIN BRAND AS brand ON brand.ID = asset.BRAND_ID
                 LEFT JOIN DEPENDENCY AS dependency ON dependency.ID = asset.ACQUISITION_DEPENDENCY_ID
                 LEFT JOIN LOCATION AS location ON location.ID = asset.LOCATION_ID
-                LEFT JOIN BUILDING AS building ON building.ID = location.BUILDING_ID`
+                LEFT JOIN BUILDING AS building ON building.ID = location.BUILDING_ID
+            WHERE asset.ASSET_KEY NOT IN (
+                SELECT ASSET_KEY
+                FROM COMPUTER
+            )`
         );
         response.json(data);
     }catch(error){
