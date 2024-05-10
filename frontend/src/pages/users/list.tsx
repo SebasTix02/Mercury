@@ -3,6 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Layout from '../../components/layout';
 import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import CustomTable from '../../common/table/custom_table';
 
 export const ListaUsuarios = () => {
   const [dataSource, setDataSource] = useState([
@@ -66,13 +67,6 @@ export const ListaUsuarios = () => {
     setIsAddModalVisible(false);
   };
 
-  const handleSearch = (value: string) => {
-    const filteredData = dataSource.filter((item) =>
-      item.nombre.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredDataSource(filteredData);
-  };
-
   const columns = [
     {
       title: 'Id',
@@ -120,27 +114,11 @@ export const ListaUsuarios = () => {
       <div style={{ padding: '20px' }}>
         <h1 style={{ marginBottom: '20px' }}>Lista de Usuarios</h1>
         <Row gutter={[16, 16]}>
-          <Col span={12}>
-            <Input
-              placeholder="Buscar por nombre"
-              prefix={<SearchOutlined />}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-          </Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-              Agregar
-            </Button>
-          </Col>
         </Row>
 
-        <Table
-          dataSource={filteredDataSource}
-          columns={columns}
-          scroll={{ x: '100%' }}
-          style={{ overflowX: 'auto', marginTop: '20px' }}
-          pagination={{ pageSize: 6 }} 
-        />
+        <CustomTable dataSource={dataSource} columns={columns} rowKey="id" handleAdd={handleAdd} searchFields={['nombre', 'telefono', 'correo']}/>
+
+
       </div>
 
       <Modal
