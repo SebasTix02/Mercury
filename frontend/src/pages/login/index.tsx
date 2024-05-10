@@ -11,7 +11,7 @@ export const Login = () => {
     // Implement your login logic here (e.g., API call, authentication)
     console.log('Login form submitted:', values);
 
-    // Assuming successful login, redirect to register page
+   
     navigate('/');
   };
 
