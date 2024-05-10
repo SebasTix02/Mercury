@@ -1,0 +1,769 @@
+OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIMPRE, PERO NO SE DEBE MOSTRAR EN EL FRONT
+
+1. Bloques
+    GET http://localhost:4000/mercury/building
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "BLOQUE 1",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 2,
+                "NAME": "BLOQUE 2",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 3,
+                "NAME": "BLOQUE 3",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 4,
+                "NAME": "Prueba Insert",
+                "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/building/:id
+
+        Devuelve: 
+        {
+            "ID": 4,
+            "NAME": "Prueba Insert",
+            "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+        }
+        
+    POST http://localhost:4000/mercury/building
+
+        Recibe:
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+    PUT http://localhost:4000/mercury/building/:id
+
+        Recibe
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/building/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+2. Ubicaciones
+    GET http://localhost:4000/mercury/location
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "BLOQUE 2",
+                "BUILDING": "LABORATORIO  CTT"
+            },
+            {
+                "ID": 2,
+                "NAME": "BLOQUE 2",
+                "BUILDING": "LABORATORIO  INDUSTRIAL 1"
+            },
+            {
+                "ID": 3,
+                "NAME": "BLOQUE 3",
+                "BUILDING": "LABORATORIO 1"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/location/:id
+
+        Devuelve: 
+        {
+            "ID": 1,
+            "NAME": "BLOQUE 2",
+            "BUILDING": "LABORATORIO  CTT"
+        }
+        
+    POST http://localhost:4000/mercury/location
+
+        Recibe:
+        {
+            "name": "Nombresito gigaprosito",
+            "buildingId": 4
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+    PUT http://localhost:4000/mercury/location/:id
+
+        Recibe
+        {
+            "name": "Nombresito gigaprosito",
+            "buildingId": 4
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/location/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+3. Marcas
+    GET http://localhost:4000/mercury/brand
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "VILLACIS HNOS.",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 2,
+                "NAME": "SIN MARCA",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/brand/:id
+
+        Devuelve: 
+        {
+            "ID": 2,
+            "NAME": "SIN MARCA",
+            "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+        }
+        
+    POST http://localhost:4000/mercury/brand
+
+        Recibe:
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+    PUT http://localhost:4000/mercury/brand/:id
+
+        Recibe
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/brand/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+4. Categorías
+    GET http://localhost:4000/mercury/category
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "BIENES SUJETOS A CONTROL",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 2,
+                "NAME": "MUEBLES DE OFICINA",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 3,
+                "NAME": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/category/:id
+
+        Devuelve: 
+        {
+            "ID": 1,
+            "NAME": "BIENES SUJETOS A CONTROL",
+            "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+        }
+        
+    POST http://localhost:4000/mercury/category
+
+        Recibe:
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+    PUT http://localhost:4000/mercury/category/:id
+
+        Recibe
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/category/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+4. Dependencias
+    GET http://localhost:4000/mercury/dependency
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "DEPENDENCIA 1",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 2,
+                "NAME": "DEPENDENCIA 2",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            },
+            {
+                "ID": 3,
+                "NAME": "DEPENDENCIA 3",
+                "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/dependency/:id
+
+        Devuelve: 
+        {
+            "ID": 2,
+            "NAME": "DEPENDENCIA 2",
+            "CREATION_DATE": "2024-05-07T05:00:00.000Z"
+        }
+        
+    POST http://localhost:4000/mercury/dependency
+
+        Recibe:
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/dependency/:id
+
+        Recibe
+        {
+            "name": "Nombresito gigaprosito"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/dependency/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+
+5. Bienes Comunes
+
+    GET http://localhost:4000/mercury/asset
+
+        Devuelve:
+        [
+            {
+                "ASSET_KEY": 521250,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "MULTIMEDIA DLP 3200 LUMENS",
+                "FEATURE": null,
+                "SERIES": "4600888EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 1",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "SALAZAR LOGROÃ‘O FRANKLIN",
+                "BUILDING": null,
+                "LOCATION": null
+            },
+            {
+                "ASSET_KEY": 521251,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "MULTIMEDIA DLP 3200 LUMENS",
+                "FEATURE": null,
+                "SERIES": "4600904EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
+                "BUILDING": null,
+                "LOCATION": null
+            },
+            {
+                "ASSET_KEY": 521252,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "NP M322X",
+                "FEATURE": null,
+                "SERIES": "4600906EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
+                "BUILDING": null,
+                "LOCATION": null
+            }
+        ]
+
+    GET http://localhost:4000/mercury/asset/:id
+
+        Recibe:
+        {
+            "ASSET_KEY": 521252,
+            "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+            "NAME": "PROYECTOR",
+            "BRAND": "NEC",
+            "MODEL": "NP M322X",
+            "FEATURE": null,
+            "SERIES": "4600906EC",
+            "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+            "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+            "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
+            "BUILDING": null,
+            "LOCATION": null
+        }
+
+
+    POST http://localhost:4000/mercury/asset
+
+        Recibe:
+        {
+            "assetKey": 9999991,
+            "categoryId": 2,
+            "name": "MESA RECTANGULAR",
+            "brandId": 6,
+            "model": "MESA BIPERSONAL",
+            "feature": "MIXTO",
+            "series": "4382396",
+            "acquisitionDependencyId": 2,
+            "entryDate": "2024-05-08",
+            "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+            "locationId": 10
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/asset/:id
+
+        Recibe:
+        {
+            "categoryId": 2,
+            "name": "MESA RECTANGULAR",
+            "brandId": 6,
+            "model": "MESA BIPERSONAL",
+            "feature": "MIXTO",
+            "series": "4382396",
+            "acquisitionDependencyId": 2,
+            "entryDate": "2024-05-08",
+            "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+            "locationId": 10
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/asset/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+6. Software
+    GET http://localhost:4000/mercury/software
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "Software despidos",
+                "VERSION": "2.3",
+                "LICENSE": "PROPIETARIO",
+                "LICENSE_DURATION": "1 AÑO",
+                "LAB_TYPE": "ESPECIALIZACIÓN",
+                "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
+                "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+            }
+        ]
+    GET http://localhost:4000/mercury/software/:id
+
+        Devuelve:
+        {
+            "ID": 1,
+            "NAME": "Software despidos",
+            "VERSION": "2.3",
+            "LICENSE": "PROPIETARIO",
+            "LICENSE_DURATION": "1 AÑO",
+            "LAB_TYPE": "ESPECIALIZACIÓN",
+            "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
+            "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+        }
+
+    POST http://localhost:4000/mercury/software
+
+        Recibe:
+        {
+            "name": "PruebaUpdate",
+            "version": "0.0.1",
+            "license": "PROPIETARIO",
+            "licenseDuration": "1 LUSTRO",
+            "labType": "CARPENTEER",
+            "entryDate": "2024-05-08"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/software/:id
+
+        Recibe:
+        {
+            "name": "PruebaUpdate",
+            "version": "0.0.1",
+            "license": "PROPIETARIO",
+            "licenseDuration": "1 LUSTRO",
+            "labType": "CARPENTEER",
+            "entryDate": "2024-05-08"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/software/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+7. Usuario
+
+    GET http://localhost:4000/mercury/user
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "ID_NUMBER": "1850062876",
+                "FIRST_NAME": "Jonas",
+                "MIDDLE_NAME": null,
+                "LASTNAME": "Kahnwald",
+                "SECOND_LASTNAME": null,
+                "CELLPHONE": "03-25876",
+                "EMAIL": "random@gmail.com",
+                "PASSWORD": "1_23",
+                "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/user/:id
+
+        Devuelve:
+        {
+            "ID": 1,
+            "ID_NUMBER": "1850062876",
+            "FIRST_NAME": "Jonas",
+            "MIDDLE_NAME": null,
+            "LASTNAME": "Kahnwald",
+            "SECOND_LASTNAME": null,
+            "CELLPHONE": "03-25876",
+            "EMAIL": "random@gmail.com",
+            "PASSWORD": "1_23",
+            "CREATION_DATE": "2024-05-08T05:00:00.000Z"
+        }
+
+    POST http://localhost:4000/mercury/user
+
+        Recibe:
+        {
+            "idNumber": "1850062876",
+            "firstName": "Jonas",
+            "middleName": null,
+            "lastname": "Kahnwald",
+            "secondLastname": null,
+            "cellphone": "03-25876",
+            "email": "random@gmail.com",
+            "password": "1_23"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 187,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/user/:id
+
+        Recibe:
+        {
+            "idNumber": "1850062876",
+            "firstName": "Jonas",
+            "middleName": null,
+            "lastname": "Kahnwald",
+            "secondLastname": null,
+            "cellphone": "03-25876",
+            "email": "random@gmail.com",
+            "password": "1_23"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/user/:id
+
+        Devuelve: 
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    Error: 
+        Código HTTP 500
+        {
+            "error": 'El correo electrónico proporcionado ya existe'
+        }
+        {
+            "error": 'Error al intentar iniciar sesión'
+        }
+
+8. Login
+
+    POST http://localhost:4000/mercury/login
+        Recibe:
+        {
+            "username": "random@gmail.com",
+            "password": "123"
+        }
+
+        Devuelve:
+        {
+            "ID_NUMBER": "1850062876",
+            "FIRST_NAME": "Jonas",
+            "LASTNAME": "Kahnwald"
+        }
+
+    Error
+        Código HTTP 500
+        {
+            "error": "Credenciales Incorrectas"
+        }
+        {
+            "error": 'Error al intentar iniciar sesión'
+        }
