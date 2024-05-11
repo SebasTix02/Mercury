@@ -767,3 +767,140 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
         {
             "error": 'Error al intentar iniciar sesión'
         }
+
+9. Computador
+
+GET 
+[
+    {
+        "ASSET_KEY": 32390859,
+        "COMPUTER_ID": 1,
+        "CATEGORY": "EQUIPO ELECTRONICO",
+        "NAME": "COMPUTADOR DE ESCRITORIO",
+        "BUILDING": "BLOQUE 2",
+        "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+        "BRAND": "DELL",
+        "MODEL": "OPTIPLEX 7070",
+        "OPERATIVE_SYSTEM": "WINDOWS",
+        "IP": "172.21.111.101",
+        "RAM_CAPACITY": "32 GB",
+        "DISK_CAPACITY": "2.25 TB",
+        "GRAPH_CAPACITY": null,
+        "FEATURE": null,
+        "SERIES": "4J48673",
+        "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+        "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+        "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+    },
+    {
+        "ASSET_KEY": 32390860,
+        "COMPUTER_ID": 2,
+        "CATEGORY": "EQUIPO ELECTRONICO",
+        "NAME": "COMPUTADOR DE ESCRITORIO",
+        "BUILDING": null,
+        "LOCATION": null,
+        "BRAND": "DELL",
+        "MODEL": "OPTIPLEX 7070",
+        "OPERATIVE_SYSTEM": "WINDOWS",
+        "IP": "172.21.111.102",
+        "RAM_CAPACITY": "32 GB",
+        "DISK_CAPACITY": "2.25 TB",
+        "GRAPH_CAPACITY": null,
+        "FEATURE": null,
+        "SERIES": "4J21J63",
+        "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+        "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+        "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+    }
+]
+
+GET 
+{
+    "ASSET_KEY": 32390859,
+    "COMPUTER_ID": 1,
+    "CATEGORY": "EQUIPO ELECTRONICO",
+    "NAME": "COMPUTADOR DE ESCRITORIO",
+    "BUILDING": "BLOQUE 2",
+    "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+    "BRAND": "DELL",
+    "MODEL": "OPTIPLEX 7070",
+    "OPERATIVE_SYSTEM": "WINDOWS",
+    "IP": "172.21.111.101",
+    "RAM_CAPACITY": "32 GB",
+    "DISK_CAPACITY": "2.25 TB",
+    "GRAPH_CAPACITY": null,
+    "FEATURE": null,
+    "SERIES": "4J48673",
+    "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+    "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+    "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+}
+
+POST 
+
+{
+    "assetKey": 1,
+    "categoryId": 5,
+    "name": "COMPUTADOR A ELIMINAR",
+    "brandId": 69,
+    "model": "CORE 2 DUO",
+    "feature": null,
+    "series": "07820041250141",
+    "acquisitionDependencyId": 3,
+    "entryDate": "2010-01-22",
+    "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+    "locationId": 5,
+    "ip": "A Eliminar",
+    "operativeSystem": "A eliminar"
+}
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 263,
+    "info": "",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
+
+PUT
+
+{
+    "categoryId": 5,
+    "name": "COMPUTADORESSSS A ELIMINAR",
+    "brandId": 69,
+    "model": "CORE 2 DUO",
+    "feature": null,
+    "series": "07820041250141",
+    "acquisitionDependencyId": 3,
+    "entryDate": "2010-01-22",
+    "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+    "locationId": 5,
+    "ip": "A Eliminar",
+    "operativeSystem": "A eliminar"
+}
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 0,
+    "info": "Rows matched: 1  Changed: 0  Warnings: 0",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
+
+DELETE
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 0,
+    "info": "",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
+
+10. Componente Computador

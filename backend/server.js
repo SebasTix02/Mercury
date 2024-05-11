@@ -9,6 +9,7 @@ const assetRoutes = require('./routes/asset');
 const softwareRoutes = require('./routes/software');
 const userRoutes = require('./routes/user');
 const loginRoutes = require('./routes/login');
+const computerRoutes = require('./routes/computer');
 
 const HTTP_SERVER = express();
 
@@ -31,6 +32,7 @@ HTTP_SERVER.use('/mercury/asset', assetRoutes);
 HTTP_SERVER.use('/mercury/software', softwareRoutes);
 HTTP_SERVER.use('/mercury/user', userRoutes);
 HTTP_SERVER.use('/mercury/login', loginRoutes);
+HTTP_SERVER.use('/mercury/computer', computerRoutes);
 
 // Arranque del servidor
 HTTP_SERVER.listen(4000, () => {
