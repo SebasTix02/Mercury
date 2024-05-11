@@ -4,6 +4,7 @@ import Layout from '../../components/layout';
 import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
+import CustomModal from '../../common/modal/custom_modal';
 
 export const ListaUsuarios = () => {
   const [dataSource, setDataSource] = useState([
@@ -45,6 +46,10 @@ export const ListaUsuarios = () => {
   };
 
   const handleEditOk = () => {
+    const updatedData = dataSource.map((item) =>
+      item.id === selectedRecord.id ? { ...item, ...selectedRecord } : item
+    );
+    setDataSource(updatedData);
     setIsEditModalVisible(false);
   };
 
@@ -77,21 +82,25 @@ export const ListaUsuarios = () => {
       title: 'Nombre',
       dataIndex: 'nombre',
       key: 'nombre',
+      rules: [{ required: true, message: '¡Por favor ingresa el nombre!' }]
     },
     {
       title: 'Teléfono',
       dataIndex: 'telefono',
       key: 'telefono',
+      rules: [{ required: true, message: '¡Por favor ingresa el teléfono!' }]
     },
     {
       title: 'Cédula',
       dataIndex: 'cedula',
       key: 'cedula',
+      rules: [{ required: true, message: '¡Por favor ingresa la cédula!' }]
     },
     {
       title: 'Correo',
       dataIndex: 'correo',
       key: 'correo',
+      rules: [{ required: true, message: '¡Por favor ingresa el correo!' }]
     },
     {
       title: 'Acciones',
@@ -115,73 +124,36 @@ export const ListaUsuarios = () => {
         <h1 style={{ marginBottom: '20px' }}>Lista de Usuarios</h1>
         <Row gutter={[16, 16]}>
         </Row>
-
         <CustomTable dataSource={dataSource} columns={columns} rowKey="id" handleAdd={handleAdd} searchFields={['nombre', 'telefono', 'correo']}/>
-
-
       </div>
 
-      <Modal
-        title="Editar Usuario"
-        visible={isEditModalVisible}
-        onOk={handleEditOk}
-        onCancel={() => setIsEditModalVisible(false)}
-      >
-        <Form
-          layout="vertical"
-          onFinish={(values) => handleEditOk()}
-          initialValues={selectedRecord}
+      <CustomModal
+        modalTitle="Editar Usuario"
+        isVisible={isEditModalVisible}
+        handleVisible={setIsEditModalVisible}
+        handleAddEdit={handleEditOk}
+        columns={columns}
+        selectedRecord={selectedRecord}
+      ></CustomModal>
+
+      <CustomModal
+        text='¿Estás seguro de que deseas eliminar este usuario?'
+        modalTitle="Confirmar Eliminación"
+        isVisible={isDeleteModalVisible}
+        handleOk={handleDeleteOk}
+        handleVisible={setIsDeleteModalVisible}
         >
-          <Form.Item label="Nombre" name="nombre">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Teléfono" name="telefono">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Cédula" name="cedula">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Correo" name="correo">
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
+      </CustomModal>
 
-      <Modal
-        title="Confirmar Eliminación"
-        visible={isDeleteModalVisible}
-        onOk={handleDeleteOk}
-        onCancel={() => setIsDeleteModalVisible(false)}
-      >
-        <p>¿Estás seguro de que deseas eliminar este usuario?</p>
-      </Modal>
+      <CustomModal
+        modalTitle="Agregar Usuario"
+        isVisible={isAddModalVisible}
+        handleVisible={setIsAddModalVisible}
+        isAdding ={true}
+        handleAddEdit={handleAddOk}
+        columns={columns}
+      ></CustomModal>
 
-      <Modal
-        title="Agregar Usuario"
-        visible={isAddModalVisible}
-        onCancel={() => setIsAddModalVisible(false)}
-        footer={null}
-      >
-        <Form layout="vertical" onFinish={handleAddOk}>
-          <Form.Item label="Nombre" name="nombre" rules={[{ required: true, message: '¡Por favor ingresa el nombre!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Teléfono" name="telefono" rules={[{ required: true, message: '¡Por favor ingresa el teléfono!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Cédula" name="cedula" rules={[{ required: true, message: '¡Por favor ingresa la cédula!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Correo" name="correo" rules={[{ required: true, message: '¡Por favor ingresa el correo!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Agregar
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
     </Layout>
   );
 };
