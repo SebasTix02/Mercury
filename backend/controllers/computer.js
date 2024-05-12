@@ -86,6 +86,21 @@ exports.updateComputer = async (request, response) => {
             feature, series, acquisitionDependencyId, entryDate, 
             currentCustodian, locationId, assetKey]
         );
+        const [computerComponentResponse]  = await connection.query(
+            `UPDATE ASSET
+                SET  LOCATION_ID = ?   
+            WHERE ASSET_KEY IN (
+                SELECT ASSET_KEY 
+                FROM COMPUTER_COMPONENT
+                WHERE ASSET_KEY IS NOT NULL
+                AND COMPUTER_ID = (
+                    SELECT ID 
+                    FROM COMPUTER
+                    WHERE ASSET_KEY = ?
+                )
+            )`,
+            [locationId, assetKey]
+        );
         const [computerResponse]  = await connection.query(
             `UPDATE COMPUTER
                 SET IP = ?, OPERATIVE_SYSTEM = ?  

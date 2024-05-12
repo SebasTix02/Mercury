@@ -968,7 +968,7 @@ PUT
     "assetKey": null,
     "name": "TECLADO",
     "isCase": 0,
-    "locationId": 8,
+    "locationId": null,
     "position": "PC 08",
     "status": 1
 }
