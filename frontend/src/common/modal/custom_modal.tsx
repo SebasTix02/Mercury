@@ -1,4 +1,4 @@
-import { Button, Modal, Form, Input, Space } from 'antd';
+import { Button, Modal, Form, Input, Space, Divider } from 'antd';
 
 interface Props {
     modalTitle: string,
@@ -10,6 +10,9 @@ interface Props {
     handleAddEdit?: any;
     columns?: any;
     selectedRecord?: any;
+    icon?: React.ReactNode;
+    iconColor?: string;
+    iconBackgroundColor?: string;
 }
 
 const CustomModal: React.FC<Props> = (
@@ -21,7 +24,10 @@ const CustomModal: React.FC<Props> = (
         isAdding = false, 
         handleAddEdit, 
         columns, 
-        selectedRecord }
+        selectedRecord,
+        icon,
+        iconColor,
+        iconBackgroundColor }
     ) => {
 
 
@@ -31,7 +37,7 @@ const CustomModal: React.FC<Props> = (
             formContent.push(
                 <Form.Item 
                 key={i} 
-                label={columns![i].title} 
+                label={<span style={{color:'#191970', fontWeight:'600'}}>{columns![i].title}</span>}
                 name={columns![i].dataIndex} 
                 rules={columns![i].rules}>
                     <Input />
@@ -39,21 +45,48 @@ const CustomModal: React.FC<Props> = (
             )
         }
     }
+    const titleStyles:any = { 
+        fontWeight: 'bold', 
+        fontSize: '1.3em' 
+    }
+
+    const iconContainerStyles:any = {
+        backgroundColor:iconBackgroundColor, 
+        borderRadius:'50%', 
+        width:'1.6em', 
+        height:'1.6em', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    }
+
+    text == "" ? titleStyles.textAlign = 'center' : null
     return (
         <div>
             <Modal
-                title={modalTitle}
+                title={
+                    <div style={titleStyles}>
+                        <Space>
+                        <div style={iconContainerStyles}>
+                            {icon && <span style={{ color: iconColor, fontSize:'1.2em'}}>{icon}</span>}
+                        </div>
+
+                            <span style={{color:'rgb(14,17,17)'}}>{modalTitle}</span>
+                        </Space>
+                        <Divider/>
+                    </div>
+                }
                 visible={isVisible}
                 onOk={handleOk}
                 onCancel={() => handleVisible(false)}
                 footer={text == "" ? null : undefined}
             >
                 {text !== "" ?
-                    <p>{text}</p>
+                    <p style={{fontSize:'1.05em'}}>{text}</p>
                 :
                     <Form layout="vertical"
                         onFinish={handleAddEdit}
-                        initialValues={selectedRecord}>
+                        initialValues={!isAdding && selectedRecord}>
                         {formContent}
                         <Form.Item style={{ textAlign: 'right' }}>
                             <Space>

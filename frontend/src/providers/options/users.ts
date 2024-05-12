@@ -1,9 +1,11 @@
 import { API_URL } from "../data";
 import axios from 'axios';
 
+const API_USER = `${API_URL}/user`
+
 export const getAllUsers = async () => {
     try {
-        const response = await axios.get(`${API_URL}/user`);
+        const response = await axios.get(`${API_USER}`);
         const data = response.data;
         return {
             success: true,
@@ -23,7 +25,7 @@ export const getAllUsers = async () => {
 
 export const addUser = async (userData:any) => {
     try {
-        const response = await axios.post(`${API_URL}/user`, userData);
+        const response = await axios.post(`${API_USER}`, userData);
         const data = response.data;
         return {
             success: true,
@@ -40,9 +42,9 @@ export const addUser = async (userData:any) => {
     }
 };
 
-export const editUser = async (id: number, userData: any) => {
+export const editUser = async (userId: number, userData: any) => {
     try {
-        const response = await axios.put(`${API_URL}/user/${id}`, userData);
+        const response = await axios.put(`${API_USER}/${userId}`, userData);
         const data = response.data;
         return {
             success: true,
@@ -61,7 +63,7 @@ export const editUser = async (id: number, userData: any) => {
 
 export const deleteUser = async (userId: number) => {
     try {
-        const response = await axios.delete(`${API_URL}/user/${userId}`);
+        const response = await axios.delete(`${API_USER}/${userId}`);
         const data = response.data;
         return {
             success: true,

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from '../../components/layout';
-import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Space, Row } from 'antd';
+import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { getAllUsers, addUser, editUser, deleteUser } from '../../providers/options/users';
+import { CustomColors } from '../../common/constants'
 
 
 export const ListaUsuarios = () => {
@@ -192,6 +193,9 @@ export const ListaUsuarios = () => {
           handleAddEdit={handleEditOk}
           columns={columns}
           selectedRecord={selectedRecord}
+          icon={<UserSwitchOutlined/>}
+          iconColor={CustomColors.WHITE}
+          iconBackgroundColor={CustomColors.PRIMARY}
         />
       )}
 
@@ -201,6 +205,9 @@ export const ListaUsuarios = () => {
         isVisible={isDeleteModalVisible}
         handleOk={handleDeleteOk}
         handleVisible={setIsDeleteModalVisible}
+        icon={<UserDeleteOutlined/>}
+          iconColor={CustomColors.WHITE}
+          iconBackgroundColor={CustomColors.DANGEROUS}
         >
       </CustomModal>
 
@@ -211,6 +218,9 @@ export const ListaUsuarios = () => {
         isAdding ={true}
         handleAddEdit={handleAddOk}
         columns={columns}
+        icon={<UserAddOutlined/>}
+        iconColor={CustomColors.WHITE}
+        iconBackgroundColor={CustomColors.SUCCESS}
       ></CustomModal>
 
     </Layout>
