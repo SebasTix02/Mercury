@@ -77,10 +77,17 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd,s
         expandable={{
             expandedRowRender: (record) => (
               <div style={{ margin: '10px 0' }}>
-                {searchFields.map((field) => (
+                {/* {searchFields.map((field) => (
                   <p key={field}>
-                    <strong>{field.charAt(0).toUpperCase() + field.slice(1)}:</strong> {record[field]}
+                    <strong>{field[1]}:</strong> {record[field[0]]}
                   </p>
+                ))} */}
+                {columns.map((column) => (
+                  searchFields.includes(column.dataIndex) && (
+                    <p key={column.dataIndex}>
+                    <strong>{column.title}:</strong> {record[column.dataIndex]}
+                  </p>
+                  )
                 ))}
               </div>
             ),

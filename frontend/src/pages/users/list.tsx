@@ -182,7 +182,7 @@ export const ListaUsuarios = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['FIRST_NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
+          searchFields={['ID_NUMBER', 'FIRST_NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
       </div>
 
       <CustomModal
