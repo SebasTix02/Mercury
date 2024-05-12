@@ -19,7 +19,7 @@ const CustomModal: React.FC<Props> = (
     if (typeof handleAddEdit === 'function'){
         for (let i = 1; i < columns!.length - 1; i++) {
             formContent.push(
-                <Form.Item label={columns![i].title} name={columns![i].dataIndex} rules={columns![i].rules}>
+                <Form.Item key={i} label={columns![i].title} name={columns![i].dataIndex} rules={columns![i].rules}>
                     <Input />
                 </Form.Item>
             )
