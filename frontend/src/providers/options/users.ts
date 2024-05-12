@@ -40,6 +40,24 @@ export const addUser = async (userData:any) => {
     }
 };
 
+export const editUser = async (id: number, userData: any) => {
+    try {
+        const response = await axios.put(`${API_URL}/user/${id}`, userData);
+        const data = response.data;
+        return {
+            success: true,
+            user: data,
+        };
+    } catch (e) {
+        const error = e as Error;
+        return {
+            success: false,
+            error: {
+                message: "message" in error ? error.message : "Error al editar usuario",
+            },
+        };
+    }
+};
 
 export const deleteUser = async (userId: number) => {
     try {

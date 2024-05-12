@@ -5,7 +5,7 @@ import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
-import { getAllUsers, addUser, deleteUser } from '../../providers/options/users';
+import { getAllUsers, addUser, editUser, deleteUser } from '../../providers/options/users';
 
 
 export const ListaUsuarios = () => {
@@ -33,7 +33,6 @@ export const ListaUsuarios = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
-  const [filteredDataSource, setFilteredDataSource] = useState(dataSource);
 
   const handleEdit = (record: any) => {
     setSelectedRecord(record);
@@ -49,11 +48,30 @@ export const ListaUsuarios = () => {
     setIsAddModalVisible(true);
   };
 
-  const handleEditOk = () => {
-    // console.log("AQUIII")
-    console.log("SELECTO: ", selectedRecord)
+  const convertUserObject = (values:any) => {
+    return {
+      "idNumber": values.ID_NUMBER,
+      "firstName": values.FIRST_NAME,
+      "middleName": values.MIDDLE_NAME,
+      "lastname": values.LASTNAME,
+      "secondLastname": values.SECOND_LASTNAME,
+      "cellphone": values.CELLPHONE,
+      "email": values.EMAIL,
+      "password": values.PASSWORD
+    }
+  }
+
+  const handleEditOk = async (values:any) => {
+    const userService = convertUserObject(values)
+    const result:any = await editUser(selectedRecord.ID, userService);
+    if (!result.success) {
+      console.error("Error al actualizar usuario:", result.error.message);
+      return
+    }
+    const editedRaw = values
+    editedRaw.ID = selectedRecord.ID
     const updatedData:any = dataSource.map((item:any) =>
-      item.id === selectedRecord.id ? { ...item, ...selectedRecord } : item
+      item.ID == editedRaw.ID ? editedRaw : item
     );
     setDataSource(updatedData);
     setIsEditModalVisible(false);
@@ -71,16 +89,7 @@ export const ListaUsuarios = () => {
   };
 
   const handleAddOk = async (values: any) => {
-    const newUser = {
-      "idNumber": values.ID_NUMBER,
-      "firstName": values.FIRST_NAME,
-      "middleName": values.MIDDLE_NAME,
-      "lastname": values.LASTNAME,
-      "secondLastname": values.SECOND_LASTNAME,
-      "cellphone": values.CELLPHONE,
-      "email": values.EMAIL,
-      "password": values.PASSWORD
-    }
+    const newUser = convertUserObject(values)
   
     const result:any = await addUser(newUser);
     if (!result.success) {
@@ -172,14 +181,13 @@ export const ListaUsuarios = () => {
         <h1 style={{ marginBottom: '20px' }}>Lista de Usuarios</h1>
         <Row gutter={[16, 16]}>
         </Row>
-        <CustomTable dataSource={dataSource} columns={columns} rowKey="id" handleAdd={handleAdd} 
+        <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
           searchFields={['FIRST_NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
       </div>
 
       <CustomModal
         modalTitle="Editar Usuario"
         isVisible={isEditModalVisible}
-        handleOk={handleEditOk}
         handleVisible={setIsEditModalVisible}
         handleAddEdit={handleEditOk}
         columns={columns}

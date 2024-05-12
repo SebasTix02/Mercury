@@ -44,7 +44,7 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd,s
           {columns.map((column) => (
             // Mostrar opciones solo para los campos relevantes
             searchFields.includes(column.dataIndex) && (
-              <Option key={column.key} value={column.dataIndex}>
+              <Option key={column.dataIndex} value={column.dataIndex}>
                 {column.title}
               </Option>
             )
