@@ -904,3 +904,93 @@ DELETE
 }
 
 10. Componente Computador
+
+GET
+
+[
+    {
+        "ID": 1,
+        "ASSET_KEY": null,
+        "NAME": "MONITOR",
+        "BUILDING": "BLOQUE 3",
+        "LOCATION": "LABORATORIO 6",
+        "POSITION": "PC 01",
+        "STATUS": "ACTIVO"
+    },
+    {
+        "ID": 2,
+        "ASSET_KEY": null,
+        "NAME": "TECLADO",
+        "BUILDING": "BLOQUE 3",
+        "LOCATION": "LABORATORIO 6",
+        "POSITION": "PC 01",
+        "STATUS": "ACTIVO"
+    }
+]
+
+GET
+
+{
+    "ID": 2,
+    "ASSET_KEY": null,
+    "NAME": "TECLADO",
+    "BUILDING": "BLOQUE 3",
+    "LOCATION": "LABORATORIO 6",
+    "POSITION": "PC 01",
+    "STATUS": "ACTIVO"
+}
+
+POST
+
+{
+    "computerId": 264,
+    "assetKey": null,
+    "name": "MOUSE",
+    "isCase": 0,
+    "locationId": 8,
+    "position": "PC 08",
+    "status": 1
+}
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 1049,
+    "info": "",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
+
+PUT
+
+{
+    "assetKey": null,
+    "name": "TECLADO",
+    "isCase": 0,
+    "locationId": 8,
+    "position": "PC 08",
+    "status": 1
+}
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 0,
+    "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 1
+}
+
+DELETE
+
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 0,
+    "info": "",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
