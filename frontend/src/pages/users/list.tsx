@@ -81,7 +81,6 @@ export const ListaUsuarios = () => {
     const resultado:any = await deleteUser(selectedRecord.ID);
     if (!resultado.success) {
       console.error("Error al eliminar usuario:", resultado.error.message);
-      console.log("Usuario eliminado exitosamente.");
     }
     const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
     setDataSource(newData);
@@ -185,14 +184,16 @@ export const ListaUsuarios = () => {
           searchFields={['ID_NUMBER', 'FIRST_NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
       </div>
 
-      <CustomModal
-        modalTitle="Editar Usuario"
-        isVisible={isEditModalVisible}
-        handleVisible={setIsEditModalVisible}
-        handleAddEdit={handleEditOk}
-        columns={columns}
-        selectedRecord={selectedRecord}
-      ></CustomModal>
+      {isEditModalVisible && (
+        <CustomModal
+          modalTitle="Editar Usuario"
+          isVisible={isEditModalVisible}
+          handleVisible={setIsEditModalVisible}
+          handleAddEdit={handleEditOk}
+          columns={columns}
+          selectedRecord={selectedRecord}
+        />
+      )}
 
       <CustomModal
         text='¿Estás seguro de que deseas eliminar este usuario?'

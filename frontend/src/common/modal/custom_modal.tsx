@@ -1,4 +1,4 @@
-import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
+import { Button, Modal, Form, Input, Space } from 'antd';
 
 interface Props {
     modalTitle: string,
@@ -13,14 +13,27 @@ interface Props {
 }
 
 const CustomModal: React.FC<Props> = (
-    { modalTitle, isVisible, handleOk, handleVisible, text = "", isAdding = false, handleAddEdit, columns, selectedRecord }) => {
+    { modalTitle, 
+        isVisible, 
+        handleOk, 
+        handleVisible, 
+        text = "", 
+        isAdding = false, 
+        handleAddEdit, 
+        columns, 
+        selectedRecord }
+    ) => {
 
 
     let formContent = []
     if (typeof handleAddEdit === 'function') {
         for (let i = 1; i < columns!.length - 1; i++) {
             formContent.push(
-                <Form.Item key={i} label={columns![i].title} name={columns![i].dataIndex} rules={columns![i].rules}>
+                <Form.Item 
+                key={i} 
+                label={columns![i].title} 
+                name={columns![i].dataIndex} 
+                rules={columns![i].rules}>
                     <Input />
                 </Form.Item>
             )
@@ -47,7 +60,9 @@ const CustomModal: React.FC<Props> = (
                                 <Button type="primary" htmlType="submit">
                                     {isAdding ? 'Agregar' : 'Actualizar'}
                                 </Button>
-                                <Button onClick={() => handleVisible(false)}>Cancelar</Button>
+                                <Button onClick={() => handleVisible(false)}>
+                                    Cancelar
+                                </Button>
                             </Space>
                         </Form.Item>
                     </Form>

@@ -12,7 +12,7 @@ interface Props {
   searchFields: string[];
 }
 
-const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd,searchFields }) => {
+const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, searchFields }) => {
   const [searchText, setSearchText] = useState('');
   const [searchColumn, setSearchColumn] = useState<string | undefined>(undefined);
 
@@ -35,21 +35,21 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd,s
     <div>
       <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Select
-          style={{ width: 120, marginRight: '8px' }}
-          placeholder="Seleccione campo"
-          allowClear
-          onChange={(value) => setSearchColumn(value)}
-        >
-          {columns.map((column) => (
-            // Mostrar opciones solo para los campos relevantes
-            searchFields.includes(column.dataIndex) && (
-              <Option key={column.dataIndex} value={column.dataIndex}>
-                {column.title}
-              </Option>
-            )
-          ))}
-        </Select>
+          <Select
+            style={{ width: 120, marginRight: '8px' }}
+            placeholder="Seleccione campo"
+            allowClear
+            onChange={(value) => setSearchColumn(value)}
+          >
+            {columns.map((column) => (
+              // Mostrar opciones solo para los campos relevantes
+              searchFields.includes(column.dataIndex) && (
+                <Option key={column.dataIndex} value={column.dataIndex}>
+                  {column.title}
+                </Option>
+              )
+            ))}
+          </Select>
           <Input
             placeholder="Buscar..."
             value={searchText}
@@ -75,24 +75,19 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd,s
         pagination={{ pageSize: 6 }}
         rowKey={rowKey}
         expandable={{
-            expandedRowRender: (record) => (
-              <div style={{ margin: '10px 0' }}>
-                {/* {searchFields.map((field) => (
-                  <p key={field}>
-                    <strong>{field[1]}:</strong> {record[field[0]]}
-                  </p>
-                ))} */}
-                {columns.map((column) => (
-                  searchFields.includes(column.dataIndex) && (
-                    <p key={column.dataIndex}>
+          expandedRowRender: (record) => (
+            <div style={{ margin: '10px 0' }}>
+              {columns.map((column) => (
+                searchFields.includes(column.dataIndex) && (
+                  <p key={column.dataIndex}>
                     <strong>{column.title}:</strong> {record[column.dataIndex]}
                   </p>
-                  )
-                ))}
-              </div>
-            ),
-          }}
-          
+                )
+              ))}
+            </div>
+          ),
+        }}
+
       />
     </div>
   );
