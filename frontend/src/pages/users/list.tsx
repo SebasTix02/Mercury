@@ -6,7 +6,7 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { getAllUsers, addUser, editUser, deleteUser } from '../../providers/options/users';
-import { CustomColors } from '../../common/constants'
+import { CustomColors, verifyIdNumber } from '../../common/constants'
 
 
 export const ListaUsuarios = () => {
@@ -50,6 +50,7 @@ export const ListaUsuarios = () => {
   };
 
   const handleAdd = () => {
+    setSelectedRecord(null)
     setIsAddModalVisible(true);
   };
 
@@ -144,7 +145,10 @@ export const ListaUsuarios = () => {
       title: 'Cédula',
       dataIndex: 'ID_NUMBER',
       key: 'idNumber',
-      rules: [{ required: true, message: '¡Por favor ingrese la cédula!' }]
+      rules: [
+        { required: true, message: '¡Por favor ingrese la cédula!' },
+        { validator: verifyIdNumber }
+      ]
     },
     {
       title: 'Nombre',
@@ -174,19 +178,35 @@ export const ListaUsuarios = () => {
       title: 'Teléfono',
       dataIndex: 'CELLPHONE',
       key: 'cellphone',
-      rules: [{ required: true, message: '¡Por favor ingresa el teléfono!' }]
+      rules: [
+        { required: true, message: '¡Por favor ingresa el teléfono!' },
+        { min: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { max: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { pattern: /^[0-9]+$/, message: 'El teléfono debe contener solo números.' }
+      ]
     },
     {
       title: 'Correo',
       dataIndex: 'EMAIL',
       key: 'email',
-      rules: [{ required: true, message: '¡Por favor ingresa el correo!' }]
+      rules: [
+        { required: true, message: '¡Por favor ingresa el correo!' },
+        {
+          type: 'email',
+          message: '¡Por favor ingresa un correo electrónico válido!',
+        },
+        { max: 40, message: 'El correo debe tener máximo 40 caracteres.' },
+      ]
     },
     {
       title: 'Contraseña',
       dataIndex: 'PASSWORD',
       key: 'password',
-      rules: [{ required: true, message: '¡Por favor ingresa la contraseña!' }]
+      rules: [
+        { required: true, message: '¡Por favor ingresa la contraseña!' },
+        { min: 8, message: 'La contraseña debe tener al menos 8 caracteres.' },
+        { max: 16, message: 'La contraseña debe tener máximo 16 caracteres.' },
+      ]
     },
     {
       title: 'Acciones',
@@ -239,17 +259,20 @@ export const ListaUsuarios = () => {
           iconBackgroundColor={CustomColors.DANGEROUS}
       />
 
-      <CustomModal
-        modalTitle="Agregar Usuario"
-        isVisible={isAddModalVisible}
-        handleVisible={setIsAddModalVisible}
-        isAdding ={true}
-        handleAddEdit={handleAddOk}
-        columns={columns}
-        icon={<UserAddOutlined/>}
-        iconColor={CustomColors.WHITE}
-        iconBackgroundColor={CustomColors.SUCCESS}
-      />
+      {isAddModalVisible && (
+        <CustomModal
+          modalTitle="Agregar Usuario"
+          isVisible={isAddModalVisible}
+          handleVisible={setIsAddModalVisible}
+          isAdding ={true}
+          handleAddEdit={handleAddOk}
+          columns={columns}
+          selectedRecord={selectedRecord}
+          icon={<UserAddOutlined/>}
+          iconColor={CustomColors.WHITE}
+          iconBackgroundColor={CustomColors.SUCCESS}
+        />
+      )}
 
     </Layout>
   );
