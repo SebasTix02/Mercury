@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from '../../components/layout';
-import { Button, Space, Row } from 'antd';
+import { Button, Space, Row, notification } from 'antd';
 import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
@@ -20,6 +20,10 @@ export const ListaUsuarios = () => {
           setDataSource(result.users);
         } else {
           console.error(result.error.message);
+          notification.error({
+            message: 'Error de obtención de datos',
+            description: `No se pudo obtener los usuarios: ${result.error.message}`
+          });
         }
       })
       .catch((error) => {
@@ -66,7 +70,11 @@ export const ListaUsuarios = () => {
     const userService = convertUserObject(values)
     const result:any = await editUser(selectedRecord.ID, userService);
     if (!result.success) {
-      console.error("Error al actualizar usuario:", result.error.message);
+      setIsEditModalVisible(false);
+      notification.error({
+        message: 'Error de actualización',
+        description: `No se pudo actualizar el usuario: ${result.error.message}`
+      });
       return
     }
     const editedRaw = values
@@ -76,16 +84,29 @@ export const ListaUsuarios = () => {
     );
     setDataSource(updatedData);
     setIsEditModalVisible(false);
+    notification.success({
+      message: 'Usuario actualizado',
+      description: 'El usuario ha sido actualizado exitosamente.'
+    });
   };
 
   const handleDeleteOk = async () => {
-    const resultado:any = await deleteUser(selectedRecord.ID);
-    if (!resultado.success) {
-      console.error("Error al eliminar usuario:", resultado.error.message);
+    const result:any = await deleteUser(selectedRecord.ID);
+    if (!result.success) {
+      setIsDeleteModalVisible(false);
+      notification.error({
+        message: 'Error de eliminación',
+        description: `No se pudo eliminar el usuario: ${result.error.message}`
+      });
+      return
     }
     const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
     setDataSource(newData);
     setIsDeleteModalVisible(false);
+    notification.success({
+      message: 'Usuario eliminado',
+      description: 'El usuario ha sido eliminado exitosamente.'
+    });
   };
 
   const handleAddOk = async (values: any) => {
@@ -93,7 +114,11 @@ export const ListaUsuarios = () => {
   
     const result:any = await addUser(newUser);
     if (!result.success) {
-      console.error("Error al añadir usuario:", result.error.message);
+      setIsAddModalVisible(false);
+      notification.error({
+        message: 'Error de agregación',
+        description: `No se pudo agregar el usuario: ${result.error.message}`
+      });
       return
     }
 
@@ -103,6 +128,10 @@ export const ListaUsuarios = () => {
     const updatedDataSource:any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
     setIsAddModalVisible(false);
+    notification.success({
+      message: 'Usuario agregado',
+      description: 'El usuario ha sido agregado exitosamente.'
+    });
   };
 
   const columns = [
@@ -208,8 +237,7 @@ export const ListaUsuarios = () => {
         icon={<UserDeleteOutlined/>}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.DANGEROUS}
-        >
-      </CustomModal>
+      />
 
       <CustomModal
         modalTitle="Agregar Usuario"
@@ -221,7 +249,7 @@ export const ListaUsuarios = () => {
         icon={<UserAddOutlined/>}
         iconColor={CustomColors.WHITE}
         iconBackgroundColor={CustomColors.SUCCESS}
-      ></CustomModal>
+      />
 
     </Layout>
   );
