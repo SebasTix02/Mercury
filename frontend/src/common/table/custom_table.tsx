@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Select } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import './CustomTable.css'; // Importa el archivo CSS
 
 const { Option } = Select;
 
@@ -33,16 +34,15 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
 
   return (
     <div>
-      <div style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="search-bar-container">
+        <div className="search-bar">
           <Select
-            style={{ width: 120, marginRight: '8px' }}
+            className="search-select"
             placeholder="Seleccione campo"
             allowClear
             onChange={(value) => setSearchColumn(value)}
           >
             {columns.map((column) => (
-              // Mostrar opciones solo para los campos relevantes
               searchFields.includes(column.dataIndex) && (
                 <Option key={column.dataIndex} value={column.dataIndex}>
                   {column.title}
@@ -54,16 +54,16 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
             placeholder="Buscar..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            style={{ width: 200, marginRight: '8px' }}
+            className="search-input"
           />
-          <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch}>
+          <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch} className="search-button">
             Buscar
           </Button>
-          <Button onClick={clearFilters} style={{ marginLeft: '8px' }}>
+          <Button onClick={clearFilters} className="clear-button">
             Limpiar
           </Button>
         </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} className="add-button">
           Agregar
         </Button>
       </div>
@@ -87,7 +87,6 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
             </div>
           ),
         }}
-
       />
     </div>
   );
