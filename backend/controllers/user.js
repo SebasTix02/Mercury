@@ -2,7 +2,12 @@ const connection = require('../databaseConnection');
 
 exports.getUsers = async (request, response) => {
     try{
-        const [data] = await connection.query('SELECT * FROM USER');
+        const [data] = await connection.query(
+            `SELECT ID, ID_NUMBER, CONCAT_WS(' ',FIRST_NAME,MIDDLE_NAME) AS NAME,
+            CONCAT_WS(' ', LASTNAME, SECOND_LASTNAME) AS LASTNAME, 
+            CELLPHONE, EMAIL, PASSWORD
+            FROM USER`
+        );
         response.json(data);
     }catch(error){
         console.log('Error en "getUsers()" controller\n',error);
@@ -12,7 +17,14 @@ exports.getUsers = async (request, response) => {
 
 exports.getUserById = async (request, response) => {
     try{
-        const [data] = await connection.query('SELECT * FROM USER WHERE ID = ?',[request.params.id]);
+        const [data] = await connection.query(
+            `SELECT ID, ID_NUMBER, CONCAT_WS(' ',FIRST_NAME,MIDDLE_NAME) AS NAME,
+            CONCAT_WS(' ', LASTNAME, SECOND_LASTNAME) AS LASTNAME, 
+            CELLPHONE, EMAIL, PASSWORD
+            FROM USER
+            WHERE ID = ?`,
+            [request.params.id]
+        );
         response.json(data[0]);
     }catch(error){
         console.log('Error en "getUserById()" controller\n',error);

@@ -767,3 +767,382 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
         {
             "error": 'Error al intentar iniciar sesión'
         }
+
+9. Computador
+
+    GET http://localhost:4000/mercury/computer
+
+        Devuelve:
+        [
+            {
+                "ASSET_KEY": 32390859,
+                "COMPUTER_ID": 1,
+                "CATEGORY": "EQUIPO ELECTRONICO",
+                "NAME": "COMPUTADOR DE ESCRITORIO",
+                "BUILDING": "BLOQUE 2",
+                "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+                "BRAND": "DELL",
+                "MODEL": "OPTIPLEX 7070",
+                "OPERATIVE_SYSTEM": "WINDOWS",
+                "IP": "172.21.111.101",
+                "RAM_CAPACITY": "32 GB",
+                "DISK_CAPACITY": "2.25 TB",
+                "GRAPH_CAPACITY": null,
+                "FEATURE": null,
+                "SERIES": "4J48673",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+            },
+            {
+                "ASSET_KEY": 32390860,
+                "COMPUTER_ID": 2,
+                "CATEGORY": "EQUIPO ELECTRONICO",
+                "NAME": "COMPUTADOR DE ESCRITORIO",
+                "BUILDING": null,
+                "LOCATION": null,
+                "BRAND": "DELL",
+                "MODEL": "OPTIPLEX 7070",
+                "OPERATIVE_SYSTEM": "WINDOWS",
+                "IP": "172.21.111.102",
+                "RAM_CAPACITY": "32 GB",
+                "DISK_CAPACITY": "2.25 TB",
+                "GRAPH_CAPACITY": null,
+                "FEATURE": null,
+                "SERIES": "4J21J63",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+            }
+        ]
+
+    **OJO: Este método recibe el asset_key para buscar la información del Computador
+    GET http://localhost:4000/mercury/computer/32390859
+
+        Devuelve:
+        {
+            "ASSET_KEY": 32390859,
+            "COMPUTER_ID": 1,
+            "CATEGORY": "EQUIPO ELECTRONICO",
+            "NAME": "COMPUTADOR DE ESCRITORIO",
+            "BUILDING": "BLOQUE 2",
+            "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+            "BRAND": "DELL",
+            "MODEL": "OPTIPLEX 7070",
+            "OPERATIVE_SYSTEM": "WINDOWS",
+            "IP": "172.21.111.101",
+            "RAM_CAPACITY": "32 GB",
+            "DISK_CAPACITY": "2.25 TB",
+            "GRAPH_CAPACITY": null,
+            "FEATURE": null,
+            "SERIES": "4J48673",
+            "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+            "ENTRY_DATE": "2021-03-23T05:00:00.000Z",
+            "CURRENT_CUSTODIAN": "SALTOS PONCE CRISTIAN JAVIER"
+        }
+
+    POST http://localhost:4000/mercury/computer
+
+        Recibe:
+        {
+            "assetKey": 1,
+            "categoryId": 5,
+            "name": "COMPUTADOR A ELIMINAR",
+            "brandId": 69,
+            "model": "CORE 2 DUO",
+            "feature": null,
+            "series": "07820041250141",
+            "acquisitionDependencyId": 3,
+            "entryDate": "2010-01-22",
+            "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+            "locationId": 5,
+            "ip": "A Eliminar",
+            "operativeSystem": "A eliminar"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 263,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    **OJO: Este método recibe el asset_key para buscar la información del Computador
+    PUT http://localhost:4000/mercury/computer/32390859
+
+        Recibe:
+        {
+            "categoryId": 5,
+            "name": "COMPUTADORESSSS A ELIMINAR",
+            "brandId": 69,
+            "model": "CORE 2 DUO",
+            "feature": null,
+            "series": "07820041250141",
+            "acquisitionDependencyId": 3,
+            "entryDate": "2010-01-22",
+            "currentCustodian": "CHANGO PALATE MARIA ELVIA",
+            "locationId": 5,
+            "ip": "A Eliminar",
+            "operativeSystem": "A eliminar"
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 0  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    DELETE http://localhost:4000/mercury/computer/32390859
+
+        Devuelve
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+10. Componente Computador
+
+    GET http://localhost:4000/mercury/computer_component
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "ASSET_KEY": null,
+                "NAME": "MONITOR",
+                "BUILDING": "BLOQUE 3",
+                "LOCATION": "LABORATORIO 6",
+                "POSITION": "PC 01",
+                "STATUS": "ACTIVO"
+            },
+            {
+                "ID": 2,
+                "ASSET_KEY": null,
+                "NAME": "TECLADO",
+                "BUILDING": "BLOQUE 3",
+                "LOCATION": "LABORATORIO 6",
+                "POSITION": "PC 01",
+                "STATUS": "ACTIVO"
+            }
+        ]
+
+    GET http://localhost:4000/mercury/computer_component/2
+
+        Devuelve:
+        {
+            "ID": 2,
+            "ASSET_KEY": null,
+            "NAME": "TECLADO",
+            "BUILDING": "BLOQUE 3",
+            "LOCATION": "LABORATORIO 6",
+            "POSITION": "PC 01",
+            "STATUS": "ACTIVO"
+        }
+
+    POST http://localhost:4000/mercury/computer_component
+
+        Recibe:
+        {
+            "computerId": 264,
+            "assetKey": null,
+            "name": "MOUSE",
+            "isCase": 0,
+            "locationId": 8,
+            "position": "PC 08",
+            "status": 1
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 1049,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/computer_component/2
+
+        Recibe:
+        {
+            "assetKey": null,
+            "name": "TECLADO",
+            "isCase": 0,
+            "locationId": null,
+            "position": "PC 08",
+            "status": 1
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/computer_component/2
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+11. Componente Case
+
+    GET http://localhost:4000/mercury/case_component
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "PROCESADOR",
+                "BRAND": "INTEL",
+                "MODEL": "Core i7-9700",
+                "SERIES": null,
+                "TYPE": null,
+                "CAPACITY": null,
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            },
+            {
+                "ID": 2,
+                "NAME": "RAM",
+                "BRAND": null,
+                "MODEL": null,
+                "SERIES": null,
+                "TYPE": null,
+                "CAPACITY": "32 GB",
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            },
+            {
+                "ID": 3,
+                "NAME": "DISCO",
+                "BRAND": null,
+                "MODEL": null,
+                "SERIES": null,
+                "TYPE": "HDD",
+                "CAPACITY": "2.00 TB",
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            }
+        ]
+
+    GET http://localhost:4000/mercury/case_component/3
+
+        Devuelve:
+        {
+            "ID": 3,
+            "NAME": "DISCO",
+            "BRAND": null,
+            "MODEL": null,
+            "SERIES": null,
+            "TYPE": "HDD",
+            "CAPACITY": "2.00 TB",
+            "STATUS": "ACTIVO",
+            "IS_UPGRADE": null,
+            "UPGRADE_DATE": null,
+            "UPGRADE_DETAIL": null
+        }
+
+    POST http://localhost:4000/mercury/case_component
+
+        Recibe:
+        {
+            "caseId": 1048,
+            "assetKey": null,
+            "name": "RAM",
+            "brandId": 1,
+            "model": "RAM MODELO",
+            "series": "asdadadasd",
+            "type": "DDR 4", 
+            "capacity": 1000,
+            "status": 1,
+            "isUpgrade": 0,
+            "upgradeDate": null,
+            "upgradeDetail": null
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 989,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
+
+    PUT http://localhost:4000/mercury/case_component/1048
+
+        Recibe:
+        {
+            "assetKey": null,
+            "name": "RAM",
+            "brandId": 1,
+            "model": "UN SEXY MODELO",
+            "series": "asdadadasd",
+            "type": "DDR 4", 
+            "capacity": 1000,
+            "status": 1,
+            "isUpgrade": 0,
+            "upgradeDate": null,
+            "upgradeDetail": null
+        }
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }
+
+    DELETE http://localhost:4000/mercury/case_component/1048
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 0
+        }
