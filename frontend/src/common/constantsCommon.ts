@@ -10,6 +10,7 @@ export const verifyIdNumber = (rule:any, value:any, callback:any) => {
     let sum = 0;
     let dig02 = parseInt(cedula.substring(0, 2), 10);
     let dig3 = parseInt(cedula.charAt(2), 10);
+    let ultDigOri = parseInt(cedula.charAt(9), 10);
     let aux, ultDigito;
 
     if (cedula.length === 10) {
@@ -28,11 +29,12 @@ export const verifyIdNumber = (rule:any, value:any, callback:any) => {
         }
 
         ultDigito = 10 - (sum % 10);
-
+        
         if (
             (dig02 >= 0 && dig02 <= 24) &&
             (dig3 < 6) &&
-            (parseInt(cedula.charAt(9), 10) === ultDigito)
+            (parseInt(cedula.charAt(9), 10) === ultDigito) ||
+            (ultDigito == 10 && ultDigOri == 0)
         ) {
             callback();
         } else {

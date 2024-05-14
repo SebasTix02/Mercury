@@ -87,7 +87,6 @@ const CustomModal: React.FC<Props> = (
                     <Form layout="vertical"
                         onFinish={handleAddEdit}
                         initialValues={selectedRecord}>
-                        {/* initialValues={!isAdding && selectedRecord}> */}
                         {formContent}
                         <Form.Item style={{ textAlign: 'right' }}>
                             <Space>
