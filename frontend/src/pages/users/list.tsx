@@ -6,7 +6,7 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { getAllUsers, addUser, editUser, deleteUser } from '../../providers/options/users';
-import { CustomColors, verifyIdNumber } from '../../common/constants'
+import { CustomColors, verifyIdNumber } from '../../common/constantsCommon'
 
 
 export const ListaUsuarios = () => {
