@@ -55,12 +55,14 @@ export const ListaUsuarios = () => {
   };
 
   const convertUserObject = (values:any) => {
+    const names = values.NAME.split(' ')
+    const lastnames = values.LASTNAME.split(' ')
     return {
       "idNumber": values.ID_NUMBER,
-      "firstName": values.FIRST_NAME,
-      "middleName": values.MIDDLE_NAME,
-      "lastname": values.LASTNAME,
-      "secondLastname": values.SECOND_LASTNAME,
+      "firstName": names[0],
+      "middleName": names[1]  ? names[1] : undefined,
+      "lastname": lastnames[0],
+      "secondLastname": lastnames[1]  ? lastnames[1] : undefined,
       "cellphone": values.CELLPHONE,
       "email": values.EMAIL,
       "password": values.PASSWORD
@@ -152,27 +154,37 @@ export const ListaUsuarios = () => {
     },
     {
       title: 'Nombre',
-      dataIndex: 'FIRST_NAME',
+      dataIndex: 'NAME',
       key: 'firstName',
-      rules: [{ required: true, message: '¡Por favor ingresa el nombre!' }]
-    },
-    {
-      title: 'Segundo Nombre',
-      dataIndex: 'MIDDLE_NAME',
-      key: 'middleName',
-      rules: []
+      rules: [
+        { required: true, message: '¡Por favor ingresa el nombre!' },
+        {
+          validator: (_:any, value:any) => {
+            const names = value.split(' ');
+            if (names.length > 2) {
+              return Promise.reject('¡Por favor ingresa un nombre o dos separados por espacio!');
+            }
+            return Promise.resolve();
+          },
+        },
+      ]
     },
     {
       title: 'Apellido',
       dataIndex: 'LASTNAME',
       key: 'lastName',
-      rules: [{ required: true, message: '¡Por favor ingresa el apellido!' }]
-    },
-    {
-      title: 'Segundo Apellido',
-      dataIndex: 'SECOND_LASTNAME',
-      key: 'secondLastName',
-      rules: []
+      rules: [
+        { required: true, message: '¡Por favor ingresa el apellido!' },
+        {
+          validator: (_:any, value:any) => {
+            const names = value.split(' ');
+            if (names.length > 2) {
+              return Promise.reject('¡Por favor ingresa un apellido o dos separados por espacio!');
+            }
+            return Promise.resolve();
+          },
+        },
+      ]
     },
     {
       title: 'Teléfono',
@@ -231,12 +243,13 @@ export const ListaUsuarios = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['ID_NUMBER', 'FIRST_NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
+          searchFields={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
       </div>
 
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -255,13 +268,14 @@ export const ListaUsuarios = () => {
         handleOk={handleDeleteOk}
         handleVisible={setIsDeleteModalVisible}
         icon={<UserDeleteOutlined/>}
-          iconColor={CustomColors.WHITE}
-          iconBackgroundColor={CustomColors.DANGEROUS}
+        iconColor={CustomColors.WHITE}
+        iconBackgroundColor={CustomColors.DANGEROUS}
       />
 
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}
