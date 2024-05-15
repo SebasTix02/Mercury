@@ -249,6 +249,7 @@ export const ListaUsuarios = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -267,13 +268,14 @@ export const ListaUsuarios = () => {
         handleOk={handleDeleteOk}
         handleVisible={setIsDeleteModalVisible}
         icon={<UserDeleteOutlined/>}
-          iconColor={CustomColors.WHITE}
-          iconBackgroundColor={CustomColors.DANGEROUS}
+        iconColor={CustomColors.WHITE}
+        iconBackgroundColor={CustomColors.DANGEROUS}
       />
 
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}
