@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Select } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import './table.css';
+import './table.css'; 
+
 
 const { Option } = Select;
 

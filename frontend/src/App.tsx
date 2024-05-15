@@ -14,7 +14,7 @@ import routerBindings, {
 } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import {ForgotPassword, Login, Register, Home, ListaUsuarios} from "./pages"
+import {ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario} from "./pages"
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
@@ -47,6 +47,8 @@ function App() {
                   <Route path="/ingresar" element={<Login/>}/>
                   <Route path="/" element={<Home />} />
                   <Route path="/usuarios" element={<ListaUsuarios />} />
+                  <Route path="/inventario" element={<Inventario />} />
+
                   <Route path="/categorias" element={<Categorias />} />
 
                 </Routes>
