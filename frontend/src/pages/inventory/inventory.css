@@ -1,0 +1,44 @@
+.listI {
+    text-align: center; /* Centrar horizontalmente los elementos */
+    display: flex;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan en varias filas */
+    justify-content: center; /* Centrar horizontalmente los elementos */
+}
+
+.custom-button,
+.custom-buttonI {
+    display: flex;
+    flex-direction: column; /* Cambiar la dirección del eje principal a columna */
+    justify-content: center; /* Centrar verticalmente los elementos */
+    align-items: center; /* Centrar horizontalmente los elementos */
+    margin: 20px 50px; /* Espacio entre los botones */
+    padding: 40px; /* Añadir espacio interno */
+    width: calc(33.33% - 100px); /* El ancho es el 33.33% del contenedor menos el espacio entre los botones */
+    max-width: 300px; /* Ancho máximo */
+    height: auto; /* Altura automática */
+    background-color: #274156;
+}
+
+.custom-button:hover,
+.custom-buttonI:hover {
+    background-color: #34547b !important; /* Cambiar el color de fondo al pasar el mouse */
+}
+
+.anticon {
+    font-size: 80px; /* Tamaño de fuente para los íconos */
+    margin-bottom: 20px;
+}
+
+@media (max-width: 992px) { /* Ajustar para dispositivos de pantalla más pequeña */
+    .custom-button,
+    .custom-buttonI {
+        width: calc(50% - 100px); /* El ancho es el 50% del contenedor menos el espacio entre los botones */
+    }
+}
+
+@media (max-width: 768px) { /* Ajustar para dispositivos de pantalla aún más pequeña */
+    .custom-button,
+    .custom-buttonI {
+        width: calc(100% - 100px); /* El ancho es el 100% del contenedor menos el espacio entre los botones */
+    }
+}
