@@ -49,7 +49,6 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/usuarios" element={<ListaUsuarios />} />
                   <Route path="/inventario" element={<Inventario />} />
-
                   <Route path="/varios" element={<Many />} />
                   <Route path="/categorias" element={<Categorias />} />
 
