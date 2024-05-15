@@ -1,0 +1,44 @@
+.listI {
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.custom-button,
+.custom-buttonI {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 50px;
+    padding: 40px;
+    width: calc(50% - 100px);
+    max-width: 300px;
+    height: auto;
+    background-color: #274156;
+}
+
+.custom-button:hover,
+.custom-buttonI:hover {
+    background-color: #34547b !important;
+}
+
+.custom-button .anticon, .custom-buttonI .anticon {
+    font-size: 80px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 992px) {
+    .custom-button,
+    .custom-buttonI {
+        width: calc(50% - 100px);
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-button,
+    .custom-buttonI {
+        width: calc(100% - 100px);
+    }
+}

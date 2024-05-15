@@ -18,6 +18,7 @@ import {ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario} from "
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
+import { Many } from "./pages/many/many";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                   <Route path="/usuarios" element={<ListaUsuarios />} />
                   <Route path="/inventario" element={<Inventario />} />
 
+                  <Route path="/varios" element={<Many />} />
                   <Route path="/categorias" element={<Categorias />} />
 
                 </Routes>
