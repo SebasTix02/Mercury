@@ -13,6 +13,7 @@ interface Props {
     icon?: React.ReactNode;
     iconColor?: string;
     iconBackgroundColor?: string;
+    formColumns?:string[];
 }
 
 const CustomModal: React.FC<Props> = (
@@ -27,23 +28,27 @@ const CustomModal: React.FC<Props> = (
         selectedRecord,
         icon,
         iconColor,
-        iconBackgroundColor }
+        iconBackgroundColor,
+        formColumns = [] }
     ) => {
 
 
-    let formContent = []
+    let formContent:any = []
     if (typeof handleAddEdit === 'function') {
-        for (let i = 1; i < columns!.length - 1; i++) {
-            formContent.push(
-                <Form.Item 
-                key={i} 
-                label={<span style={{color:'#191970', fontWeight:'600'}}>{columns![i].title}</span>}
-                name={columns![i].dataIndex} 
-                rules={columns![i].rules}>
-                    <Input />
-                </Form.Item>
-            )
-        }
+        formColumns.forEach((columnName, index) => {
+            const column = columns.find((col:any) => col.dataIndex === columnName);
+            if (column) {
+                formContent.push(
+                    <Form.Item 
+                        key={index} 
+                        label={<span style={{color:'#191970', fontWeight:'600'}}>{column.title}</span>}
+                        name={column.dataIndex} 
+                        rules={column.rules}>
+                        <Input />
+                    </Form.Item>
+                );
+            }
+        });
     }
     const titleStyles:any = { 
         fontWeight: 'bold', 

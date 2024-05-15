@@ -17,6 +17,7 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import {ForgotPassword, Login, Register, Home, ListaUsuarios} from "./pages"
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
+import { Categorias } from "./pages/category/category";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                   <Route path="/ingresar" element={<Login/>}/>
                   <Route path="/" element={<Home />} />
                   <Route path="/usuarios" element={<ListaUsuarios />} />
+                  <Route path="/categorias" element={<Categorias />} />
 
                 </Routes>
                 <RefineKbar />
