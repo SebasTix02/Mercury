@@ -24,7 +24,7 @@
     background-color: #34547b !important; /* Cambiar el color de fondo al pasar el mouse */
 }
 
-.anticon {
+.custom-button .anticon, .custom-buttonI .anticon {
     font-size: 80px; /* Tamaño de fuente para los íconos */
     margin-bottom: 20px;
 }

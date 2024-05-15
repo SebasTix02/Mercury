@@ -15,7 +15,7 @@ export const Inventario = () => {
     return (
         <Layout>
             <div style={{ padding: '20px' }}>
-                <h1 style={{ marginBottom: '20px' }}>Inventario</h1>
+                <h1 style={{ marginBottom: '20px' }} className="inventario">Inventario</h1>
                 <Row gutter={[16, 16]}>
                     <Space>
                         <div className="listI">
