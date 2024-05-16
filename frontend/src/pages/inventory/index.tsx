@@ -2,7 +2,7 @@ import { Row, Button, Space } from "antd";
 import Layout from "../../components/layout";
 import { useState } from "react";
 import { GoldOutlined, DesktopOutlined, CodeOutlined} from '@ant-design/icons';
-import "./inventory.css"
+import "../options.css"
 
 
 export const Inventario = () => {
@@ -15,8 +15,8 @@ export const Inventario = () => {
     return (
         <Layout>
             <div style={{ padding: '20px' }}>
-                <h1 style={{ marginBottom: '20px' }} className="inventario">Inventario</h1>
-                <Row gutter={[16, 16]}>
+                <h1 style={{ marginBottom: '20px' }}>Inventario</h1>
+                <Row gutter={[16, 16]} justify={"center"}>
                     <Space>
                         <div className="listI">
                             <Button type="primary" icon={<GoldOutlined />} className="custom-buttonI">Bienes Generales</Button>
