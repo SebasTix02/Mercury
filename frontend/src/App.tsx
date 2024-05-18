@@ -19,6 +19,7 @@ import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
 import { Many } from "./pages/many/many";
+import { Buildings } from "./pages/building/building";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
                   <Route path="/inventario" element={<Inventario />} />
                   <Route path="/varios" element={<Many />} />
                   <Route path="/categorias" element={<Categorias />} />
+                  <Route path="/bloques" element={<Buildings />} />
 
                 </Routes>
                 <RefineKbar />
