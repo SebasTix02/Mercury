@@ -4,7 +4,6 @@ const reportBuilder = require('../reports/pdf_generator/report_builder');
 const reader = require('../reports/pdf_generator/file_reader');
 const pdf = require('html-pdf');
 const { minify } = require('html-minifier-terser');
-const puppeteer = require('puppeteer');
 
 const cssFileDir = './reports/styles.css';
 const getHeader = async () => {
@@ -64,15 +63,6 @@ exports.getUpeReport = async (request, response) => {
         minifyCSS: true
     });
 
-    // generatePDF(minifiedHtml).then((pdfBuffer) => {
-    //     response.setHeader('Content-Disposition', 'inline; filename=reporte.pdf');
-    //     response.setHeader('Content-Type', 'application/pdf');
-    //     response.send(pdfBuffer);
-    // }).catch((err) => {
-    //     console.log(err);
-    //     response.status(500).json({error: 'Ha ocurrido un error al tratar de generar el PDF'});
-    // });
-
     // Opciones para la generación del PDF en memoria
     const options = { 
         format: 'A4', 
@@ -101,13 +91,4 @@ exports.getUpeReport = async (request, response) => {
         }
     });
 
-}
-
-async function generatePDF(html) {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.setContent(html);
-    const pdfBuffer = await page.pdf({ format: 'A4', landscape: true,  });
-    await browser.close();
-    return pdfBuffer;
 }
