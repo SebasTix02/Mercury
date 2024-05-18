@@ -36,7 +36,7 @@ exports.getEntities = (denormalizedData) => {
                 lastComputerComponent.components.push(new CaseComponent(row.COMPUTER_ID, convertNull(row.CASE_COMPONENT_BRAND),
                     row.CASE_COMPONENT_NAME, convertNull(row.CASE_COMPONENT_MODEL), convertNull(row.CASE_COMPONENT_SERIES),
                     convertNull(row.CASE_COMPONENT_TYPE), convertNull(row.CASE_COMPONENT_CAPACITY), row.CASE_COMPONENT_STATUS,
-                    row.IS_UPGRADE, convertNull(row.UPGRADE_DATE), convertNull(row.UPGRADE_DETAIL))
+                    convertNull(row.IS_UPGRADE), convertNull(row.UPGRADE_DATE), convertNull(row.UPGRADE_DETAIL))
                 );
             }
         }
