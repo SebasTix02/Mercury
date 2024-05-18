@@ -39,7 +39,7 @@ export const getCategory = async (categoryId:number) => {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las categorías",
+                message: "message" in error ? error.message : "Error al obtener la categoría",
             },
         };
     }
@@ -48,7 +48,6 @@ export const getCategory = async (categoryId:number) => {
 
 export const addCategory = async (name:{}) => {
     try {
-        console.log("EL NOMBREEE: ", name)
         const response = await axios.post(`${API_CATEGORY}`, name);
         const data = response.data;
         return {

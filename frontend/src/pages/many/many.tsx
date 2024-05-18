@@ -23,7 +23,10 @@ export const Many = () => {
                                 className="custom-buttonI" onClick={() => navigate("/categorias")}>
                                 Categorías
                             </Button>
-                            <Button type="primary" icon={ <DatabaseOutlined /> } className="custom-button" >Bloques</Button>
+                            <Button type="primary" icon={ <DatabaseOutlined />} 
+                                className="custom-buttonI" onClick={() => navigate("/bloques")}>
+                                Bloques
+                            </Button>
                             <Button type="primary" icon={ <AppstoreOutlined /> } className="custom-button" >Ubicación</Button>
                             <Button type="primary" icon={ <CopyrightOutlined /> } className="custom-button" >Marcas</Button>
                             <Button type="primary" icon={ <UngroupOutlined /> } className="custom-button" >Dependencias</Button>
