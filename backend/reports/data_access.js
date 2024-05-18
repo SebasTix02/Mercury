@@ -70,8 +70,10 @@ exports.getUpeReportInfo = async () => {
                 LEFT JOIN LOCATION AS cc_location ON cc_location.ID = computer_component.LOCATION_ID
                 LEFT JOIN BUILDING AS asset_building ON asset_building.ID = asset_location.BUILDING_ID 
                 LEFT JOIN BUILDING AS cc_building ON cc_building.ID = cc_location.BUILDING_ID
-            WHERE asset.ASSET_KEY = 1
-            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
+            -- WHERE asset.ASSET_KEY = 1
+            -- WHERE computer.ID IS NOT NULL
+            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID
+            `
         );
         if(data.length == 0){
             return JSON.parse({error: 'La fuente no devolvió datos en "getUpeReportInfo()"'});

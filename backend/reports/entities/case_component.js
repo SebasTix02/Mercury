@@ -13,7 +13,7 @@ class CaseComponent{
         this.status = status;
         this.isUpgrade = isUpgrade;
         this.upgradeDate = upgradeDate;
-        this,upgradeDetail = upgradeDetail;
+        this.upgradeDetail = upgradeDetail;
     }
 }
 

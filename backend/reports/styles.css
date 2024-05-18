@@ -1,0 +1,35 @@
+table{
+    font-size: 12px;
+}
+
+tr {
+    page-break-inside: avoid;
+}
+
+tbody tr:nth-child(even){
+    background-color: #E8EDDF
+}
+
+tbody tr:nth-child(odd){
+    background-color: #CFDBD5
+}
+
+
+thead{
+    background-color: #336699;
+    /* background-color: #A31621; */
+    color: #E8EDDF;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.separator{
+    background-color: #2F4858 !important;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* table, th, td {
+    border: 1px solid black;
+} */
