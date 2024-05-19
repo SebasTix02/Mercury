@@ -73,7 +73,7 @@ export const Buildings = () => {
     setDataSource(updatedData);
     setIsEditModalVisible(false);
     notification.success({
-      message: 'Bloque actualizad0',
+      message: 'Bloque actualizado',
       description: 'El bloque ha sido actualizado exitosamente.'
     });
   };

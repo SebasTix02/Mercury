@@ -5,19 +5,24 @@ import { Button, Space, Row, notification } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, MinusCircleOutlined, CopyrightCircleOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
-import { getAllBuildings, getBuilding, addBuilding, editBuilding, deleteBuilding } from '../../providers/options/building';
+import { getAllLocations, getLocation, addLocation, editLocation, deleteLocation } from '../../providers/options/location';
+import { getAllBuildings } from '../../providers/options/building';
 import { CustomColors } from '../../common/constantsCommon'
 
 
 export const Locations = () => {
   const [dataSource, setDataSource] = useState([])
+  const [buildings, setBuildings] = useState([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllBuildings()
+    getAllLocations()
       .then((result:any) => {
         if (result.success) {
-          setDataSource(result.buildings);
+          setDataSource(result.locations);
+          getAllBuildings().then((buildData:any) => {
+            setBuildings(buildData.buildings);
+          })
         } else {
           console.error(result.error.message);
           notification.error({
@@ -55,36 +60,39 @@ export const Locations = () => {
   };
 
   const handleEditOk = async (values:any) => {
-    const buildingObject = { name: values.NAME.toUpperCase()}
-    const result:any = await editBuilding(selectedRecord.ID, buildingObject);
+    const locationObject = { 
+      name: values.NAME.toUpperCase(),
+      buildingId : values.BUILDING
+    }
+    const result:any = await editLocation(selectedRecord.ID, locationObject);
     if (!result.success) {
       setIsEditModalVisible(false);
       notification.error({
         message: 'Error de actualización',
-        description: `No se pudo actualizar el bloque: ${result.error.message}`
+        description: `No se pudo actualizar la ubicación: ${result.error.message}`
       });
       return
     }
-    const record:any = await getBuilding(selectedRecord.ID);
-    const editedRaw = record.building
+    const record:any = await getLocation(selectedRecord.ID);
+    const editedRaw = record.location
     const updatedData:any = dataSource.map((item:any) =>
       item.ID == editedRaw.ID ? editedRaw : item
     );
     setDataSource(updatedData);
     setIsEditModalVisible(false);
     notification.success({
-      message: 'Bloque actualizad0',
-      description: 'El bloque ha sido actualizado exitosamente.'
+      message: 'Ubicación actualizada',
+      description: 'La ubicación ha sido actualizada exitosamente.'
     });
   };
 
   const handleDeleteOk = async () => {
-    const result:any = await deleteBuilding(selectedRecord.ID);
+    const result:any = await deleteLocation(selectedRecord.ID);
     if (!result.success) {
       setIsDeleteModalVisible(false);
       notification.error({
         message: 'Error de eliminación',
-        description: `No se pudo eliminar el bloque: ${result.error.message}`
+        description: `No se pudo eliminar la ubicación: ${result.error.message}`
       });
       return
     }
@@ -92,30 +100,33 @@ export const Locations = () => {
     setDataSource(newData);
     setIsDeleteModalVisible(false);
     notification.success({
-      message: 'Bloque eliminado',
-      description: 'El bloque ha sido eliminado exitosamente.'
+      message: 'Ubicación eliminada',
+      description: 'La ubicación ha sido eliminada exitosamente.'
     });
   };
 
   const handleAddOk = async (values: any) => {
-    const buildingObject = { name: values.NAME.toUpperCase()}
-    const result:any = await addBuilding(buildingObject);
+    const locationObject = { 
+      name: values.NAME.toUpperCase(),
+      buildingId : values.BUILDING
+    }
+    const result:any = await addLocation(locationObject);
     if (!result.success) {
       setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
-        description: `No se pudo agregar el bloque: ${result.error.message}`
+        description: `No se pudo agregar la ubicación: ${result.error.message}`
       });
       return
     }
 
-    const newRecord:any = await getBuilding(result.building.insertId);
-    const updatedDataSource:any = [...dataSource, newRecord.building];
+    const newRecord:any = await getLocation(result.location.insertId);
+    const updatedDataSource:any = [...dataSource, newRecord.location];
     setDataSource(updatedDataSource);
     setIsAddModalVisible(false);
     notification.success({
-      message: 'Bloque agregado',
-      description: 'El bloque ha sido agregado exitosamente.'
+      message: 'Ubicación agregada',
+      description: 'La ubicación ha sido agregada exitosamente.'
     });
   };
 
@@ -130,14 +141,17 @@ export const Locations = () => {
       dataIndex: 'NAME',
       key: 'name',
       rules: [
-        { required: true, message: '¡Por favor ingresa el bloque!' },
+        { required: true, message: '¡Por favor ingresa la ubicación!' },
         { max: 50, message: '¡Debe contener máximo 50 caracteres!' },
       ]
     },
     {
-      title: 'Fecha de Creación',
-      dataIndex: 'CREATION_DATE',
-      key: 'date',
+      title: 'Bloque',
+      dataIndex: 'BUILDING',
+      key: 'building',
+      rules: [
+        { required: true, message: '¡Por favor selecciona el bloque!' },
+      ]
     },
     {
       title: 'Acciones',
@@ -162,13 +176,14 @@ export const Locations = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['NAME', 'CREATION_DATE']}/>
+          searchFields={['NAME', 'BUILDING']}/>
       </div>
 
       {isEditModalVisible && (
         <CustomModal
-          modalTitle="Editar Bloque"
-          formColumns={['NAME']}
+          modalTitle="Editar Ubicación"
+          formColumns={['NAME', 'BUILDING']}
+          selectTypeInputs={[[1, buildings]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -181,7 +196,7 @@ export const Locations = () => {
       )}
 
       <CustomModal
-        text='¿Estás seguro de que deseas eliminar este bloque?'
+        text='¿Estás seguro de que deseas eliminar esta ubicación?'
         modalTitle="Confirmar Eliminación"
         isVisible={isDeleteModalVisible}
         handleOk={handleDeleteOk}
@@ -193,8 +208,9 @@ export const Locations = () => {
 
       {isAddModalVisible && (
         <CustomModal
-          modalTitle="Agregar Bloque"
-          formColumns={['NAME']}
+          modalTitle="Agregar Ubicación"
+          formColumns={['NAME', 'BUILDING']}
+          selectTypeInputs={[[1, buildings]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}
