@@ -3,7 +3,7 @@ const connection = require('../databaseConnection');
 exports.getLocations = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT location.ID AS ID, building.NAME AS NAME, location.NAME AS BUILDING
+            `SELECT location.ID AS ID, building.NAME AS BUILDING, location.NAME AS NAME
             FROM LOCATION AS location, BUILDING AS building
             WHERE location.BUILDING_ID = building.ID
             ORDER BY location.ID`
@@ -18,7 +18,7 @@ exports.getLocations = async (request, response) => {
 exports.getLocationById = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT location.ID AS ID, building.NAME AS NAME, location.NAME AS BUILDING
+            `SELECT location.ID AS ID, building.NAME AS BUILDING, location.NAME AS NAME
             FROM LOCATION AS location, BUILDING AS building
             WHERE location.BUILDING_ID = building.ID
             AND location.ID = ?`,
