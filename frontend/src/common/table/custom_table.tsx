@@ -10,7 +10,7 @@ interface Props {
   dataSource: any[];
   columns: any[];
   rowKey: string;
-  handleAdd: () => void;
+  handleAdd?: () => void;
   searchFields: string[];
 }
 
@@ -64,9 +64,11 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
             Limpiar
           </Button>
         </div>
-        <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} className="add-button">
-          Agregar
-        </Button>
+        {handleAdd && (
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} className="add-button">
+            Agregar
+          </Button>
+        )}
       </div>
       <Table
         dataSource={searchColumn ? handleSearch() : dataSource}
