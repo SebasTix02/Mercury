@@ -48,7 +48,7 @@ const CustomModal: React.FC<Props> = ({
             });
             form.setFieldsValue(initialValues);
         } else if (selectedRecord) {
-            const building = selectTypeInputs.find(([index]) => index === 1)[1].find((b: any) => b.NAME === selectedRecord.BUILDING);
+            const building = selectTypeInputs.find(([index]) => index === 1)?.[1]?.find((b: any) => b.NAME === selectedRecord.BUILDING);
             const initialValues = { ...selectedRecord, BUILDING: building ? building.ID : undefined };
             form.setFieldsValue(initialValues);
         }
@@ -84,7 +84,8 @@ const CustomModal: React.FC<Props> = ({
 
     const titleStyles: any = {
         fontWeight: 'bold',
-        fontSize: '1.3em'
+        fontSize: '1.3em',
+        ...(text === "" && { textAlign: 'center' })
     };
 
     const iconContainerStyles: any = {
@@ -96,10 +97,6 @@ const CustomModal: React.FC<Props> = ({
         justifyContent: 'center',
         alignItems: 'center'
     };
-
-    if (text === "") {
-        titleStyles.textAlign = 'center';
-    }
 
     return (
         <div>
@@ -148,4 +145,3 @@ const CustomModal: React.FC<Props> = ({
 };
 
 export default CustomModal;
-
