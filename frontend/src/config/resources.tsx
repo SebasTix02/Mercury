@@ -1,5 +1,5 @@
 
-import { BoxPlotOutlined, CopyOutlined, DashboardOutlined, FallOutlined, GoldOutlined, HomeOutlined, ProductOutlined, ShopOutlined, TagOutlined, ToolOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import { BoxPlotOutlined, CodeOutlined, CopyOutlined, DashboardOutlined, FallOutlined, GoldOutlined, HomeOutlined, ProductOutlined, ShopOutlined, TagOutlined, ToolOutlined, UserSwitchOutlined } from "@ant-design/icons";
 
 import { IResourceItem } from "@refinedev/core";
 
@@ -10,6 +10,14 @@ export const resources: IResourceItem[] = [
         meta: {
             label: 'Inicio',
             icon: <HomeOutlined/>
+        }
+    },
+    {
+        name: 'software',
+        list: '/software',
+        meta: {
+            label: 'Software',
+            icon: <CodeOutlined />
         }
     },
     {
