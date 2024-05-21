@@ -21,6 +21,7 @@ import { Categorias } from "./pages/category/category";
 import { Many } from "./pages/many/many";
 import { Buildings } from "./pages/building/building";
 import { Locations } from "./pages/location/location";
+import { Brands } from "./pages/brand/brand";
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
                   <Route path="/categorias" element={<Categorias />} />
                   <Route path="/bloques" element={<Buildings />} />
                   <Route path="/ubicaciones" element={<Locations />} />
+                  <Route path="/marcas" element={<Brands />} />
 
                 </Routes>
                 <RefineKbar />
