@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { GoldOutlined, DesktopOutlined, CodeOutlined } from '@ant-design/icons';
 import "../options.css";
 import FormularioBG from "./formBG";
+import FormComp from "./formComp";
+import FormSoft from "./formSoft";
 
 export const Inventario = () => {
 
@@ -12,6 +14,8 @@ export const Inventario = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
   const [isBienesModalOpen, setIsBienesModalOpen] = useState(false);
+  const [isComputadoresModalOpen, setIsComputadoresModalOpen] = useState(false);
+  const [isSoftwareModalOpen, setIsSoftwareModalOpen] = useState(false);
 
   const showBienesModal = () => {
     setIsBienesModalOpen(true);
@@ -23,6 +27,30 @@ export const Inventario = () => {
 
   const handleBienesCancel = () => {
     setIsBienesModalOpen(false);
+  };
+
+  const showComputadoresModal = () => {
+    setIsComputadoresModalOpen(true);
+  };
+
+  const handleComputadoresOk = () => {
+    setIsComputadoresModalOpen(false);
+  };
+
+  const handleComputadoresCancel = () => {
+    setIsComputadoresModalOpen(false);
+  };
+
+  const showSoftwareModal = () => {
+    setIsSoftwareModalOpen(true);
+  };
+
+  const handleSoftwareOk = () => {
+    setIsSoftwareModalOpen(false);
+  };
+
+  const handleSoftwareCancel = () => {
+    setIsSoftwareModalOpen(false);
   };
 
   return (
@@ -40,10 +68,20 @@ export const Inventario = () => {
               >
                 Bienes Generales
               </Button>
-              <Button type="primary" icon={<DesktopOutlined />} className="custom-button">
+              <Button 
+                type="primary" 
+                icon={<DesktopOutlined />} 
+                className="custom-button"
+                onClick={showComputadoresModal}  
+              >
                 Computadores
               </Button>
-              <Button type="primary" icon={<CodeOutlined />} className="custom-button">
+              <Button 
+                type="primary" 
+                icon={<CodeOutlined />} 
+                className="custom-button"
+                onClick={showSoftwareModal}
+                >
                 Software
               </Button>
             </div>
@@ -57,6 +95,24 @@ export const Inventario = () => {
           footer={null}
         >
           <FormularioBG />
+        </Modal>
+        <Modal
+          title="Agregar Computadores"
+          open={isComputadoresModalOpen}
+          onOk={handleComputadoresOk}
+          onCancel={handleComputadoresCancel}
+          footer={null}
+        >
+          <FormComp />
+        </Modal>
+        <Modal
+          title="Agregar Software"
+          open={isSoftwareModalOpen}
+          onOk={handleSoftwareOk}
+          onCancel={handleSoftwareCancel}
+          footer={null}
+        >
+          <FormSoft />
         </Modal>
       </div>
     </Layout>
