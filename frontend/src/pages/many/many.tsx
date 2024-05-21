@@ -35,7 +35,10 @@ export const Many = () => {
                                 className="custom-buttonI" onClick={() => navigate("/marcas")}>
                                 Marcas
                             </Button>
-                            <Button type="primary" icon={ <UngroupOutlined /> } className="custom-button" >Dependencias</Button>
+                            <Button type="primary" icon={ <UngroupOutlined />} 
+                                className="custom-buttonI" onClick={() => navigate("/dependencias")}>
+                                Dependencias
+                            </Button>
                         </div>
                     </Space>
                 </Row>
