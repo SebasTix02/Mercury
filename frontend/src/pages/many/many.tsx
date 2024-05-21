@@ -31,7 +31,10 @@ export const Many = () => {
                                 className="custom-buttonI" onClick={() => navigate("/ubicaciones")}>
                                 Ubicación
                             </Button>
-                            <Button type="primary" icon={ <CopyrightOutlined /> } className="custom-button" >Marcas</Button>
+                            <Button type="primary" icon={ <CopyrightOutlined />} 
+                                className="custom-buttonI" onClick={() => navigate("/marcas")}>
+                                Marcas
+                            </Button>
                             <Button type="primary" icon={ <UngroupOutlined /> } className="custom-button" >Dependencias</Button>
                         </div>
                     </Space>
