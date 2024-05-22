@@ -80,9 +80,9 @@ export const editSoftware = async (softwareId: number, software:{}) => {
     }
 };
 
-export const deleteLocation = async (locationId: number) => {
+export const deleteSoftware = async (softwareId: number) => {
     try {
-        const response = await axios.delete(`${API_SOFTWARE}/${locationId}`);
+        const response = await axios.delete(`${API_SOFTWARE}/${softwareId}`);
         const data = response.data;
         return {
             success: true,
@@ -93,7 +93,7 @@ export const deleteLocation = async (locationId: number) => {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar la ubicación.",
+                message: "message" in error ? error.message : "Error al eliminar el software.",
             },
         };
     }
