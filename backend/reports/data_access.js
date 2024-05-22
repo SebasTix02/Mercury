@@ -138,7 +138,7 @@ exports.getDependencyInfo = async (dependencyId) => {
     }
 }
 
-exports.getLabInfo = async (locationId) => {
+exports.getLocationInfo = async (locationId) => {
     try{
         const [data] = await connection.query(
             `${assetBaseQuery}

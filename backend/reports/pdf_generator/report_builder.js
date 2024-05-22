@@ -113,7 +113,7 @@ exports.fillDependencyTable = (data) => {
     return filledRows
 }
 
-exports.fillLabTable = (data) => {
+exports.fillLocationTable = (data) => {
     let filledRows = '';
     let lastBuilding = null
     let lastLocation = null

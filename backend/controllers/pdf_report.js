@@ -57,7 +57,7 @@ exports.getUpeReport = async (request, response) => {
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'upe_report',response);
 
 }
 
@@ -100,7 +100,7 @@ exports.getComputersReport = async (request, response) => {
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'computer_report',response);
 
 }
 
@@ -144,7 +144,7 @@ exports.getAgeReport = async (request, response) => {
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'age_report',response);
 
 }
 
@@ -187,13 +187,13 @@ exports.getDependencyReport = async (request, response) => {
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'dependency_report',response);
 
 }
 
-exports.getLabReport = async (request, response) => {
+exports.getLocationReport = async (request, response) => {
     
-    const data = await dataAccess.getLabInfo(request.params.id);
+    const data = await dataAccess.getLocationInfo(request.params.id);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -223,14 +223,14 @@ exports.getLabReport = async (request, response) => {
                 </tr>
             </thead>
             <tbody>
-                ${reportBuilder.fillLabTable(convertedAssets)}
+                ${reportBuilder.fillLocationTable(convertedAssets)}
             </tbody>
         </table>
     </body>
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'location_report',response);
 
 }
 
@@ -267,11 +267,11 @@ exports.getSoftwareReport = async (request, response) => {
     </html>
     `;
 
-    await sendPdf2Client(htmlReport,response);
+    await sendPdf2Client(htmlReport,'software_report',response);
 
 }
 
-async function sendPdf2Client(htmlReport, response){
+async function sendPdf2Client(htmlReport, reportName, response){
     const minifiedHtml = await minify(htmlReport, {
         collapseWhitespace: true,
         removeComments: true,
@@ -299,7 +299,7 @@ async function sendPdf2Client(htmlReport, response){
         } else {
             // Establecer las cabeceras de la respuesta para enviar el archivo PDF
             response.setHeader('Content-Type', 'application/pdf');
-            response.setHeader('Content-Disposition', 'inline; filename = UPE_REPORT.pdf');
+            response.setHeader('Content-Disposition', `inline; filename = ${reportName}.pdf`);
 
             // Enviar el contenido del PDF como respuesta
             response.end(buffer);

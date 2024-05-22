@@ -2,8 +2,8 @@ const dataAccess = require('../data_access');
 const assetConverter = require('../asset_converter');
 const XlsxGenerator = require('xlsx-populate');
 
-async function upe(){
-    const data = await dataAccess.getUpeReportInfo(undefined);
+exports.generateUpeReport = async () => {
+    const data = await dataAccess.getUpeReportInfo();
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -38,11 +38,12 @@ async function upe(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
-async function exec(){
-    const data = await dataAccess.getAgeInfo(undefined);
+exports.generateAgeReport = async () => {
+    const data = await dataAccess.getAgeInfo();
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -82,11 +83,12 @@ async function exec(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
-async function dependency(){
-    const data = await dataAccess.getDependencyInfo(undefined);
+exports.generateDependencyReport = async (dependencyId) => {
+    const data = await dataAccess.getDependencyInfo(dependencyId);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -121,11 +123,12 @@ async function dependency(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
-async function lab(){
-    const data = await dataAccess.getLabInfo(undefined);
+exports.generateLocationReport = async (locationId) => {
+    const data = await dataAccess.getLocationInfo(locationId);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -160,11 +163,12 @@ async function lab(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
-async function software(){
-    const data = await dataAccess.getSoftwareInfo(undefined);
+exports.generateSoftwareReport = async () => {
+    const data = await dataAccess.getSoftwareInfo();
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -197,11 +201,12 @@ async function software(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
-async function computers(){
-    const data = await dataAccess.getComputersInfo(undefined);
+exports.generateComputersReport = async (locationId) => {
+    const data = await dataAccess.getComputersInfo(locationId);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -325,7 +330,8 @@ async function computers(){
 
     console.log("Archivo construido, exportando...");
 
-    return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    // return workbook.toFileAsync("./reports/xlsx_generator/output.xlsx");
+    return workbook.outputAsync();
 }
 
 function setHeaders(sheet, headers, columsWidth){
@@ -375,6 +381,6 @@ function getAge(entryDate){
     return new Date().getFullYear() - entryDate.getFullYear();
 }
 
-exec().then(() => {
-    console.log("Archivo Exportado");
-});
+// exec().then(() => {
+//     console.log("Archivo Exportado");
+// });
