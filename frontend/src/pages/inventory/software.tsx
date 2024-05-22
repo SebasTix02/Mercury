@@ -54,6 +54,31 @@ export const Software = () => {
     setIsAddModalVisible(true);
   };
 
+  const licenses = [
+    {
+     ID: 1,
+     NAME: 'PROPIETARIO'
+    },
+    {
+     ID: 2,
+     NAME: 'LIBRE'
+    },
+  ]
+
+  const convertSoftwareObject = (values:any) => {
+    const license = typeof values.LICENSE === 'number'
+    ? licenses.find(l => l.ID === values.LICENSE)?.NAME
+    : values.LICENSE;
+    return {
+      name: values.NAME,
+      version: values.VERSION,
+      license: license,
+      licenseDuration: values.LICENSE_DURATION,
+      labType: values.LAB_TYPE,
+      entryDate: values.ENTRY_DATE
+    }
+  }
+
   const handleEditOk = async (values:any) => {
     // const locationObject = { 
     //   name: values.NAME.toUpperCase(),
@@ -101,28 +126,25 @@ export const Software = () => {
   };
 
   const handleAddOk = async (values: any) => {
-    // const locationObject = { 
-    //   name: values.NAME.toUpperCase(),
-    //   buildingId : values.BUILDING
-    // }
-    // const result:any = await addLocation(locationObject);
-    // if (!result.success) {
-    //   setIsAddModalVisible(false);
-    //   notification.error({
-    //     message: 'Error de agregación',
-    //     description: `No se pudo agregar la ubicación: ${result.error.message}`
-    //   });
-    //   return
-    // }
+    const swObj = convertSoftwareObject(values)
+    const result:any = await addSoftware(swObj);
+    if (!result.success) {
+      setIsAddModalVisible(false);
+      notification.error({
+        message: 'Error de agregación',
+        description: `No se pudo agregar el software: ${result.error.message}`
+      });
+      return
+    }
 
-    // const newRecord:any = await getLocation(result.location.insertId);
-    // const updatedDataSource:any = [...dataSource, newRecord.location];
-    // setDataSource(updatedDataSource);
-    // setIsAddModalVisible(false);
-    // notification.success({
-    //   message: 'Ubicación agregada',
-    //   description: 'La ubicación ha sido agregada exitosamente.'
-    // });
+    const newRecord:any = await getSoftware(result.software.insertId);
+    const updatedDataSource:any = [...dataSource, newRecord.software];
+    setDataSource(updatedDataSource);
+    setIsAddModalVisible(false);
+    notification.success({
+      message: 'Software agregado',
+      description: 'El software ha sido agregada exitosamente.'
+    });
   };
 
   const columns = [
@@ -198,17 +220,6 @@ export const Software = () => {
       ),
     },
   ];
-
-  const licenses = [
-    {
-     ID: 1,
-     NAME: 'PROPIETARIO'
-    },
-    {
-     ID: 2,
-     NAME: 'LIBRE'
-    },
-  ]
 
   return (
     <Layout>
