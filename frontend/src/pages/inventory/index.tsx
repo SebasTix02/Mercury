@@ -6,9 +6,10 @@ import "../options.css";
 import FormularioBG from "./formBG";
 import FormComp from "./formComp";
 import FormSoft from "./formSoft";
+import { useNavigate } from "react-router-dom";
 
 export const Inventario = () => {
-
+  const navigate = useNavigate()
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -80,7 +81,7 @@ export const Inventario = () => {
                 type="primary" 
                 icon={<CodeOutlined />} 
                 className="custom-button"
-                onClick={showSoftwareModal}
+                onClick={() => navigate("/software")}
                 >
                 Software
               </Button>
