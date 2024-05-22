@@ -42,20 +42,20 @@ export const getSoftware = async (softwareId:number) => {
 };
 
 
-export const addLocation = async (location:{}) => {
+export const addSoftware = async (software:{}) => {
     try {
-        const response = await axios.post(`${API_SOFTWARE}`, location);
+        const response = await axios.post(`${API_SOFTWARE}`, software);
         const data = response.data;
         return {
             success: true,
-            location: data,
+            software: data,
         };
     } catch (e) {
         const error = e as Error;
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir la ubicación.",
+                message: "message" in error ? error.message : "Error al añadir el software.",
             },
         };
     }
