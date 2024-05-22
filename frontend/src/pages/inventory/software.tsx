@@ -5,29 +5,24 @@ import { Button, Space, Row, notification } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, MinusCircleOutlined, CopyrightCircleOutlined } from '@ant-design/icons';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
-import { getAllLocations, getLocation, addLocation, editLocation, deleteLocation } from '../../providers/options/location';
-import { getAllBuildings } from '../../providers/options/building';
+import { getAllSoftware, getSoftware, addSoftware, editSoftware, deleteSoftware } from '../../providers/options/software';
 import { CustomColors } from '../../common/constantsCommon'
 
 
 export const Software = () => {
   const [dataSource, setDataSource] = useState([])
-  const [buildings, setBuildings] = useState([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllLocations()
+    getAllSoftware()
       .then((result:any) => {
         if (result.success) {
-          setDataSource(result.locations);
-          getAllBuildings().then((buildData:any) => {
-            setBuildings(buildData.buildings);
-          })
+          setDataSource(result.software);
         } else {
           console.error(result.error.message);
           notification.error({
             message: 'Error de obtención de datos',
-            description: `No se pudo obtener las ubicaciones: ${result.error.message}`
+            description: `No se pudo obtener el Software: ${result.error.message}`
           });
         }
       })
@@ -60,74 +55,74 @@ export const Software = () => {
   };
 
   const handleEditOk = async (values:any) => {
-    const locationObject = { 
-      name: values.NAME.toUpperCase(),
-      buildingId : values.BUILDING
-    }
-    const result:any = await editLocation(selectedRecord.ID, locationObject);
-    if (!result.success) {
-      setIsEditModalVisible(false);
-      notification.error({
-        message: 'Error de actualización',
-        description: `No se pudo actualizar la ubicación: ${result.error.message}`
-      });
-      return
-    }
-    const record:any = await getLocation(selectedRecord.ID);
-    const editedRaw = record.location
-    const updatedData:any = dataSource.map((item:any) =>
-      item.ID == editedRaw.ID ? editedRaw : item
-    );
-    setDataSource(updatedData);
-    setIsEditModalVisible(false);
-    notification.success({
-      message: 'Ubicación actualizada',
-      description: 'La ubicación ha sido actualizada exitosamente.'
-    });
+    // const locationObject = { 
+    //   name: values.NAME.toUpperCase(),
+    //   buildingId : values.BUILDING
+    // }
+    // const result:any = await editLocation(selectedRecord.ID, locationObject);
+    // if (!result.success) {
+    //   setIsEditModalVisible(false);
+    //   notification.error({
+    //     message: 'Error de actualización',
+    //     description: `No se pudo actualizar la ubicación: ${result.error.message}`
+    //   });
+    //   return
+    // }
+    // const record:any = await getLocation(selectedRecord.ID);
+    // const editedRaw = record.location
+    // const updatedData:any = dataSource.map((item:any) =>
+    //   item.ID == editedRaw.ID ? editedRaw : item
+    // );
+    // setDataSource(updatedData);
+    // setIsEditModalVisible(false);
+    // notification.success({
+    //   message: 'Ubicación actualizada',
+    //   description: 'La ubicación ha sido actualizada exitosamente.'
+    // });
   };
 
   const handleDeleteOk = async () => {
-    const result:any = await deleteLocation(selectedRecord.ID);
-    if (!result.success) {
-      setIsDeleteModalVisible(false);
-      notification.error({
-        message: 'Error de eliminación',
-        description: `No se pudo eliminar la ubicación: ${result.error.message}`
-      });
-      return
-    }
-    const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
-    setDataSource(newData);
-    setIsDeleteModalVisible(false);
-    notification.success({
-      message: 'Ubicación eliminada',
-      description: 'La ubicación ha sido eliminada exitosamente.'
-    });
+    // const result:any = await deleteLocation(selectedRecord.ID);
+    // if (!result.success) {
+    //   setIsDeleteModalVisible(false);
+    //   notification.error({
+    //     message: 'Error de eliminación',
+    //     description: `No se pudo eliminar la ubicación: ${result.error.message}`
+    //   });
+    //   return
+    // }
+    // const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
+    // setDataSource(newData);
+    // setIsDeleteModalVisible(false);
+    // notification.success({
+    //   message: 'Ubicación eliminada',
+    //   description: 'La ubicación ha sido eliminada exitosamente.'
+    // });
   };
 
   const handleAddOk = async (values: any) => {
-    const locationObject = { 
-      name: values.NAME.toUpperCase(),
-      buildingId : values.BUILDING
-    }
-    const result:any = await addLocation(locationObject);
-    if (!result.success) {
-      setIsAddModalVisible(false);
-      notification.error({
-        message: 'Error de agregación',
-        description: `No se pudo agregar la ubicación: ${result.error.message}`
-      });
-      return
-    }
+    // const locationObject = { 
+    //   name: values.NAME.toUpperCase(),
+    //   buildingId : values.BUILDING
+    // }
+    // const result:any = await addLocation(locationObject);
+    // if (!result.success) {
+    //   setIsAddModalVisible(false);
+    //   notification.error({
+    //     message: 'Error de agregación',
+    //     description: `No se pudo agregar la ubicación: ${result.error.message}`
+    //   });
+    //   return
+    // }
 
-    const newRecord:any = await getLocation(result.location.insertId);
-    const updatedDataSource:any = [...dataSource, newRecord.location];
-    setDataSource(updatedDataSource);
-    setIsAddModalVisible(false);
-    notification.success({
-      message: 'Ubicación agregada',
-      description: 'La ubicación ha sido agregada exitosamente.'
-    });
+    // const newRecord:any = await getLocation(result.location.insertId);
+    // const updatedDataSource:any = [...dataSource, newRecord.location];
+    // setDataSource(updatedDataSource);
+    // setIsAddModalVisible(false);
+    // notification.success({
+    //   message: 'Ubicación agregada',
+    //   description: 'La ubicación ha sido agregada exitosamente.'
+    // });
   };
 
   const columns = [
@@ -141,16 +136,51 @@ export const Software = () => {
       dataIndex: 'NAME',
       key: 'name',
       rules: [
-        { required: true, message: '¡Por favor ingresa la ubicación!' },
+        { required: true, message: '¡Por favor ingresa el software!' },
         { max: 50, message: '¡Debe contener máximo 50 caracteres!' },
       ]
     },
     {
-      title: 'Bloque',
-      dataIndex: 'BUILDING',
-      key: 'building',
+      title: 'Versión',
+      dataIndex: 'VERSION',
+      key: 'version',
       rules: [
-        { required: true, message: '¡Por favor selecciona el bloque!' },
+        { required: true, message: '¡Por favor ingresa la versión!' },
+        { max: 20, message: '¡Debe contener máximo 20 caracteres!' },
+      ]
+    },
+    {
+      title: 'Licencia',
+      dataIndex: 'LICENSE',
+      key: 'license',
+      rules: [
+        { required: true, message: '¡Por favor ingresa la licencia!' },
+      ]
+    },
+    {
+      title: 'Duración Licencia',
+      dataIndex: 'LICENSE_DURATION',
+      key: 'license_duration',
+      rules: [
+        { required: true, message: '¡Por favor ingresa la duración de la licencia!' },
+        { max: 20, message: '¡Debe contener máximo 20 caracteres!' },
+      ]
+    },
+    {
+      title: 'Tipo Laboratorio',
+      dataIndex: 'LAB_TYPE',
+      key: 'lab_type',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el tipo de laboratorio!' },
+        { max: 50, message: '¡Debe contener máximo 50 caracteres!' },
+      ]
+    },
+    {
+      title: 'Fecha de Ingreso',
+      dataIndex: 'ENTRY_DATE',
+      key: 'entry_date',
+      rules: [
+        { required: true, message: '¡Por favor ingresa la fecha de adquisición!' },
       ]
     },
     {
@@ -169,6 +199,17 @@ export const Software = () => {
     },
   ];
 
+  const licenses = [
+    {
+     ID: 1,
+     NAME: 'PROPIETARIO'
+    },
+    {
+     ID: 2,
+     NAME: 'LIBRE'
+    },
+  ]
+
   return (
     <Layout>
       <div style={{ padding: '20px' }}>
@@ -181,9 +222,9 @@ export const Software = () => {
 
       {isEditModalVisible && (
         <CustomModal
-          modalTitle="Editar Ubicación"
-          formColumns={['NAME', 'BUILDING']}
-          selectTypeInputs={[[1, buildings]]}
+          modalTitle="Editar Software"
+          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
+          selectTypeInputs={[[2, licenses]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -196,7 +237,7 @@ export const Software = () => {
       )}
 
       <CustomModal
-        text='¿Estás seguro de que deseas eliminar esta ubicación?'
+        text='¿Estás seguro de que deseas eliminar este software?'
         modalTitle="Confirmar Eliminación"
         isVisible={isDeleteModalVisible}
         handleOk={handleDeleteOk}
@@ -208,9 +249,9 @@ export const Software = () => {
 
       {isAddModalVisible && (
         <CustomModal
-          modalTitle="Agregar Ubicación"
-          formColumns={['NAME', 'BUILDING']}
-          selectTypeInputs={[[1, buildings]]}
+          modalTitle="Agregar Software"
+          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
+          selectTypeInputs={[[2, licenses]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}

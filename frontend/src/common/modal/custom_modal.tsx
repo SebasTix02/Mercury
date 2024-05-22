@@ -68,7 +68,6 @@ const CustomModal: React.FC<Props> = ({
                         rules={column.rules}>
                         {selectInput ? (
                             <Select>
-                                <Option value="">Seleccione una categoría</Option>
                                 {selectInput[1].map((opt: any) => (
                                     <Option key={opt.ID} value={opt.ID}>{opt.NAME}</Option>
                                 ))}
