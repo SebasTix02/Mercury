@@ -13,14 +13,6 @@ export const resources: IResourceItem[] = [
         }
     },
     {
-        name: 'software',
-        list: '/software',
-        meta: {
-            label: 'Software',
-            icon: <CodeOutlined />
-        }
-    },
-    {
       name: 'varios',
       list: '/varios',
       meta: {
