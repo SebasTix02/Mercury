@@ -22,20 +22,20 @@ export const getAllSoftware = async () => {
     }
 };
 
-export const getLocation = async (locationId:number) => {
+export const getSoftware = async (softwareId:number) => {
     try {
-        const response = await axios.get(`${API_SOFTWARE}/${locationId}`);
+        const response = await axios.get(`${API_SOFTWARE}/${softwareId}`);
         const data = response.data;
         return {
             success: true,
-            location: data,
+            software: data,
         };
     } catch (e) {
         const error = e as Error;
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las ubicaciones.",
+                message: "message" in error ? error.message : "Error al obtener el software.",
             },
         };
     }
