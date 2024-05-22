@@ -61,20 +61,20 @@ export const addSoftware = async (software:{}) => {
     }
 };
 
-export const editLocation = async (locationId: number, location:{}) => {
+export const editSoftware = async (softwareId: number, software:{}) => {
     try {
-        const response = await axios.put(`${API_SOFTWARE}/${locationId}`, location);
+        const response = await axios.put(`${API_SOFTWARE}/${softwareId}`, software);
         const data = response.data;
         return {
             success: true,
-            location: data,
+            software: data,
         };
     } catch (e) {
         const error = e as Error;
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar la ubicación.",
+                message: "message" in error ? error.message : "Error al editar el software.",
             },
         };
     }
