@@ -59,8 +59,13 @@ exports.insertAsset = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "insertAsset()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar insertar el bien'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "insertAsset()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar insertar el bien'});
+        }
     }
 }
 
@@ -82,8 +87,13 @@ exports.updateAsset = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "updateAsset()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar actualizar el bien'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "updateAsset()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar actualizar el bien'});
+        }
     }
 }
 
