@@ -4,12 +4,12 @@ import { Button, Modal, Form, Input, Space, Divider, Select } from 'antd';
 const { Option } = Select;
 
 interface Props {
-    modalTitle: string,
-    isVisible: boolean,
+    modalTitle: string;
+    isVisible: boolean;
     handleOk?: () => void;
     handleVisible: any;
     text?: string;
-    isAdding?: boolean,
+    isAdding?: boolean;
     handleAddEdit?: any;
     columns?: any;
     selectedRecord?: any;
@@ -18,6 +18,7 @@ interface Props {
     iconBackgroundColor?: string;
     formColumns?: string[];
     selectTypeInputs?: any[];
+    dateTypeInputs?: number[];
 }
 
 const CustomModal: React.FC<Props> = ({
@@ -34,7 +35,8 @@ const CustomModal: React.FC<Props> = ({
     iconColor,
     iconBackgroundColor,
     formColumns = [],
-    selectTypeInputs = []
+    selectTypeInputs = [],
+    dateTypeInputs = []
 }) => {
     const [form] = Form.useForm();
 
@@ -49,7 +51,10 @@ const CustomModal: React.FC<Props> = ({
             form.setFieldsValue(initialValues);
         } else if (selectedRecord) {
             const building = selectTypeInputs.find(([index]) => index === 1)?.[1]?.find((b: any) => b.NAME === selectedRecord.BUILDING);
-            const initialValues = { ...selectedRecord, BUILDING: building ? building.ID : undefined };
+            const initialValues = {
+                ...selectedRecord,
+                BUILDING: building ? building.ID : undefined,
+            };
             form.setFieldsValue(initialValues);
         }
     }, [isAdding, selectTypeInputs, formColumns, form, selectedRecord]);
@@ -72,6 +77,8 @@ const CustomModal: React.FC<Props> = ({
                                     <Option key={opt.ID} value={opt.ID}>{opt.NAME}</Option>
                                 ))}
                             </Select>
+                        ) : dateTypeInputs.includes(index) ? (
+                            <input type='date' style={{borderRadius:'8px', padding:'4px', borderStyle:'solid', borderWidth:'1px', width:'100%'}} />
                         ) : (
                             <Input />
                         )}

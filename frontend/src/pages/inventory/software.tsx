@@ -225,6 +225,7 @@ export const Software = () => {
           modalTitle="Editar Software"
           formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
           selectTypeInputs={[[2, licenses]]}
+          dateTypeInputs={[5]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -252,6 +253,7 @@ export const Software = () => {
           modalTitle="Agregar Software"
           formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
           selectTypeInputs={[[2, licenses]]}
+          dateTypeInputs={[5]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}
