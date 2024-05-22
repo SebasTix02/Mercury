@@ -14,6 +14,7 @@ const computerComponentRoutes = require('./routes/computer_component');
 const caseComponentRoutes = require('./routes/case_component');
 const pdfReportRoutes = require('./routes/pdf_report');
 const xlsxReportRoutes = require('./routes/xlsx_report');
+const qrRoutes = require('./routes/qr');
 
 const HTTP_SERVER = express();
 
@@ -41,10 +42,11 @@ HTTP_SERVER.use('/mercury/computer_component', computerComponentRoutes);
 HTTP_SERVER.use('/mercury/case_component', caseComponentRoutes);
 HTTP_SERVER.use('/mercury/report/pdf', pdfReportRoutes);
 HTTP_SERVER.use('/mercury/report/xlsx', xlsxReportRoutes);
+HTTP_SERVER.use('/mercury/QR', qrRoutes);
 
 // Arranque del servidor
 HTTP_SERVER.listen(4000, () => {
     console.clear();
-    console.log("Servidor HTTP escuchando en el puerto 3000");
+    console.log("Servidor HTTP escuchando en el puerto 4000");
 });
 
