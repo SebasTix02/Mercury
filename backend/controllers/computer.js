@@ -65,8 +65,17 @@ exports.insertComputer = async (request, response) => {
         );
         response.json(computerResponse);
     }catch(error){
-        console.log('Error en "insertComputer()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar insertar el computador'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            msg = duplicateField[5].includes('IP')
+            ? `La ip ${duplicateField[2]} ya está asignada a otro dispositivo. Ingrese una diferente`
+            : `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`
+
+            response.status(500).json({error: msg});
+        } else {
+            console.log('Error en "insertComputer()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar insertar el computador'});
+        }
     }
 }
 
@@ -109,8 +118,17 @@ exports.updateComputer = async (request, response) => {
         );
         response.json(computerResponse);
     }catch(error){
-        console.log('Error en "updateComputer()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar actualizar el computador'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            msg = duplicateField[5].includes('IP')
+            ? `La ip ${duplicateField[2]} ya está asignada a otro dispositivo. Ingrese una diferente`
+            : `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`
+
+            response.status(500).json({error: msg});
+        } else {
+            console.log('Error en "updateComputer()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar actualizar el computador'});
+        }
     }
 }
 
