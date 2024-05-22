@@ -12,6 +12,8 @@ const loginRoutes = require('./routes/login');
 const computerRoutes = require('./routes/computer');
 const computerComponentRoutes = require('./routes/computer_component');
 const caseComponentRoutes = require('./routes/case_component');
+const pdfReportRoutes = require('./routes/pdf_report');
+const xlsxReportRoutes = require('./routes/xlsx_report');
 
 const HTTP_SERVER = express();
 
@@ -37,6 +39,8 @@ HTTP_SERVER.use('/mercury/login', loginRoutes);
 HTTP_SERVER.use('/mercury/computer', computerRoutes);
 HTTP_SERVER.use('/mercury/computer_component', computerComponentRoutes);
 HTTP_SERVER.use('/mercury/case_component', caseComponentRoutes);
+HTTP_SERVER.use('/mercury/report/pdf', pdfReportRoutes);
+HTTP_SERVER.use('/mercury/report/xlsx', xlsxReportRoutes);
 
 // Arranque del servidor
 HTTP_SERVER.listen(4000, () => {
