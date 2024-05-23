@@ -23,7 +23,9 @@ import { Buildings } from "./pages/building/building";
 import { Locations } from "./pages/location/location";
 import { Brands } from "./pages/brand/brand";
 import { Dependency } from "./pages/dependency/dependency";
+import { Software } from "./pages/inventory/software";
 import { Inventario_Computadores } from "./pages/inventory/computers";
+
 
 function App() {
   return (
@@ -60,6 +62,7 @@ function App() {
                   <Route path="/ubicaciones" element={<Locations />} />
                   <Route path="/marcas" element={<Brands />} />
                   <Route path="/dependencias" element={<Dependency />} />
+                  <Route path="/software" element={<Software />} />
                   <Route path="/computadores" element={<Inventario_Computadores />} />
 
                 </Routes>
