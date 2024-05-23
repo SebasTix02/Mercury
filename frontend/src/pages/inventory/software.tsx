@@ -80,30 +80,27 @@ export const Software = () => {
   }
 
   const handleEditOk = async (values:any) => {
-    // const locationObject = { 
-    //   name: values.NAME.toUpperCase(),
-    //   buildingId : values.BUILDING
-    // }
-    // const result:any = await editLocation(selectedRecord.ID, locationObject);
-    // if (!result.success) {
-    //   setIsEditModalVisible(false);
-    //   notification.error({
-    //     message: 'Error de actualización',
-    //     description: `No se pudo actualizar la ubicación: ${result.error.message}`
-    //   });
-    //   return
-    // }
-    // const record:any = await getLocation(selectedRecord.ID);
-    // const editedRaw = record.location
-    // const updatedData:any = dataSource.map((item:any) =>
-    //   item.ID == editedRaw.ID ? editedRaw : item
-    // );
-    // setDataSource(updatedData);
-    // setIsEditModalVisible(false);
-    // notification.success({
-    //   message: 'Ubicación actualizada',
-    //   description: 'La ubicación ha sido actualizada exitosamente.'
-    // });
+    const swObj = convertSoftwareObject(values)
+    const result:any = await editSoftware(selectedRecord.ID, swObj);
+    if (!result.success) {
+      setIsEditModalVisible(false);
+      notification.error({
+        message: 'Error de actualización',
+        description: `No se pudo actualizar el software: ${result.error.message}`
+      });
+      return
+    }
+    const record:any = await getSoftware(selectedRecord.ID);
+    const editedRaw = record.software
+    const updatedData:any = dataSource.map((item:any) =>
+      item.ID == editedRaw.ID ? editedRaw : item
+    );
+    setDataSource(updatedData);
+    setIsEditModalVisible(false);
+    notification.success({
+      message: 'Software actualizado',
+      description: 'El software ha sido actualizado exitosamente.'
+    });
   };
 
   const handleDeleteOk = async () => {
@@ -143,7 +140,7 @@ export const Software = () => {
     setIsAddModalVisible(false);
     notification.success({
       message: 'Software agregado',
-      description: 'El software ha sido agregada exitosamente.'
+      description: 'El software ha sido agregado exitosamente.'
     });
   };
 
