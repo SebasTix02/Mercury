@@ -99,8 +99,13 @@ exports.insertCaseComponent = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "insertCaseComponent()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar insertar el Componente del Gabinete'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "insertCaseComponent()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar insertar el Componente del Gabinete'});
+        }
     }
 }
 
@@ -120,8 +125,13 @@ exports.updateCaseComponent = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "updateCaseComponent()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar actualizar el Componente del Gabinete'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "updateCaseComponent()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar actualizar el Componente del Gabinete'});
+        }
     }
 }
 

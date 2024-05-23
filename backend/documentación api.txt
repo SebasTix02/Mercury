@@ -1146,3 +1146,155 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "warningStatus": 0,
             "changedRows": 0
         }
+
+
+12. Etiquetas QR
+
+    GET http://localhost:4000/mercury/QR
+
+        Devuelve:
+        [
+            {
+                "ASSET_KEY": 521250,
+                "COMPUTER_ID": 1204,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "MULTIMEDIA DLP 3200 LUMENS",
+                "FEATURE": null,
+                "SERIES": "4600888EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 1",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "SALAZAR LOGROÃ‘O FRANKLIN",
+                "BUILDING": null,
+                "LOCATION": null
+            },
+            {
+                "ASSET_KEY": 521251,
+                "COMPUTER_ID": null,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "MULTIMEDIA DLP 3200 LUMENS",
+                "FEATURE": null,
+                "SERIES": "4600904EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
+                "BUILDING": null,
+                "LOCATION": null
+            },
+            {
+                "ASSET_KEY": 521252,
+                "COMPUTER_ID":  null,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "NP M322X",
+                "FEATURE": null,
+                "SERIES": "4600906EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
+                "BUILDING": null,
+                "LOCATION": null
+            }
+        ]
+
+    POST http://localhost:4000/mercury/QR
+
+        * IMPORTANTE: Aquí espero recibir el assetKey que envío y también si es o no computador, 
+        que en este caso sería el valor enviado en COMPUTER_ID o bien null, o bien un valor numérico.
+        Recibe:
+        [
+            {
+                "assetKey": 12345675,
+                "isComputer": null
+            },
+            {
+                "assetKey": 12345676,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345677,
+                "isComputer": 1024
+            },
+            {
+                "assetKey": 12345678,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345679,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345680,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345681,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345682,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345683,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345684,
+                "isComputer": 1024 
+            },
+            {
+                "assetKey": 12345685,
+                "isComputer": null
+            },
+            {
+                "assetKey": 12345686,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345687,
+                "isComputer": 1024 
+            },
+            {
+                "assetKey": 12345688,
+                "isComputer": null
+            },
+            {
+                "assetKey": 12345689,
+                "isComputer": null 
+            },
+            {
+                "assetKey": 12345690,
+                "isComputer": 1024
+            }
+        ]
+
+13. Reportes
+
+-- Excel 
+GET
+http://localhost:4000/mercury/report/xlsx/upe
+http://localhost:4000/mercury/report/xlsx/computer
+http://localhost:4000/mercury/report/xlsx/computer/:id
+http://localhost:4000/mercury/report/xlsx/age
+http://localhost:4000/mercury/report/xlsx/dependency
+http://localhost:4000/mercury/report/xlsx/dependency/:id
+http://localhost:4000/mercury/report/xlsx/location
+http://localhost:4000/mercury/report/xlsx/location/:id
+http://localhost:4000/mercury/report/xlsx/software
+
+-- PDF 
+GET
+http://localhost:4000/mercury/report/pdf/upe
+http://localhost:4000/mercury/report/pdf/computer
+http://localhost:4000/mercury/report/pdf/computer/:id
+http://localhost:4000/mercury/report/pdf/age
+http://localhost:4000/mercury/report/pdf/dependency
+http://localhost:4000/mercury/report/pdf/dependency/:id
+http://localhost:4000/mercury/report/pdf/location
+http://localhost:4000/mercury/report/pdf/location/:id
+http://localhost:4000/mercury/report/pdf/software

@@ -71,8 +71,13 @@ exports.insertComputerComponent = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "insertComputerComponent()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar insertar el Componente del Computador'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "insertComputerComponent()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar insertar el Componente del Computador'});
+        }
     }
 }
 
@@ -89,8 +94,13 @@ exports.updateComputerComponent = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
-        console.log('Error en "updateComputerComponent()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar actualizar el Componente del Computador'});
+        if(error.errno == 1062){
+            duplicateField = error.sqlMessage.split(' ');
+            response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else {
+            console.log('Error en "updateComputerComponent()" controller\n',error);
+            response.status(500).json({error: 'Error al intentar actualizar el Componente del Computador'});
+        }
     }
 }
 
