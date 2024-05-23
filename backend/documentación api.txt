@@ -1013,7 +1013,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "changedRows": 0
         }
 
-11. Componente Case
+11. Componente Gabinete
 
     GET http://localhost:4000/mercury/case_component
 
@@ -1146,6 +1146,64 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "warningStatus": 0,
             "changedRows": 0
         }
+
+    PUT http://localhost:4000/mercury/case_component/unsubscribe/:id
+
+        Devuelve:
+        {
+            "fieldCount": 0,
+            "affectedRows": 1,
+            "insertId": 0,
+            "info": "Rows matched: 1  Changed: 1  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 1
+        }    
+
+    GET http://localhost:4000/mercury/case_component/case_related/:id
+
+        Devuelve:
+        [
+            {
+                "ID": 1,
+                "NAME": "PROCESADOR",
+                "BRAND": "INTEL",
+                "MODEL": "Core i7-9700",
+                "SERIES": null,
+                "TYPE": null,
+                "CAPACITY": null,
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            },
+            {
+                "ID": 2,
+                "NAME": "RAM",
+                "BRAND": null,
+                "MODEL": null,
+                "SERIES": null,
+                "TYPE": null,
+                "CAPACITY": "32 GB",
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            },
+            {
+                "ID": 3,
+                "NAME": "DISCO",
+                "BRAND": null,
+                "MODEL": null,
+                "SERIES": null,
+                "TYPE": "HDD",
+                "CAPACITY": "2.00 TB",
+                "STATUS": "ACTIVO",
+                "IS_UPGRADE": null,
+                "UPGRADE_DATE": null,
+                "UPGRADE_DETAIL": null
+            }
+        ]
 
 
 12. Etiquetas QR
