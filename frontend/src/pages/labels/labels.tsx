@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Row, Table, Checkbox, Space, notification } from 'antd';
-import QRCode from 'qrcode';
-import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+
 import Layout from '../../components/layout';
 import CustomTable from '../../common/table/custom_table';
 
@@ -21,31 +19,6 @@ export const Etiquetas = () => {
         setSelectedRowKeys(selectedKeys);
     };
 
-    const generatePDF = async () => {
-        if (selectedRowKeys.length === 0) {
-            notification.warning({
-                message: 'No hay componentes seleccionados',
-                description: 'Por favor, selecciona al menos un componente para generar los códigos QR.'
-            });
-            return;
-        }
-
-        const doc = new jsPDF();
-        for (let index = 0; index < selectedRowKeys.length; index++) {
-            const key = selectedRowKeys[index];
-            const record = dataSource.find(item => item.ID === key);
-            if (!record) continue;
-
-            const qrUrl = `http://localhost:4000/mercury/component/${record.ID}`;
-            const qrDataUrl = await QRCode.toDataURL(qrUrl);
-
-            doc.text(`Componente ID: ${record.ID}`, 10, 10 + index * 40);
-            doc.text(`IP: ${record.IP}`, 10, 20 + index * 40);
-            doc.text(`Ubicación: ${record.LOCATION}`, 10, 30 + index * 40);
-            doc.addImage(qrDataUrl, 'PNG', 150, 10 + index * 40, 30, 30);
-        }
-        doc.save('codigos_qr.pdf');
-    };
 
     const columns = [
         {
@@ -105,9 +78,9 @@ export const Etiquetas = () => {
                     dataSource={dataSource}
                     columns={columns}
                     rowKey="ID"
-                    searchFields={['ID', 'COMPUTER_ID', 'IP', 'BUILDING', 'LOCATION']}
+                    searchFields={['ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', '', '', '']}
                 />
-                <Button type="primary" onClick={generatePDF}>Generar Códigos QR</Button>
+                <Button type="primary" onClick={generatePDF}>Generar Etiquetas (QR)</Button>
             </div>
         </Layout>
     );
