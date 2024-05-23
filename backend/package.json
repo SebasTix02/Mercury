@@ -17,6 +17,7 @@
     "html-pdf": "^3.0.1",
     "mysql2": "^3.9.7",
     "nodemon": "^3.1.0",
+    "qrcode": "^1.5.3",
     "xlsx-populate": "^1.21.0"
   }
 }

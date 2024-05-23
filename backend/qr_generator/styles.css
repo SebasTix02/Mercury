@@ -1,0 +1,22 @@
+*{
+  box-sizing: border-box;      
+}
+
+.qr-tag{
+    display: inline-block;
+    min-width: 70px;
+    border: 2px solid black;
+    margin-right: 1px;
+    margin-bottom: 1px;
+}
+
+.qr{
+    width: 60px;
+    margin: 2px auto;
+}
+
+.asset-key{
+    font-weight: bold;
+    text-align: center;
+    margin: 0px 2px;
+}
