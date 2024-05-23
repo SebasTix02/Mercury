@@ -70,7 +70,7 @@ export const Etiquetas = () => {
             key: 'acquisition_dependency',
         },
         {
-            title: 'Fecha...',
+            title: 'Fecha adquisición',
             dataIndex: 'ENTRY_DATE',
             key: 'entry_date',
         },
