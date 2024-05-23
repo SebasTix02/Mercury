@@ -104,22 +104,22 @@ export const Software = () => {
   };
 
   const handleDeleteOk = async () => {
-    // const result:any = await deleteLocation(selectedRecord.ID);
-    // if (!result.success) {
-    //   setIsDeleteModalVisible(false);
-    //   notification.error({
-    //     message: 'Error de eliminación',
-    //     description: `No se pudo eliminar la ubicación: ${result.error.message}`
-    //   });
-    //   return
-    // }
-    // const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
-    // setDataSource(newData);
-    // setIsDeleteModalVisible(false);
-    // notification.success({
-    //   message: 'Ubicación eliminada',
-    //   description: 'La ubicación ha sido eliminada exitosamente.'
-    // });
+    const result:any = await deleteSoftware(selectedRecord.ID);
+    if (!result.success) {
+      setIsDeleteModalVisible(false);
+      notification.error({
+        message: 'Error de eliminación',
+        description: `No se pudo eliminar el software: ${result.error.message}`
+      });
+      return
+    }
+    const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
+    setDataSource(newData);
+    setIsDeleteModalVisible(false);
+    notification.success({
+      message: 'Software eliminada',
+      description: 'El software ha sido eliminado exitosamente.'
+    });
   };
 
   const handleAddOk = async (values: any) => {
