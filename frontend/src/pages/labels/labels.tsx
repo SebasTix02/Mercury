@@ -18,33 +18,71 @@ export const Etiquetas = () => {
     const handleSelectChange = (selectedKeys: number[]) => {
         setSelectedRowKeys(selectedKeys);
     };
-
-
+    
+    const generatePDF = () => {
+        notification.success({ message: 'Etiquetas generadas con exito' });
+    };
+    
     const columns = [
         {
             title: 'Código',
-            dataIndex: 'ID',
-            key: 'id',
+            dataIndex: 'ASSET_KEY',
+            key: 'asset_key',
         },
         {
             title: 'Cód. Computador',
-            dataIndex: 'ID',
-            key: 'id',
+            dataIndex: 'COMPUTER_ID',
+            key: 'computer_id',
         },
         {
-            title: 'IP',
-            dataIndex: 'IP',
-            key: 'ip',
+            title: 'Categoría',
+            dataIndex: 'CATEGORY',
+            key: 'category',
         },
         {
-            title: 'Bloque',
+            title: 'Nombre',
+            dataIndex: 'NAME',
+            key: 'name',
+        },
+        {
+            title: 'Marca',
+            dataIndex: 'BRAND',
+            key: 'brand',
+        },
+        {
+            title: 'Modelo',
+            dataIndex: 'MODEL',
+            key: 'model',
+        },
+        {
+            title: 'Característica',
+            dataIndex: 'FEATURE',
+            key: 'feature',
+        },
+        {
+            title: 'Serie',
+            dataIndex: 'SERIES',
+            key: 'series',
+        },
+        {
+            title: 'Dependencia',
+            dataIndex: 'ACQUISITION_DEPENDENCY',
+            key: 'acquisition_dependency',
+        },
+        {
+            title: 'Fecha...',
+            dataIndex: 'ENTRY_DATE',
+            key: 'entry_date',
+        },
+        {
+            title: 'Custodio actual',
+            dataIndex: 'CURRENT_CUSTODIAN',
+            key: 'current_custodian',
+        },
+        {
+            title: 'Edificio',
             dataIndex: 'BUILDING',
             key: 'building',
-        },
-        {
-            title: 'Ubicación',
-            dataIndex: 'ID',
-            key: 'id',
         },
         {
             title: 'Localización',
@@ -52,7 +90,7 @@ export const Etiquetas = () => {
             key: 'location',
         },
         {
-            title: 'Seleccionar',
+            title: 'Seleccionar...',
             key: 'isSelected',
             render: (_: any, record: Component) => (
                 <Checkbox
@@ -77,9 +115,9 @@ export const Etiquetas = () => {
                 <CustomTable
                     dataSource={dataSource}
                     columns={columns}
-                    rowKey="ID"
-                    searchFields={['ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', '', '', '']}
-                />
+                    rowKey="ASSET_KEY"
+                    searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
+                    />
                 <Button type="primary" onClick={generatePDF}>Generar Etiquetas (QR)</Button>
             </div>
         </Layout>
