@@ -25,7 +25,7 @@ import { Brands } from "./pages/brand/brand";
 import { Dependency } from "./pages/dependency/dependency";
 import { Software } from "./pages/inventory/software";
 import { Inventario_Computadores } from "./pages/inventory/computers";
-
+import Reports from "./pages/reports/reports";
 
 function App() {
   return (
@@ -64,7 +64,7 @@ function App() {
                   <Route path="/dependencias" element={<Dependency />} />
                   <Route path="/software" element={<Software />} />
                   <Route path="/computadores" element={<Inventario_Computadores />} />
-
+                  <Route path="/reportes" element={<Reports />} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
