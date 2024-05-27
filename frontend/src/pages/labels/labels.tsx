@@ -6,10 +6,6 @@ import CustomTable from '../../common/table/custom_table';
 import { getInfoLabels } from '../../providers/options/label';
 
 interface Component {
-    ID: number;
-    IP: string;
-    BUILDING: string | null;
-    LOCATION: string | null;
     ASSET_KEY: number;
     COMPUTER_ID: number | null;
     CATEGORY: string;
@@ -21,12 +17,15 @@ interface Component {
     ACQUISITION_DEPENDENCY: string;
     ENTRY_DATE: string;
     CURRENT_CUSTODIAN: string;
+    BUILDING: string | null;
+    LOCATION: string | null;
 }
 
 export const Etiquetas = () => {
     const [dataSource, setDataSource] = useState<Component[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchLabels = async () => {
             try {
@@ -53,6 +52,7 @@ export const Etiquetas = () => {
 
         fetchLabels();
     }, []);
+    
     const handleSelectChange = (selectedKeys: number[]) => {
         setSelectedRowKeys(selectedKeys);
     };
@@ -132,11 +132,11 @@ export const Etiquetas = () => {
             key: 'isSelected',
             render: (_: any, record: Component) => (
                 <Checkbox
-                    checked={selectedRowKeys.includes(record.ID)}
+                    checked={selectedRowKeys.includes(record.ASSET_KEY)}
                     onChange={() => {
-                        const newSelectedRowKeys = selectedRowKeys.includes(record.ID)
-                            ? selectedRowKeys.filter(key => key !== record.ID)
-                            : [...selectedRowKeys, record.ID];
+                        const newSelectedRowKeys = selectedRowKeys.includes(record.ASSET_KEY)
+                            ? selectedRowKeys.filter(key => key !== record.ASSET_KEY)
+                            : [...selectedRowKeys, record.ASSET_KEY];
                         handleSelectChange(newSelectedRowKeys);
                     }}
                 />
@@ -156,7 +156,7 @@ export const Etiquetas = () => {
                     rowKey="ASSET_KEY"
                     searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
                     />
-                <Button type="primary" onClick={generatePDF}>Generar Etiquetas (QR)</Button>
+                <Button type="primary" onClick={generatePDF}>Generar Etiquetas QR</Button>
             </div>
         </Layout>
     );
