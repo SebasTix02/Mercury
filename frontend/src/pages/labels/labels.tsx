@@ -1,20 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Row, Table, Checkbox, Space, notification } from 'antd';
 
 import Layout from '../../components/layout';
 import CustomTable from '../../common/table/custom_table';
+import { getInfoLabels } from '../../providers/options/label';
 
 interface Component {
     ID: number;
     IP: string;
-    BUILDING: string;
-    LOCATION: string;
+    BUILDING: string | null;
+    LOCATION: string | null;
+    ASSET_KEY: number;
+    COMPUTER_ID: number | null;
+    CATEGORY: string;
+    NAME: string;
+    BRAND: string;
+    MODEL: string;
+    FEATURE: string | null;
+    SERIES: string;
+    ACQUISITION_DEPENDENCY: string;
+    ENTRY_DATE: string;
+    CURRENT_CUSTODIAN: string;
 }
 
 export const Etiquetas = () => {
     const [dataSource, setDataSource] = useState<Component[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchLabels = async () => {
+            try {
+                const result = await getInfoLabels();
+                if (result.success) {
+                    setDataSource(result.categories);
+                } else {
+                    console.error(result.error?.message);
+                    notification.error({
+                        message: 'Error de obtención de datos',
+                        description: `No se pudo obtener las categorías: ${result.error?.message}`
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+                notification.error({
+                    message: 'Error de obtención de datos',
+                    description: 'Ocurrió un error al obtener las categorías.'
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
 
+        fetchLabels();
+    }, []);
     const handleSelectChange = (selectedKeys: number[]) => {
         setSelectedRowKeys(selectedKeys);
     };
@@ -70,7 +108,7 @@ export const Etiquetas = () => {
             key: 'acquisition_dependency',
         },
         {
-            title: 'Fecha adquisición',
+            title: 'Fecha...',
             dataIndex: 'ENTRY_DATE',
             key: 'entry_date',
         },

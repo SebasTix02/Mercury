@@ -1,17 +1,18 @@
 import { message } from "antd";
-import { API_URL } from "../data";
+import { API_QR } from "../data";
 import axios from 'axios';
 
-const API_LABEL = `${API_URL}/`
+const API_LABEL = `${API_QR}`;
 
 export const getInfoLabels = async () => {
     try {
         const response = await axios.get(`${API_LABEL}`);
-        const data = response.data.map((item:any) => ({
+        const data = response.data.map((item: any) => ({
+            ...item
         }));
         return {
             success: true,
-            labels: data,
+            categories: data,
         };
     } catch (e) {
         const error = e as Error;
@@ -21,5 +22,16 @@ export const getInfoLabels = async () => {
                 message: "message" in error ? error.message : "Error al obtener la información",
             },
         };
+    }
+};
+
+export const sendAssetKeys = async (assets: { assetKey: number, isComputer: number | null }[]) => {
+    try {
+        const response = await axios.post(API_LABEL, assets);
+        return response.data;
+    } catch (e) {
+        const error = e as Error;
+        message.error(`Error al enviar los asset keys: ${error.message}`);
+        throw error;
     }
 };
