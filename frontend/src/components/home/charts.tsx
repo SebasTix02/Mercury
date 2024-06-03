@@ -4,16 +4,19 @@ import React from 'react'
 import { Text } from '../text'
 import { Area, AreaConfig } from '@ant-design/plots'
 
-function Charts() {
+interface Props {
+    data: any;
+    color: any;
+    title: any;
+    max:any;
+}
+
+const Charts: React.FC<Props> = ({ data, color, title, max }) => {
     const config:AreaConfig = {
-        data: [
-            {bienes: 'computadoras', Valores:30},
-            {bienes: 'Generales', Valores:80},
-            {bienes: 'software', Valores:50},
-        ],
-        color: "#FF4A4A",
-        xField:'bienes',
-        yField:'Valores',
+        data: data.sort((a: { COUNT: number }, b: { COUNT: number }) => b.COUNT - a.COUNT).slice(0, max),
+        color: color,
+        xField:'TAG',
+        yField:'COUNT',
         isStack: false,
         animation:true,
         startOnZero:false,
@@ -25,12 +28,12 @@ function Charts() {
             tickCount:4,
             label:{
                 formatter:(v:string)=>{
-                    return `Total / 10 = ${Number(v)/10}`
+                    return `${Number(v)/10}`
                 }
             }
         },
         areaStyle: function areaStyle(){
-            return {fill: '#9A031E'}
+            return {fill: color}
         }
     }
   return (
@@ -44,9 +47,8 @@ function Charts() {
             alignItems: 'center',
             gap: '8px',
         }}>
-            <FallOutlined/>
             <Text size="sm" style={{marginLeft:'0.5rem'}}>
-                Inventario General
+                {title}
             </Text>
         </div>
     }
