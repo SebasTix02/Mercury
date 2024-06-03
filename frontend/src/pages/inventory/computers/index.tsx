@@ -12,8 +12,10 @@ import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
+import { useNavigate } from 'react-router-dom';
 
 export const Inventario_Computadores = () => {
+  const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([])
   const [locations, setLocations] = useState([])
@@ -73,7 +75,7 @@ export const Inventario_Computadores = () => {
     setIsDeleteModalVisible(true);
   };
   const handleRepower = (record: any) => {
-    alert("repotenciacion en proceso")
+    navigate('/repotenciar/'+record.COMPUTER_ID);
   };
 
   const handleAdd = () => {
