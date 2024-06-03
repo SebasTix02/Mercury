@@ -1356,3 +1356,75 @@ http://localhost:4000/mercury/report/pdf/dependency/:id
 http://localhost:4000/mercury/report/pdf/location
 http://localhost:4000/mercury/report/pdf/location/:id
 http://localhost:4000/mercury/report/pdf/software
+
+14. Dashboard
+
+    GET http://localhost:4000/mercury/dashboard
+
+        Devuelve:
+        {
+            assetsCount: {
+                title: "Total de Bienes",
+                values: 0
+            },
+            commonAssetsCount:{
+                title: "Total Bienes Comunes",
+                values: 0
+            },
+            computersCount:{
+                title: "Total Computadores",
+                values: 0
+            },
+            softwareCount:{
+                title: "Total Software",
+                values: 0
+            },
+            usersCount:{
+                title: "Total Usuarios",
+                values: 0
+            },
+            countByCategory:{
+                title: "Total de Bienes por Categoría",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByBrand:{
+                title: "Total de Bienes por Marca",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByLocation:{
+                title: "Total de Bienes por Ubicación",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByBuilding:{
+                title: "Total de Bienes por Bloque",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByAge:{
+                title: "Total de Bienes por Edad",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByCaseComponent:{
+                title: "Total de Bienes Componentes",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByLicense:{
+                title: "Total de Software por Licencia",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByCustodian:{
+                title: "Bienes Asignados por Custodio",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByDependency:{
+                title: "Total de Bienes por Dependencia",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByYear:{
+                title: "Bienes Adquiridos Anualmente",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            },
+            countByMonth:{
+                title: "Bienes Adquiridos este Año Mensualmente",
+                values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
+            }
+        }
