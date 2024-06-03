@@ -192,7 +192,9 @@ exports.getCaseComponentByCaseId = async (request, response) => {
                 LEFT JOIN ASSET AS asset ON asset.ASSET_KEY = case_component.ASSET_KEY
                 LEFT JOIN BRAND AS brand ON brand.ID = case_component.BRAND_ID
                     OR brand.ID = asset.BRAND_ID
-            WHERE case_component.CASE_ID = ?`,
+                LEFT JOIN COMPUTER_COMPONENT AS computer_component ON computer_component.ID = case_component.CASE_ID
+                LEFT JOIN COMPUTER AS computer ON computer.ID = computer_component.COMPUTER_ID
+            WHERE computer.ID = ?`,
             [request.params.id]
         );
         response.json(data[0]);
