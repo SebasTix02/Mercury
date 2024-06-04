@@ -11,9 +11,9 @@ import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { CustomColors } from '../../common/constantsCommon';
 import Layout from '../../components/layout';
-import { Buildings } from '../building/building';
 import { getAllBuildings } from '../../providers/options/building';
 import { getAllLocations } from '../../providers/options/location';
+import { getAllBrands } from '../../providers/options/brand';
 const { TabPane } = Tabs;
 
 interface Component {
@@ -40,10 +40,10 @@ interface ComputerComponent {
 }
 
 export const Repotenciacion = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [buildings, setBuildings] = useState([])
   const [locations, setLocations] = useState([])
+  const [brands, setBrands] = useState([])
   // Computer Components State
   const [computerComponents, setComputerComponents] = useState<ComputerComponent[]>([]);
   const [loadingComputerComponents, setLoadingComputerComponents] = useState(true);
@@ -53,7 +53,7 @@ export const Repotenciacion = () => {
   const [selectedComputerComponent, setSelectedComputerComponent] = useState<Component | null>(null);
 
   // Case Components State
-  const [caseComponents, setCaseComponents] = useState<Component[]>([]);
+  const [caseComponents, setCaseComponents] = useState<Component[][]>([]);
   const [loadingCaseComponents, setLoadingCaseComponents] = useState(true);
   const [isEditCaseComponentModalVisible, setIsEditCaseComponentModalVisible] = useState(false);
   const [isDeleteCaseComponentModalVisible, setIsDeleteCaseComponentModalVisible] = useState(false);
@@ -70,17 +70,19 @@ export const Repotenciacion = () => {
       getAllLocations().then((locationData:any) => {
         setLocations(locationData.locations);
       })
+      getAllBrands().then((brandData:any) => {
+        setBrands(brandData.brands);
+      })
     }
   }, [id]);
-
   const fetchComponentsById = async (id: string) => {
     try {
       setLoadingComputerComponents(true);
       setLoadingCaseComponents(true);
-
+  
       const computerComponentResult = await getComputerComponentById(Number.parseInt(id));
-      const caseComponentResult = await getCaseComponentById(Number.parseInt(id));
-
+      const caseComponentResult = await getCaseComponentsRelated(Number.parseInt(id)); // Cambio aquí
+  
       if (computerComponentResult.success) {
         setComputerComponents([computerComponentResult.component]);
       } else {
@@ -89,9 +91,9 @@ export const Repotenciacion = () => {
           description: `No se pudo obtener el componente de computadora: ${computerComponentResult.error?.message}`,
         });
       }
-
+  
       if (caseComponentResult.success) {
-        setCaseComponents([caseComponentResult.component]);
+        setCaseComponents(caseComponentResult.components); // Cambio aquí
       } else {
         notification.error({
           message: 'Error de obtención de datos',
@@ -230,7 +232,28 @@ export const Repotenciacion = () => {
   };
 
   const handleEditCaseComponentOk = async (values: any) => {
-    const result: any = await editCaseComponent(selectedCaseComponent!.ID, values);
+    let nombreMarca = null;
+    let idMarca = null; 
+    brands.map((item: any) => {
+        if (item.ID == values.BRAND) { 
+          console.log(item)
+          idMarca = item.ID; 
+          nombreMarca = item.NAME
+        }
+        return item;
+    });
+    const objectEdit = {
+      "assetKey": null,"name": values.NAME,"brandId": idMarca,
+      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": values.STATUS,
+      "isUpgrade": values.IS_UPGRADE === "SI" ? 1 : 0,"upgradeDate": values.UPGRADE_DATE,"upgradeDetail": values.UPGRADE_DETAIL,
+    }
+    const objectShow = {
+      "NAME": values.NAME,"BRAND": nombreMarca,
+      "MODEL": values.MODEL,"SERIES": values.SERIES,"TYPE": values.TYPE,"CAPACITY": values.CAPACITY,"STATUS": values.STATUS,
+      "IS_UPGRADE": values.IS_UPGRADE,"UPGRADE_DATE": values.UPGRADE_DATE,"UPGRADE_DETAIL": values.UPGRADE_DETAIL,
+    }
+    
+    const result: any = await editCaseComponent(selectedCaseComponent!.ID, objectEdit);
     if (!result.success) {
       setIsEditCaseComponentModalVisible(false);
       notification.error({
@@ -240,8 +263,11 @@ export const Repotenciacion = () => {
       return;
     }
     const updatedData = caseComponents.map((item: any) =>
-      item.ID === selectedCaseComponent!.ID ? { ...item, ...values } : item
+      item.ID === selectedCaseComponent!.ID ? { ...item, ...objectShow } : item
     );
+    console.log("values: "+ values.BRAND + "nombre: " +nombreMarca)
+    console.log(updatedData)
+    setCaseComponents(updatedData);
     setIsEditCaseComponentModalVisible(false);
     notification.success({
       message: 'Componente de Gabinete actualizado',
@@ -302,7 +328,7 @@ export const Repotenciacion = () => {
       dataIndex: 'BUILDING',
       key: 'building',
       rules: [
-        { required: true, message: '¡Por favor selecciona la categoria!' },
+        { required: true, message: '¡Por favor selecciona el edificio!' },
       ]
     },
     {
@@ -310,7 +336,7 @@ export const Repotenciacion = () => {
       dataIndex: 'LOCATION',
       key: 'location',
       rules: [
-        { required: true, message: '¡Por favor selecciona la categoria!' },
+        { required: true, message: '¡Por favor selecciona la ubicacion!' },
       ]
     },
     {
@@ -350,6 +376,9 @@ export const Repotenciacion = () => {
       title: 'Marca',
       dataIndex: 'BRAND',
       key: 'brand',
+      rules: [
+        { required: true, message: '¡Por favor selecciona la ubicacion!' },
+      ]
     },
     {
       title: 'Modelo',
@@ -482,7 +511,8 @@ export const Repotenciacion = () => {
       {isEditCaseComponentModalVisible && (
         <CustomModal
           modalTitle="Editar Componente de Gabinete"
-          formColumns={['NAME', 'BRAND', 'MODEL', 'TYPE']}
+          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE', 'CAPACITY', 'STATUS', 'IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
+          selectTypeInputs={[[1, brands]]}
           isVisible={isEditCaseComponentModalVisible}
           handleVisible={setIsEditCaseComponentModalVisible}
           handleAddEdit={handleEditCaseComponentOk}
