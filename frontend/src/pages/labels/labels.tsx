@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Table, Checkbox, Space, notification } from 'antd';
+import { Button, Row, Checkbox, notification } from 'antd';
 
 import Layout from '../../components/layout';
 import CustomTable from '../../common/table/custom_table';
@@ -51,8 +51,8 @@ export const Etiquetas = () => {
         };
 
         fetchLabels();
-    }, []);
-    
+    }, []); 
+
     const handleSelectChange = (selectedKeys: number[]) => {
         setSelectedRowKeys(selectedKeys);
     };
@@ -65,30 +65,28 @@ export const Etiquetas = () => {
         }
     };
 
-    const handleGenerateQrTags = async () => {
-        // Filtra los activos seleccionados
-        const selectedAssets = dataSource.filter(item => selectedRowKeys.includes(item.ASSET_KEY));
-        
-        // Mapea los activos seleccionados al formato correcto
-        const formattedAssets = selectedAssets.map(item => ({
-            assetKey: item.ASSET_KEY,
-            isComputer: item.COMPUTER_ID !== null ? item.COMPUTER_ID : null,
-        }));
-        
+    const handleGenerateQR = async () => {
         try {
-            // Envía los activos formateados al backend para generar las etiquetas QR
-            const response = await sendAssetKeys(formattedAssets);
-            // Maneja la respuesta, por ejemplo, muestra un mensaje de éxito
+            const selectedAssets = dataSource.filter(asset => selectedRowKeys.includes(asset.ASSET_KEY));
+            if (selectedAssets.length === 0) {
+                notification.error({
+                    message: 'Error al generar QR',
+                    description: 'No se ha seleccionado ningún activo para generar el QR.'
+                });
+                return;
+            }
+
+            await sendAssetKeys(selectedAssets.map(asset => ({ assetKey: asset.ASSET_KEY, isComputer: asset.COMPUTER_ID })));
+
             notification.success({
-                message: 'Etiquetas generadas con éxito',
-                description: 'Las etiquetas QR han sido generadas y descargadas.',
+                message: 'QR generados correctamente',
+                description: 'Se han generado los QR correctamente.'
             });
         } catch (error) {
-            // Maneja errores, por ejemplo, muestra un mensaje de error
             console.error(error);
             notification.error({
-                message: 'Error al generar etiquetas',
-                description: 'Ha ocurrido un error al generar las etiquetas QR.',
+                message: 'Error al generar QR',
+                description: 'Ocurrió un error al generar los QR.'
             });
         }
     };
@@ -178,13 +176,11 @@ export const Etiquetas = () => {
         },
 
     ];
+
     return (
         <Layout>
             <div style={{ padding: '20px' }}>
                 <h1 style={{ marginBottom: '20px' }}>Lista de Componentes</h1>
-                <Row gutter={[16, 16]}>
-                </Row>
-                
                 <CustomTable
                     dataSource={dataSource}
                     columns={columns}
@@ -192,21 +188,17 @@ export const Etiquetas = () => {
                     searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
                 />
                 
-                    <Checkbox
-                        indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < dataSource.length}
-                        onChange={e => handleSelectAllChange(e.target.checked)}
-                        checked={selectedRowKeys.length === dataSource.length}
-                    >
-                        Seleccionar todos
-                    </Checkbox>
+                <Checkbox
+                    indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < dataSource.length}
+                    onChange={e => handleSelectAllChange(e.target.checked)}
+                    checked={selectedRowKeys.length === dataSource.length}
+                >
+                    Seleccionar todos
+                </Checkbox>
 
-                    <Button
-                        type="primary"
-                        onClick={handleGenerateQrTags}
-                        disabled={selectedRowKeys.length === 0}
-                    >
-                        Generar Etiquetas (QR)
-                    </Button>
+                <Button type="primary" onClick={handleGenerateQR} disabled={selectedRowKeys.length === 0}>
+                    Generar Etiquetas (QR)
+                </Button>
             </div>
         </Layout>
     );
