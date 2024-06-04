@@ -8,5 +8,7 @@ router.get('/:id',controller.getComputerComponentById);
 router.post('/',controller.insertComputerComponent);
 router.put('/:id',controller.updateComputerComponent);
 router.delete('/:id',controller.deleteComputerComponent);
+router.get('/computer_related/:id',controller.getComputerComponentsByComputerId);
+
 
 module.exports = router;
