@@ -15,7 +15,7 @@ import { getAllBuildings } from '../../providers/options/building';
 import { getAllLocations } from '../../providers/options/location';
 import { getAllBrands } from '../../providers/options/brand';
 const { TabPane } = Tabs;
-
+/*Agregar crud de repotenciacion para repotenciar */
 interface Component {
   ID: number;
   NAME: string;
