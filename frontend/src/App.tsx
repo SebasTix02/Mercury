@@ -18,6 +18,7 @@ import {ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario} from "
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
+import { Etiquetas } from "./pages/labels/labels";
 import { Many } from "./pages/many/many";
 import { Buildings } from "./pages/building/building";
 import { Locations } from "./pages/location/location";
@@ -58,6 +59,7 @@ function App() {
                   <Route path="/inventario" element={<Inventario />} />
                   <Route path="/varios" element={<Many />} />
                   <Route path="/categorias" element={<Categorias />} />
+                  <Route path="/etiquetas" element={<Etiquetas />} />
                   <Route path="/bloques" element={<Buildings />} />
                   <Route path="/ubicaciones" element={<Locations />} />
                   <Route path="/marcas" element={<Brands />} />

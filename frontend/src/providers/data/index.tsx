@@ -5,6 +5,8 @@ import { fetchWrapper } from "./fetch-wrapper";
 import {createClient} from "graphql-ws"
 export const API_BASE_URL = "http://localhost:4000"
 export const API_URL = `${API_BASE_URL}/mercury`
+export const API_QR = `${API_URL}/QR`
+
 // export const API_BASE_URL = "https://api.crm.refine.dev"
 // export const API_URL = `${API_BASE_URL}/graphql`
 export const WS_URL = 'wss://api.crm.refine.dev/graphql'
