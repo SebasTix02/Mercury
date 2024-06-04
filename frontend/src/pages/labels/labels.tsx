@@ -65,23 +65,52 @@ export const Etiquetas = () => {
         }
     };
 
-    const generatePDF = async () => {
-        const selectedAssets = dataSource
-            .filter(item => selectedRowKeys.includes(item.ASSET_KEY))
-            .map(item => ({
-                assetKey: item.ASSET_KEY,
-                isComputer: item.COMPUTER_ID,
-            }));
-
+    const handleGenerateQrTags = async () => {
+        // Filtra los activos seleccionados
+        const selectedAssets = dataSource.filter(item => selectedRowKeys.includes(item.ASSET_KEY));
+        
+        // Mapea los activos seleccionados al formato correcto
+        const formattedAssets = selectedAssets.map(item => ({
+            assetKey: item.ASSET_KEY,
+            isComputer: item.COMPUTER_ID !== null ? item.COMPUTER_ID : null,
+        }));
+        
         try {
-            await sendAssetKeys(selectedAssets);
-            notification.success({ message: 'Etiquetas generadas con éxito' });
+            // Envía los activos formateados al backend para generar las etiquetas QR
+            const response = await sendAssetKeys(formattedAssets);
+            // Maneja la respuesta, por ejemplo, muestra un mensaje de éxito
+            notification.success({
+                message: 'Etiquetas generadas con éxito',
+                description: 'Las etiquetas QR han sido generadas y descargadas.',
+            });
         } catch (error) {
+            // Maneja errores, por ejemplo, muestra un mensaje de error
             console.error(error);
+            notification.error({
+                message: 'Error al generar etiquetas',
+                description: 'Ha ocurrido un error al generar las etiquetas QR.',
+            });
         }
     };
+    
 
     const columns = [
+        {
+            title: 'Seleccionar...',
+            key: 'isSelected',
+            render: (_: any, record: Component) => (
+                
+                <Checkbox
+                    checked={selectedRowKeys.includes(record.ASSET_KEY)}
+                    onChange={() => {
+                        const newSelectedRowKeys = selectedRowKeys.includes(record.ASSET_KEY)
+                            ? selectedRowKeys.filter(key => key !== record.ASSET_KEY)
+                            : [...selectedRowKeys, record.ASSET_KEY];
+                        handleSelectChange(newSelectedRowKeys);
+                    }}
+                />
+            ),
+        },
         {
             title: 'Código',
             dataIndex: 'ASSET_KEY',
@@ -147,22 +176,7 @@ export const Etiquetas = () => {
             dataIndex: 'LOCATION',
             key: 'location',
         },
-        {
-            title: 'Seleccionar...',
-            key: 'isSelected',
-            render: (_: any, record: Component) => (
-                
-                <Checkbox
-                    checked={selectedRowKeys.includes(record.ASSET_KEY)}
-                    onChange={() => {
-                        const newSelectedRowKeys = selectedRowKeys.includes(record.ASSET_KEY)
-                            ? selectedRowKeys.filter(key => key !== record.ASSET_KEY)
-                            : [...selectedRowKeys, record.ASSET_KEY];
-                        handleSelectChange(newSelectedRowKeys);
-                    }}
-                />
-            ),
-        },
+
     ];
     return (
         <Layout>
@@ -178,15 +192,21 @@ export const Etiquetas = () => {
                     searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
                 />
                 
-                <Checkbox
+                    <Checkbox
                         indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < dataSource.length}
                         onChange={e => handleSelectAllChange(e.target.checked)}
                         checked={selectedRowKeys.length === dataSource.length}
-                    >Seleccionar todos
+                    >
+                        Seleccionar todos
                     </Checkbox>
-                <Button type="primary" onClick={generatePDF} disabled={selectedRowKeys.length === 0}>
-                    Generar Etiquetas (QR)
-                </Button>
+
+                    <Button
+                        type="primary"
+                        onClick={handleGenerateQrTags}
+                        disabled={selectedRowKeys.length === 0}
+                    >
+                        Generar Etiquetas (QR)
+                    </Button>
             </div>
         </Layout>
     );
