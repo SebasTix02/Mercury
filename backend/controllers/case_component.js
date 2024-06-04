@@ -156,3 +156,48 @@ exports.unsubscribeCaseComponent = async (request, response) => {
         response.status(500).json({error: 'Error al intentar dar de baja el Componente del Gabinete'});
     }
 }
+
+exports.getCaseComponentByCaseId = async (request, response) => {
+    try{
+        const [data] = await connection.query(
+            `SELECT case_component.ID, 
+            CASE 
+                WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
+                ELSE case_component.NAME
+            END AS NAME,
+            brand.NAME AS BRAND,
+            CASE
+                WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.MODEL
+                ELSE case_component.MODEL
+            END AS MODEL,
+            CASE
+                WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.SERIES
+                ELSE case_component.SERIES
+            END AS SERIES,
+            case_component.TYPE,
+            CASE
+                WHEN case_component.CAPACITY >= 1000 THEN CONCAT(CAST(ROUND(case_component.CAPACITY / 1000, 2) AS CHAR),' TB')
+                ELSE CONCAT(CAST(case_component.CAPACITY AS CHAR),' GB')
+            END AS CAPACITY,
+            CASE
+                WHEN case_component.STATUS = 1 THEN 'ACTIVO'
+                ELSE 'BAJA'
+            END AS STATUS,
+            CASE
+                WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
+                ELSE NULL
+            END AS IS_UPGRADE,
+            case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
+            FROM CASE_COMPONENT AS case_component
+                LEFT JOIN ASSET AS asset ON asset.ASSET_KEY = case_component.ASSET_KEY
+                LEFT JOIN BRAND AS brand ON brand.ID = case_component.BRAND_ID
+                    OR brand.ID = asset.BRAND_ID
+            WHERE case_component.CASE_ID = ?`,
+            [request.params.id]
+        );
+        response.json(data[0]);
+    }catch(error){
+        console.log('Error en "getCaseComponentByCaseId()" controller\n',error);
+        response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete'});
+    }
+}
