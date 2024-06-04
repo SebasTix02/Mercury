@@ -82,21 +82,42 @@ export const Inventario_Computadores = () => {
   };
 
   const handleEditOk = async (values: any) => {
+    console.log(values)
+    let idMarca = null; 
+    let idCategoria = null; 
+    let idDependencia = null; 
+    let idUbicacion = null; 
+    brands.map((item: any) => {
+      if (item.NAME == values.BRAND) { idMarca = item.ID; }
+      return item;
+    });
+    categories.map((item: any) => {
+      if (item.NAME == values.CATEGORY) { idCategoria = item.ID; }
+      return item;
+    });
+    dependencies.map((item: any) => {
+      if (item.NAME == values.ACQUISITION_DEPENDENCY) { idDependencia = item.ID; }
+      return item;
+    });
+    locations.map((item: any) => {
+      if (item.NAME == values.LOCATION) { idUbicacion = item.ID; }
+      return item;
+    });
     var objectEdit={
-      "categoryId": values.CATEGORY,
+      "categoryId": idCategoria,
       "name": values.NAME,
-      "brandId": values.BRAND,
+      "brandId": idMarca,
       "model": values.MODEL,
-      "feature": null,
+      "feature": values.FEATURE,
       "series": values.SERIES,
-      "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
+      "acquisitionDependencyId": idDependencia,
       "entryDate": values.ENTRY_DATE,
       "currentCustodian": values.CURRENT_CUSTODIAN,
       "locationId": values.LOCATION,
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
+      "operativeSystem": values.OPERATIVE_SYSTEM,
   }
-  console.log(values);
+  console.log(objectEdit)
     const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -145,7 +166,7 @@ export const Inventario_Computadores = () => {
       "name": values.NAME,
       "brandId": values.BRAND,
       "model": values.MODEL,
-      "feature": null,
+      "feature": values.FEATURE,
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
@@ -255,6 +276,11 @@ export const Inventario_Computadores = () => {
       key: 'graphCapacity',
     },
     {
+      title: 'Comentarios',
+      dataIndex: 'FEATURE',
+      key: 'feature',
+    },
+    {
       title: 'Serie',
       dataIndex: 'SERIES',
       key: 'series',
@@ -270,7 +296,7 @@ export const Inventario_Computadores = () => {
     {
       title: 'Fecha de Ingreso',
       dataIndex: 'ENTRY_DATE',
-      key: 'entryDate',
+      key: 'date',
     },
     {
       title: 'Custodio Actual',
@@ -302,7 +328,7 @@ export const Inventario_Computadores = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM','FEATURE']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
@@ -329,7 +355,7 @@ export const Inventario_Computadores = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'FEATURE']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
