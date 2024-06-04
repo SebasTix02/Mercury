@@ -6,7 +6,10 @@ const API_COMPUTER = `${API_URL}/computer`;
 export const getAllComputers = async () => {
     try {
         const response = await axios.get(`${API_COMPUTER}`);
-        const data = response.data;
+        const data = response.data.map((item:any) => ({
+            ...item,
+            ENTRY_DATE: new Date(item.ENTRY_DATE).toISOString().split('T')[0]
+        }))
         return {
             success: true,
             computers: data,

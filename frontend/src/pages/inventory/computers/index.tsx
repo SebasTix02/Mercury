@@ -330,6 +330,7 @@ export const Inventario_Computadores = () => {
           modalTitle="Editar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM','FEATURE']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          dateTypeInputs={[7]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -357,6 +358,7 @@ export const Inventario_Computadores = () => {
           modalTitle="Agregar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'FEATURE']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          dateTypeInputs={[7]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}
