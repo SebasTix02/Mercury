@@ -25,6 +25,11 @@ import { Brands } from "./pages/brand/brand";
 import { Dependency } from "./pages/dependency/dependency";
 import { Software } from "./pages/inventory/software";
 import { Inventario_Computadores } from "./pages/inventory/computers";
+<<<<<<< HEAD
+=======
+import Reports from "./pages/reports/reports";
+import { Inventario_Bienes } from "./pages/inventory/bienes";
+>>>>>>> a68dc7c (Creacion del Inventario Bienes Generales)
 
 
 function App() {
@@ -64,6 +69,11 @@ function App() {
                   <Route path="/dependencias" element={<Dependency />} />
                   <Route path="/software" element={<Software />} />
                   <Route path="/computadores" element={<Inventario_Computadores />} />
+<<<<<<< HEAD
+=======
+                  <Route path="/reportes" element={<Reports />} />
+                  <Route path="/bienes" element={<Inventario_Bienes/>}/>
+>>>>>>> a68dc7c (Creacion del Inventario Bienes Generales)
 
                 </Routes>
                 <RefineKbar />
