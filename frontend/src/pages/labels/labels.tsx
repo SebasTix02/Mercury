@@ -3,7 +3,7 @@ import { Button, Row, Table, Checkbox, Space, notification } from 'antd';
 
 import Layout from '../../components/layout';
 import CustomTable from '../../common/table/custom_table';
-import { getInfoLabels } from '../../providers/options/label';
+import { getInfoLabels, sendAssetKeys } from '../../providers/options/label';
 
 interface Component {
     ASSET_KEY: number;
@@ -57,10 +57,30 @@ export const Etiquetas = () => {
         setSelectedRowKeys(selectedKeys);
     };
     
-    const generatePDF = () => {
-        notification.success({ message: 'Etiquetas generadas con exito' });
+    const handleSelectAllChange = (checked: boolean) => {
+        if (checked) {
+            setSelectedRowKeys(dataSource.map(item => item.ASSET_KEY));
+        } else {
+            setSelectedRowKeys([]);
+        }
     };
-    
+
+    const generatePDF = async () => {
+        const selectedAssets = dataSource
+            .filter(item => selectedRowKeys.includes(item.ASSET_KEY))
+            .map(item => ({
+                assetKey: item.ASSET_KEY,
+                isComputer: item.COMPUTER_ID,
+            }));
+
+        try {
+            await sendAssetKeys(selectedAssets);
+            notification.success({ message: 'Etiquetas generadas con éxito' });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const columns = [
         {
             title: 'Código',
@@ -131,6 +151,7 @@ export const Etiquetas = () => {
             title: 'Seleccionar...',
             key: 'isSelected',
             render: (_: any, record: Component) => (
+                
                 <Checkbox
                     checked={selectedRowKeys.includes(record.ASSET_KEY)}
                     onChange={() => {
@@ -143,20 +164,29 @@ export const Etiquetas = () => {
             ),
         },
     ];
-
     return (
         <Layout>
             <div style={{ padding: '20px' }}>
                 <h1 style={{ marginBottom: '20px' }}>Lista de Componentes</h1>
                 <Row gutter={[16, 16]}>
                 </Row>
+                
                 <CustomTable
                     dataSource={dataSource}
                     columns={columns}
                     rowKey="ASSET_KEY"
                     searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
-                    />
-                <Button type="primary" onClick={generatePDF}>Generar Etiquetas QR</Button>
+                />
+                
+                <Checkbox
+                        indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < dataSource.length}
+                        onChange={e => handleSelectAllChange(e.target.checked)}
+                        checked={selectedRowKeys.length === dataSource.length}
+                    >Seleccionar todos
+                    </Checkbox>
+                <Button type="primary" onClick={generatePDF} disabled={selectedRowKeys.length === 0}>
+                    Generar Etiquetas (QR)
+                </Button>
             </div>
         </Layout>
     );
