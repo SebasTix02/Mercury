@@ -9,6 +9,6 @@ router.post('/',controller.insertCaseComponent);
 router.put('/:id',controller.updateCaseComponent);
 router.delete('/:id',controller.deleteCaseComponent);
 router.put('/unsubscribe/:id',controller.unsubscribeCaseComponent);
-router.get('/case_related/:id',controller.unsubscribeCaseComponent);
+router.get('/case_related/:id',controller.getCaseComponentByComputerId);
 
 module.exports = router;

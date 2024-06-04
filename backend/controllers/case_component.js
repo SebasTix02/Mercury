@@ -157,7 +157,7 @@ exports.unsubscribeCaseComponent = async (request, response) => {
     }
 }
 
-exports.getCaseComponentByCaseId = async (request, response) => {
+exports.getCaseComponentByComputerId = async (request, response) => {
     try{
         const [data] = await connection.query(
             `SELECT case_component.ID, 
@@ -199,7 +199,7 @@ exports.getCaseComponentByCaseId = async (request, response) => {
         );
         response.json(data[0]);
     }catch(error){
-        console.log('Error en "getCaseComponentByCaseId()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete'});
+        console.log('Error en "getCaseComponentByComputerId()" controller\n',error);
+        response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete del Computador'});
     }
 }
