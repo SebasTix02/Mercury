@@ -1,8 +1,13 @@
 import { message } from "antd";
 import { API_QR } from "../data";
 import axios from 'axios';
-
+import { saveAs } from 'file-saver';
 const API_LABEL = `${API_QR}`;
+
+interface Asset {
+    assetKey: number;
+    isComputer: number | null;
+}
 
 export const getInfoLabels = async () => {
     try {
@@ -25,9 +30,11 @@ export const getInfoLabels = async () => {
     }
 };
 
-export const sendAssetKeys = async (assets: { assetKey: number, isComputer: number | null }[]) => {
+export const sendAssetKeys = async (assets: Asset[]) => {
     try {
-        const response = await axios.post(API_LABEL, assets);
+        const response = await axios.post(API_LABEL, assets, { responseType: 'blob' });
+        saveAs(new Blob([response.data]), 'qr_tags.pdf');
+
         return response.data;
     } catch (e) {
         const error = e as Error;
