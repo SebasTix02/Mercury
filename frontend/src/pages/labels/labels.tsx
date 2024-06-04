@@ -187,19 +187,19 @@ export const Etiquetas = () => {
                     rowKey="ASSET_KEY"
                     searchFields={['ASSET_KEY', 'COMPUTER_ID', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'FEATURE', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'BUILDING', 'LOCATION']}
                 />
-                
+{/*                 
                 <Checkbox
                     indeterminate={selectedRowKeys.length > 0 && selectedRowKeys.length < dataSource.length}
                     onChange={e => handleSelectAllChange(e.target.checked)}
                     checked={selectedRowKeys.length === dataSource.length}
                 >
                     Seleccionar todos
-                </Checkbox>
+                </Checkbox> */}
 
                 <Button type="primary" onClick={handleGenerateQR} disabled={selectedRowKeys.length === 0}>
                     Generar Etiquetas (QR)
                 </Button>
             </div>
-        </Layout>
+        </Layout>   
     );
 };
