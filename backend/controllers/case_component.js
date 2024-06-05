@@ -161,6 +161,7 @@ exports.getCaseComponentByComputerId = async (request, response) => {
     try{
         const [data] = await connection.query(
             `SELECT case_component.ID, 
+            computer_component.ID AS CASE_ID,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
