@@ -30,7 +30,7 @@ export const resources: IResourceItem[] = [
     },
     {
       name: 'Repotenciar',
-      list: '/repotenciar',
+      list: '/repotenciar/1',
       meta: {
         label: 'Repotenciar',
         icon: <ToolOutlined/>

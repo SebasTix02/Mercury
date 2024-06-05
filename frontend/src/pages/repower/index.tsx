@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Space, Row, notification, Tabs, Input } from 'antd';
 import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined, SearchOutlined } from '@ant-design/icons';
-import { useNavigate, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import { editComputerComponent,getAllComputerComponents, getComputerComponentsByComputerId, addComputerComponent
   ,deleteComputerComponent, getAllCaseComponents, getCaseComponentById,addCaseComponent,editCaseComponent,deleteCaseComponent
   ,unsubscribeCaseComponent, getCaseComponentsRelated
@@ -40,10 +40,11 @@ interface ComputerComponent {
 }
 
 export const Repotenciacion = () => {
-  const { id } = useParams<{ id: string }>();
+  var { id } = useParams<{ id: string }>();
   const [buildings, setBuildings] = useState([])
   const [locations, setLocations] = useState([])
   const [brands, setBrands] = useState([])
+  const [caseId, setCases] = useState()
   // Computer Components State
   const [computerComponents, setComputerComponents] = useState<ComputerComponent[]>([]);
   const [loadingComputerComponents, setLoadingComputerComponents] = useState(true);
@@ -72,6 +73,9 @@ export const Repotenciacion = () => {
       })
       getAllBrands().then((brandData:any) => {
         setBrands(brandData.brands);
+      })
+      getCaseComponentsRelated(Number.parseInt(id)).then((casesData:any) => {
+        setCases(casesData.components[0].CASE_ID);
       })
     }
   }, [id]);
@@ -116,6 +120,9 @@ export const Repotenciacion = () => {
 
   const handleSearchById = async (searchId: string) => {
     await fetchComponentsById(searchId);
+    id=searchId
+    const newUrl = `/repotenciar/${searchId}`; // Define la nueva URL
+    window.history.pushState({ path: newUrl }, '', newUrl);
   };
 
   // Handlers and other functions remain the same
@@ -240,12 +247,18 @@ export const Repotenciacion = () => {
       });
       return;
     }
+    if (id) {
+      await fetchComponentsById(id);
+    } else {
+      console.error("ID is undefined. Cannot fetch components.");
+    }
     const newRecord = { ...values, ID: id };
     setIsAddComputerComponentModalVisible(false);
     notification.success({
       message: 'Componente de Computadora agregado',
       description: 'El componente de computadora ha sido agregado exitosamente.',
     });
+    
   };
 
   // Case Component Handlers
@@ -339,7 +352,18 @@ export const Repotenciacion = () => {
   };
 
   const handleAddCaseComponentOk = async (values: any) => {
-    const result: any = await addCaseComponent(values);
+    const currentDate = new Date();
+    const formattedDate = currentDate.getFullYear() + '-' + 
+                          String(currentDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                          String(currentDate.getDate()).padStart(2, '0');
+    const fecha = values.IS_UPGRADE === "SI" ? formattedDate : null;
+    const objectEdit = {
+      "caseId": caseId,"assetKey": null,"name": values.NAME,"brandId": values.BRAND,
+      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": values.STATUS,
+      "isUpgrade": values.IS_UPGRADE === "SI" ? 1 : 0,"upgradeDate": fecha,"upgradeDetail": null,
+    }
+    console.log(objectEdit)
+    const result: any = await addCaseComponent(objectEdit);
     if (!result.success) {
       setIsAddCaseComponentModalVisible(false);
       notification.error({
@@ -348,7 +372,12 @@ export const Repotenciacion = () => {
       });
       return;
     }
-    const newRecord = { ...values, ID: result.component.insertId };
+    const newRecord = { ...values, ID: result.result.insertId };
+    if (id) {
+      await fetchComponentsById(id);
+    } else {
+      console.error("ID is undefined. Cannot fetch components.");
+    }
     setIsAddCaseComponentModalVisible(false);
     notification.success({
       message: 'Componente de Gabinete agregado',
@@ -481,7 +510,7 @@ export const Repotenciacion = () => {
       <div style={{ padding: '20px' }}>
         <h1 style={{ marginBottom: '20px' }}>Repotenciación</h1>
         <Input.Search
-          placeholder="Ingrese ID del componente"
+          placeholder="Ingrese ID del computador a repotenciar"
           enterButton={<SearchOutlined />}
           size="large"
           onSearch={handleSearchById}
@@ -583,7 +612,8 @@ export const Repotenciacion = () => {
       {isAddCaseComponentModalVisible && (
         <CustomModal
           modalTitle="Agregar Componente de Gabinete"
-          formColumns={['NAME', 'BRAND', 'MODEL', 'TYPE']}
+          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE','CAPACITY','STATUS','IS_UPGRADE']}
+          selectTypeInputs={[[1, brands]]}
           isVisible={isAddCaseComponentModalVisible}
           handleVisible={setIsAddCaseComponentModalVisible}
           isAdding={true}
