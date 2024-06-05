@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button, Space, Row, notification, Tabs, Input } from 'antd';
 import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
-import { editComputerComponent,getAllComputerComponents, getComputerComponentById, addComputerComponent
+import { editComputerComponent,getAllComputerComponents, getComputerComponentsByComputerId, addComputerComponent
   ,deleteComputerComponent, getAllCaseComponents, getCaseComponentById,addCaseComponent,editCaseComponent,deleteCaseComponent
   ,unsubscribeCaseComponent, getCaseComponentsRelated
  } from '../../providers/options/components';
@@ -77,27 +77,31 @@ export const Repotenciacion = () => {
   }, [id]);
   const fetchComponentsById = async (id: string) => {
     try {
+      // Reiniciar los estados para evitar duplicados
+      setComputerComponents([]);
+      setCaseComponents([]);
+  
       setLoadingComputerComponents(true);
       setLoadingCaseComponents(true);
   
-      const computerComponentResult = await getComputerComponentById(Number.parseInt(id));
-      const caseComponentResult = await getCaseComponentsRelated(Number.parseInt(id)); // Cambio aquí
+      const computerComponentResult = await getComputerComponentsByComputerId(Number.parseInt(id));
+      const caseComponentResult = await getCaseComponentsRelated(Number.parseInt(id));
   
       if (computerComponentResult.success) {
-        setComputerComponents([computerComponentResult.component]);
+        setComputerComponents(computerComponentResult.components);
       } else {
         notification.error({
           message: 'Error de obtención de datos',
-          description: `No se pudo obtener el componente de computadora: ${computerComponentResult.error?.message}`,
+          description: `No se pudo obtener los componentes de computadora: ${computerComponentResult.error?.message}`,
         });
       }
   
       if (caseComponentResult.success) {
-        setCaseComponents(caseComponentResult.components); // Cambio aquí
+        setCaseComponents(caseComponentResult.components);
       } else {
         notification.error({
           message: 'Error de obtención de datos',
-          description: `No se pudo obtener el componente de gabinete: ${caseComponentResult.error?.message}`,
+          description: `No se pudo obtener los componentes de gabinete: ${caseComponentResult.error?.message}`,
         });
       }
     } catch (error) {
@@ -107,6 +111,8 @@ export const Repotenciacion = () => {
       setLoadingCaseComponents(false);
     }
   };
+  
+  
 
   const handleSearchById = async (searchId: string) => {
     await fetchComponentsById(searchId);
@@ -129,22 +135,34 @@ export const Repotenciacion = () => {
   };
 
   const handleEditComputerComponentOk = async (values: any) => {
+    let ubicacion = null;
+    console.log(typeof values.LOCATION)
+    if (typeof values.LOCATION === 'number') {
+        locations.map((item: any) => {
+        if (item.ID === values.LOCATION) { 
+          ubicacion = item; 
+        }
+        return item;
+    });
+    }else{ // Inicializa la variable fuera del mapeo
+      locations.map((item: any) => {
+          if (item.NAME === values.LOCATION) { 
+            ubicacion = item; 
+          }
+          return item;
+      });
+    }
+    
     var objectEdit = {
         "assetKey": null, // Asegúrate de incluir el assetKey si es necesario
         "name": values.NAME,
         "isCase": 0,
-        "locationId": values.LOCATION,
+        "locationId": ubicacion!.ID,
         "position": values.POSITION,
-        "status": values.STATUS === "INACTIVO" ? 0 : 1
+        "status": values.STATUS === "ACTIVO" ? 1 : 0
     };
-    let ubicacion = null; // Inicializa la variable fuera del mapeo
-    const recorrerUbicaciones = locations.map((item: any) => {
-        if (item.ID === values.LOCATION) { // Comprueba si la ID coincide
-          ubicacion = item; // Actualiza el valor si hay una coincidencia
-        }
-        return item;
-    });
-  
+    console.log(objectEdit)
+    console.log(ubicacion)
     var valoresMostrar = {
       "ASSET_KEY": null,
       "NAME": values.NAME,
@@ -179,6 +197,7 @@ export const Repotenciacion = () => {
 
 
   const handleDeleteComputerComponentOk = async () => {
+    console.log(selectedComputerComponent!.ID)
     const result: any = await deleteComputerComponent(selectedComputerComponent!.ID);
     if (!result.success) {
       setIsDeleteComputerComponentModalVisible(false);
@@ -198,7 +217,21 @@ export const Repotenciacion = () => {
   };
 
   const handleAddComputerComponentOk = async (values: any) => {
-    const result: any = await addComputerComponent(values);
+    const nombre = values.NAME.toLowerCase();
+    var isCase = 0;
+    if (nombre.includes('case') || nombre.includes('gabinete')) {
+      isCase = 1;
+    }
+    var objectAdd = {
+      "computerId": id,
+      "assetKey": null,
+      "name": values.NAME,
+      "isCase": isCase,
+      "locationId": values.LOCATION,
+      "position": values.POSITION,
+      "status": values.STATUS === "ACTIVO" ? 1 : 0
+  }
+    const result: any = await addComputerComponent(objectAdd);
     if (!result.success) {
       setIsAddComputerComponentModalVisible(false);
       notification.error({
@@ -207,7 +240,7 @@ export const Repotenciacion = () => {
       });
       return;
     }
-    const newRecord = { ...values, ID: result.component.insertId };
+    const newRecord = { ...values, ID: id };
     setIsAddComputerComponentModalVisible(false);
     notification.success({
       message: 'Componente de Computadora agregado',
@@ -234,14 +267,25 @@ export const Repotenciacion = () => {
   const handleEditCaseComponentOk = async (values: any) => {
     let nombreMarca = null;
     let idMarca = null; 
-    brands.map((item: any) => {
-        if (item.ID == values.BRAND) { 
-          console.log(item)
+    console.log(typeof values.BRAND + "/dato: " + values.BRAND)
+    if (typeof values.BRAND === 'string') {
+      brands.map((item: any) => {
+        if (item.NAME == values.BRAND) { 
           idMarca = item.ID; 
           nombreMarca = item.NAME
         }
         return item;
-    });
+      });
+    }else{ // Inicializa la variable fuera del mapeo
+      brands.map((item: any) => {
+          if (item.ID == values.BRAND) { 
+            idMarca = item.ID; 
+            nombreMarca = item.NAME
+          }
+          return item;
+      });
+    }
+    console.log("id" + idMarca + "/nombre: " + nombreMarca)
     const objectEdit = {
       "assetKey": null,"name": values.NAME,"brandId": idMarca,
       "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": values.STATUS,
@@ -252,7 +296,7 @@ export const Repotenciacion = () => {
       "MODEL": values.MODEL,"SERIES": values.SERIES,"TYPE": values.TYPE,"CAPACITY": values.CAPACITY,"STATUS": values.STATUS,
       "IS_UPGRADE": values.IS_UPGRADE,"UPGRADE_DATE": values.UPGRADE_DATE,"UPGRADE_DETAIL": values.UPGRADE_DETAIL,
     }
-    
+    console.log(objectShow)
     const result: any = await editCaseComponent(selectedCaseComponent!.ID, objectEdit);
     if (!result.success) {
       setIsEditCaseComponentModalVisible(false);
@@ -495,7 +539,8 @@ export const Repotenciacion = () => {
       {isAddComputerComponentModalVisible && (
         <CustomModal
           modalTitle="Agregar Componente de Computadora"
-          formColumns={['NAME', 'BUILDING', 'LOCATION', 'POSITION']}
+          formColumns={['NAME', 'LOCATION', 'POSITION', 'STATUS']}
+          selectTypeInputs={[[1, locations]]}
           isVisible={isAddComputerComponentModalVisible}
           handleVisible={setIsAddComputerComponentModalVisible}
           isAdding={true}

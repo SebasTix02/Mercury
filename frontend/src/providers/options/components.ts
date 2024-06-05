@@ -43,7 +43,23 @@ export const getComputerComponentById = async (id: number) => {
         };
     }
 };
-
+export const getComputerComponentsByComputerId = async (id: number) => {
+    try {
+        const response = await axios.get(`${API_COMPUTER_COMPONENT}/computer_related/${id}`);
+        return {
+            success: true,
+            components: response.data,
+        };
+    } catch (e) {
+        const error = e as Error;
+        return {
+            success: false,
+            error: {
+                message: error.message || "Error al obtener componentes de computadora",
+            },
+        };
+    }
+};
 export const addComputerComponent = async (componentData: any) => {
     try {
         const response = await axios.post(API_COMPUTER_COMPONENT, componentData);
