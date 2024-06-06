@@ -69,7 +69,8 @@ function App() {
                   <Route path="/software" element={<Software />} />
                   <Route path="/computadores" element={<Inventario_Computadores />} />
                   <Route path="/bienes" element={<Inventario_Bienes />} />
-
+                  <Route path="/reportes" element={<Reports />} />
+                  <Route path="/repotenciar/:id" element={<Repotenciacion />} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
