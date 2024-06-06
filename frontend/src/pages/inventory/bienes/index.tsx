@@ -6,76 +6,78 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../../common/table/custom_table';
 import CustomModal from '../../../common/modal/custom_modal';
 import { CustomColors } from '../../../common/constantsCommon';
-import { addComputer, deleteComputer, editComputer, getAllComputers, getComputerByAssetKey } from '../../../providers/options/computer';
+import { addAsset, deleteAsset, editAsset, getAllAssets } from '../../../providers/options/asset';
 import { getAllBuildings } from '../../../providers/options/building';
 import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
-import { useNavigate, useParams } from 'react-router-dom';
-export const Inventario_Computadores = () => {
-  const { scannedCode } = useParams();
-  const navigate = useNavigate();
+
+export const Inventario_Bienes = () => {
+  type Category = {
+    id: number;
+    name: string;
+  };
+  
+  type Brand = {
+    id: number;
+    name: string;
+  };
+  
+  type Dependency = {
+    id: number;
+    name: string;
+  };
+  
+  type Location = {
+    id: number;
+    name: string;
+  };
+  
   const [dataSource, setDataSource] = useState([]);
-  const [buildings, setBuildings] = useState([])
-  const [locations, setLocations] = useState([])
-  const [categories, setCategories] = useState([])
-  const [brands, setBrands] = useState([])
-  const [dependencies, setDependencies] = useState([])
+  const [buildings, setBuildings] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [dependencies, setDependencies] = useState<Dependency[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result:any = await getAllComputers();
+    getAllAssets()
+      .then((result: any) => {
         if (result.success) {
-          setDataSource(result.computers);
-          const [buildData, locationData, categoriesData, brandsData, dependenciesData] = await Promise.all([
-            getAllBuildings(),
-            getAllLocations(),
-            getAllCategories(),
-            getAllBrands(),
-            getAllDependencies(),
-          ]);
-
-          setBuildings(buildData.buildings);
-          setLocations(locationData.locations);
-          setCategories(categoriesData.categories);
-          setBrands(brandsData.brands);
-          setDependencies(dependenciesData.dependencies);
-
-          if (scannedCode) {
-            const parsedCode = parseInt(scannedCode, 10);
-            const computerResult:any = await getComputerByAssetKey(parsedCode);
-            if (computerResult.success) {
-              setSelectedRecord(computerResult.computer);
-              setIsEditModalVisible(true);
-            } else {
-              notification.error({
-                message: 'Error de obtención de datos',
-                description: `No se pudo obtener el computador con el código escaneado: ${computerResult.error.message}`,
-              });
-            }
-          }
+          setDataSource(result.assets);
+          getAllBuildings().then((buildData: any) => {
+            setBuildings(buildData.buildings);
+          });
+          getAllLocations().then((locationData: any) => {
+            setLocations(locationData.locations);
+          });
+          getAllCategories().then((categoriesData: any) => {
+            setCategories(categoriesData.categories);
+          });
+          getAllBrands().then((brandsData: any) => {
+            setBrands(brandsData.brands);
+          });
+          getAllDependencies().then((dependenciesData: any) => {
+            setDependencies(dependenciesData.dependencies);
+          });
         } else {
+          console.error(result.error.message);
           notification.error({
             message: 'Error de obtención de datos',
-            description: `No se pudo obtener los computadores: ${result.error.message}`,
+            description: `No se pudo obtener los activos: ${result.error.message}`,
           });
         }
-      } catch (error:any) {
+      })
+      .catch((error) => {
         console.error(error);
-        notification.error({
-          message: 'Error de obtención de datos',
-          description: `Ocurrió un error al obtener los datos: ${error.message}`,
-        });
-      } finally {
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [scannedCode]);
+      });
+  }, []);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -83,16 +85,29 @@ export const Inventario_Computadores = () => {
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
   const handleEdit = (record: any) => {
-    setSelectedRecord(record);
+    console.log("Record CATEGORY:", record.CATEGORY);
+    console.log("Categories:", categories);
+    const editRecord = {
+      ...record,
+      CATEGORY: categories.find((cat) => cat.id === record.CATEGORY) || {},
+      BRAND: brands.find((brand) => brand.id === record.BRAND) || {},
+      ACQUISITION_DEPENDENCY: dependencies.find((dep) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
+      LOCATION: locations.find((loc) => loc.id === record.LOCATION) || {},
+    };
+    setSelectedRecord(editRecord);
     setIsEditModalVisible(true);
   };
+  
+  
+  
 
   const handleDelete = (record: any) => {
     setSelectedRecord(record);
     setIsDeleteModalVisible(true);
   };
+
   const handleRepower = (record: any) => {
-    alert("repotenciacion en proceso")
+    alert("repotenciacion en proceso");
   };
 
   const handleAdd = () => {
@@ -101,7 +116,7 @@ export const Inventario_Computadores = () => {
   };
 
   const handleEditOk = async (values: any) => {
-    var objectEdit={
+    const objectEdit = {
       "categoryId": values.CATEGORY,
       "name": values.NAME,
       "brandId": values.BRAND,
@@ -114,14 +129,14 @@ export const Inventario_Computadores = () => {
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
-  }
-  console.log(values);
-    const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
+    };
+    console.log(values);
+    const result: any = await editAsset(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
       notification.error({
         message: 'Error de actualización',
-        description: `No se pudo actualizar el computador: ${result.error.message}`,
+        description: `No se pudo actualizar el activo: ${result.error.message}`,
       });
       return;
     }
@@ -133,18 +148,19 @@ export const Inventario_Computadores = () => {
     setDataSource(updatedData);
     setIsEditModalVisible(false);
     notification.success({
-      message: 'Computador actualizado',
-      description: 'El computador ha sido actualizado exitosamente.',
+      message: 'Activo actualizado',
+      description: 'El activo ha sido actualizado exitosamente.',
     });
   };
+  
 
   const handleDeleteOk = async () => {
-    const result: any = await deleteComputer(selectedRecord.ASSET_KEY);
+    const result: any = await deleteAsset(selectedRecord.ASSET_KEY);
     if (!result.success) {
       setIsDeleteModalVisible(false);
       notification.error({
         message: 'Error de eliminación',
-        description: `No se pudo eliminar el computador: ${result.error.message}`,
+        description: `No se pudo eliminar el activo: ${result.error.message}`,
       });
       return;
     }
@@ -152,13 +168,13 @@ export const Inventario_Computadores = () => {
     setDataSource(newData);
     setIsDeleteModalVisible(false);
     notification.success({
-      message: 'Computador eliminado',
-      description: 'El computador ha sido eliminado exitosamente.',
+      message: 'Activo eliminado',
+      description: 'El activo ha sido eliminado exitosamente.',
     });
   };
 
   const handleAddOk = async (values: any) => {
-    var objectAdd={
+    var objectAdd = {
       "assetKey": values.ASSET_KEY,
       "categoryId": values.CATEGORY,
       "name": values.NAME,
@@ -172,26 +188,26 @@ export const Inventario_Computadores = () => {
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
-  }
-    const result: any = await addComputer(objectAdd);
+    };
+    const result: any = await addAsset(objectAdd);
     if (!result.success) {
       setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
-        description: `No se pudo agregar el computador: ${result.error.message}`,
+        description: `No se pudo agregar el activo: ${result.error.message}`,
       });
       return;
     }
 
     const newRecord = { ...values };
-    newRecord.ASSET_KEY = result.computer.insertId;
+    newRecord.ASSET_KEY = result.asset.insertId;
 
     const updatedDataSource: any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
     setIsAddModalVisible(false);
     notification.success({
-      message: 'Computador agregado',
-      description: 'El computador ha sido agregado exitosamente.',
+      message: 'Activo agregado',
+      description: 'El activo ha sido agregado exitosamente.',
     });
   };
 
@@ -199,12 +215,7 @@ export const Inventario_Computadores = () => {
     {
       title: 'ID_Activo',
       dataIndex: 'ASSET_KEY',
-      key: 'asset_Key',
-    },
-    {
-      title: 'ID',
-      dataIndex: 'COMPUTER_ID',
-      key: 'computer_id',
+      key: 'asset_key',
     },
     {
       title: 'Categoría',
@@ -249,31 +260,6 @@ export const Inventario_Computadores = () => {
       key: 'model',
     },
     {
-      title: 'Sistema Operativo',
-      dataIndex: 'OPERATIVE_SYSTEM',
-      key: 'operativeSystem',
-    },
-    {
-      title: 'IP',
-      dataIndex: 'IP',
-      key: 'ip',
-    },
-    {
-      title: 'Capacidad de RAM',
-      dataIndex: 'RAM_CAPACITY',
-      key: 'ramCapacity',
-    },
-    {
-      title: 'Capacidad de Disco',
-      dataIndex: 'DISK_CAPACITY',
-      key: 'diskCapacity',
-    },
-    {
-      title: 'Capacidad Gráfica',
-      dataIndex: 'GRAPH_CAPACITY',
-      key: 'graphCapacity',
-    },
-    {
       title: 'Serie',
       dataIndex: 'SERIES',
       key: 'series',
@@ -281,7 +267,7 @@ export const Inventario_Computadores = () => {
     {
       title: 'Dependencia de Adquisición',
       dataIndex: 'ACQUISITION_DEPENDENCY',
-      key: 'acquisitionDependency',
+      key: 'acquisition_dependency',
       rules: [
         { required: true, message: '¡Por favor selecciona la dependencia de adquisicion!' },
       ]
@@ -289,12 +275,12 @@ export const Inventario_Computadores = () => {
     {
       title: 'Fecha de Ingreso',
       dataIndex: 'ENTRY_DATE',
-      key: 'entryDate',
+      key: 'entry_date',
     },
     {
       title: 'Custodio Actual',
       dataIndex: 'CURRENT_CUSTODIAN',
-      key: 'currentCustodian',
+      key: 'current_custodian',
     },
     {
       title: 'Acciones',
@@ -312,30 +298,31 @@ export const Inventario_Computadores = () => {
   return (
     <Layout>
       <div style={{ padding: '20px' }}>
-        <h1 style={{ marginBottom: '20px' }}>Inventario de Computadores</h1>
-        <Row gutter={[16, 16]}>
-        </Row>
+        <h1 style={{ marginBottom: '20px' }}>Inventario Bienes Generales</h1>
+        <Row gutter={[16, 16]}></Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ASSET_KEY" searchFields={['NAME','CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} handleAdd={handleAdd}/>
       </div>
 
       {isEditModalVisible && (
         <CustomModal
-          modalTitle="Editar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          modalTitle="Editar Activo"
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
           columns={columns}
-          selectedRecord={selectedRecord}
+          selectedRecord={selectedRecord} // Asegurar que selectedRecord se pase aquí
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
         />
       )}
 
+
+
       <CustomModal
-        text='¿Estás seguro de que deseas eliminar este computador?'
+        text='¿Estás seguro de que deseas eliminar este activo?'
         modalTitle="Confirmar Eliminación"
         isVisible={isDeleteModalVisible}
         handleOk={handleDeleteOk}
@@ -347,7 +334,7 @@ export const Inventario_Computadores = () => {
 
       {isAddModalVisible && (
         <CustomModal
-          modalTitle="Agregar Computador"
+          modalTitle="Agregar Activo"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
           isVisible={isAddModalVisible}

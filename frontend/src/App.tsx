@@ -26,6 +26,7 @@ import { Brands } from "./pages/brand/brand";
 import { Dependency } from "./pages/dependency/dependency";
 import { Software } from "./pages/inventory/software";
 import { Inventario_Computadores } from "./pages/inventory/computers";
+import { Inventario_Bienes } from "./pages/inventory/bienes";
 import Reports from "./pages/reports/reports";
 import { Repotenciacion } from "./pages/repower";
 import { QRScanner } from "./pages/qr_scanner/qr_scanner";
@@ -72,6 +73,7 @@ function App() {
                   <Route path="/reportes" element={<Reports />} />
                   <Route path="/repotenciar/:id" element={<Repotenciacion />} />
                   <Route path="/escaner" element={<QRScanner />} />
+                  <Route path="/bienes" element={<Inventario_Bienes />} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />

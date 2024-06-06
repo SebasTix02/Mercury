@@ -19,7 +19,7 @@ export const Inventario = () => {
   const [isSoftwareModalOpen, setIsSoftwareModalOpen] = useState(false);
 
   const showBienesModal = () => {
-    setIsBienesModalOpen(true);
+    navigate('/bienes');
   };
 
   const handleBienesOk = () => {
