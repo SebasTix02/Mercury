@@ -26,6 +26,7 @@ import { Brands } from "./pages/brand/brand";
 import { Dependency } from "./pages/dependency/dependency";
 import { Software } from "./pages/inventory/software";
 import { Inventario_Computadores } from "./pages/inventory/computers";
+import { Inventario_Bienes } from "./pages/inventory/bienes";
 import Reports from "./pages/reports/reports";
 import { Repotenciacion } from "./pages/repower";
 
@@ -67,8 +68,8 @@ function App() {
                   <Route path="/dependencias" element={<Dependency />} />
                   <Route path="/software" element={<Software />} />
                   <Route path="/computadores" element={<Inventario_Computadores />} />
-                  <Route path="/reportes" element={<Reports />} />
-                  <Route path="/repotenciar/:id" element={<Repotenciacion />} />
+                  <Route path="/bienes" element={<Inventario_Bienes />} />
+
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
