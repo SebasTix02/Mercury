@@ -92,7 +92,7 @@ export const Inventario_Computadores = () => {
     setIsDeleteModalVisible(true);
   };
   const handleRepower = (record: any) => {
-    alert("repotenciacion en proceso")
+    navigate('/repotenciar/'+record. COMPUTER_ID);
   };
 
   const handleAdd = () => {
