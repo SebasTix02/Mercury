@@ -6,15 +6,16 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../../common/table/custom_table';
 import CustomModal from '../../../common/modal/custom_modal';
 import { CustomColors } from '../../../common/constantsCommon';
-import { addComputer, deleteComputer, editComputer, getAllComputers } from '../../../providers/options/computer';
+import { addComputer, deleteComputer, editComputer, getAllComputers, getComputerByAssetKey } from '../../../providers/options/computer';
 import { getAllBuildings } from '../../../providers/options/building';
 import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Inventario_Computadores = () => {
+  const { scannedCode } = useParams();
   const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([])
@@ -25,40 +26,57 @@ export const Inventario_Computadores = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllComputers()
-      .then((result: any) => {
+    const fetchData = async () => {
+      try {
+        const result:any = await getAllComputers();
         if (result.success) {
           setDataSource(result.computers);
-          getAllBuildings().then((buildData:any) => {
-            setBuildings(buildData.buildings);
-          })
-          getAllLocations().then((locationData:any) => {
-            setLocations(locationData.locations);
-          })
-          getAllCategories().then((categoriesData:any) => {
-            setCategories(categoriesData.categories);
-          })
-          getAllBrands().then((brandsData:any) => {
-            setBrands(brandsData.brands);
-          })
-          getAllDependencies().then((dependenciesData:any) => {
-            setDependencies(dependenciesData.dependencies);
-          })
+          const [buildData, locationData, categoriesData, brandsData, dependenciesData] = await Promise.all([
+            getAllBuildings(),
+            getAllLocations(),
+            getAllCategories(),
+            getAllBrands(),
+            getAllDependencies(),
+          ]);
+
+          setBuildings(buildData.buildings);
+          setLocations(locationData.locations);
+          setCategories(categoriesData.categories);
+          setBrands(brandsData.brands);
+          setDependencies(dependenciesData.dependencies);
+
+          if (scannedCode) {
+            const parsedCode = parseInt(scannedCode, 10);
+            const computerResult:any = await getComputerByAssetKey(parsedCode);
+            if (computerResult.success) {
+              setSelectedRecord(computerResult.computer);
+              setIsEditModalVisible(true);
+            } else {
+              notification.error({
+                message: 'Error de obtención de datos',
+                description: `No se pudo obtener el computador con el código escaneado: ${computerResult.error.message}`,
+              });
+            }
+          }
         } else {
-          console.error(result.error.message);
           notification.error({
             message: 'Error de obtención de datos',
             description: `No se pudo obtener los computadores: ${result.error.message}`,
           });
         }
-      })
-      .catch((error) => {
+      } catch (error:any) {
         console.error(error);
-      })
-      .finally(() => {
+        notification.error({
+          message: 'Error de obtención de datos',
+          description: `Ocurrió un error al obtener los datos: ${error.message}`,
+        });
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [scannedCode]);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
