@@ -157,10 +157,11 @@ exports.unsubscribeCaseComponent = async (request, response) => {
     }
 }
 
-exports.getCaseComponentByCaseId = async (request, response) => {
+exports.getCaseComponentByComputerId = async (request, response) => {
     try{
         const [data] = await connection.query(
             `SELECT case_component.ID, 
+            computer_component.ID AS CASE_ID,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
@@ -192,12 +193,14 @@ exports.getCaseComponentByCaseId = async (request, response) => {
                 LEFT JOIN ASSET AS asset ON asset.ASSET_KEY = case_component.ASSET_KEY
                 LEFT JOIN BRAND AS brand ON brand.ID = case_component.BRAND_ID
                     OR brand.ID = asset.BRAND_ID
-            WHERE case_component.CASE_ID = ?`,
+                LEFT JOIN COMPUTER_COMPONENT AS computer_component ON computer_component.ID = case_component.CASE_ID
+                LEFT JOIN COMPUTER AS computer ON computer.ID = computer_component.COMPUTER_ID
+            WHERE computer.ID = ?`,
             [request.params.id]
         );
-        response.json(data[0]);
+        response.json(data);
     }catch(error){
-        console.log('Error en "getCaseComponentByCaseId()" controller\n',error);
-        response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete'});
+        console.log('Error en "getCaseComponentByComputerId()" controller\n',error);
+        response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete del Computador'});
     }
 }

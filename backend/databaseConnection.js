@@ -5,7 +5,8 @@ const connection = mysql.createPool({
     user: 'root',
     password: '',
     port: 3306,
-    database: 'mercury'
+    database: 'mercury',
+    multipleStatements: true
 });
 
 module.exports = connection

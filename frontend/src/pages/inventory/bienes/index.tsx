@@ -14,12 +14,33 @@ import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 
 export const Inventario_Bienes = () => {
+  type Category = {
+    id: number;
+    name: string;
+  };
+  
+  type Brand = {
+    id: number;
+    name: string;
+  };
+  
+  type Dependency = {
+    id: number;
+    name: string;
+  };
+  
+  type Location = {
+    id: number;
+    name: string;
+  };
+  
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([]);
-  const [locations, setLocations] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [dependencies, setDependencies] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [dependencies, setDependencies] = useState<Dependency[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,9 +85,21 @@ export const Inventario_Bienes = () => {
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
   const handleEdit = (record: any) => {
-    setSelectedRecord(record);
+    console.log("Record CATEGORY:", record.CATEGORY);
+    console.log("Categories:", categories);
+    const editRecord = {
+      ...record,
+      CATEGORY: categories.find((cat) => cat.id === record.CATEGORY) || {},
+      BRAND: brands.find((brand) => brand.id === record.BRAND) || {},
+      ACQUISITION_DEPENDENCY: dependencies.find((dep) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
+      LOCATION: locations.find((loc) => loc.id === record.LOCATION) || {},
+    };
+    setSelectedRecord(editRecord);
     setIsEditModalVisible(true);
   };
+  
+  
+  
 
   const handleDelete = (record: any) => {
     setSelectedRecord(record);
@@ -83,11 +116,8 @@ export const Inventario_Bienes = () => {
   };
 
   const handleEditOk = async (values: any) => {
-    // Get the category ID from the selected category in the form
-    const categoryId = values.CATEGORY; // Assuming the category selection is stored in the 'CATEGORY' field
-
-    var objectEdit = {
-      "categoryId": categoryId,
+    const objectEdit = {
+      "categoryId": values.CATEGORY,
       "name": values.NAME,
       "brandId": values.BRAND,
       "model": values.MODEL,
@@ -122,6 +152,7 @@ export const Inventario_Bienes = () => {
       description: 'El activo ha sido actualizado exitosamente.',
     });
   };
+  
 
   const handleDeleteOk = async () => {
     const result: any = await deleteAsset(selectedRecord.ASSET_KEY);
@@ -275,18 +306,20 @@ export const Inventario_Bienes = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Activo"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
           columns={columns}
-          selectedRecord={selectedRecord}
+          selectedRecord={selectedRecord} // Asegurar que selectedRecord se pase aquí
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
         />
       )}
+
+
 
       <CustomModal
         text='¿Estás seguro de que deseas eliminar este activo?'

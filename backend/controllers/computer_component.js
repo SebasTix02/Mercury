@@ -114,3 +114,36 @@ exports.deleteComputerComponent = async (request, response) => {
         response.status(500).json({error: 'Error al intentar eliminar el Componente del Computador'});
     }
 }
+
+exports.getComputerComponentsByComputerId = async (request, response) => {
+    try{
+        const [data] = await connection.query(
+            `SELECT computer_component.ID, computer_component.ASSET_KEY,
+            CASE 
+                WHEN computer_component.ASSET_KEY IS NOT NULL THEN (
+                    SELECT NAME 
+                    FROM ASSET 
+                    WHERE ASSET_KEY = computer_component.ASSET_KEY
+                )
+                ELSE computer_component.NAME
+            END AS NAME,
+            building.NAME AS BUILDING, location.NAME AS LOCATION, computer_component.POSITION,
+            CASE 
+                WHEN computer_component.STATUS = 0 THEN 'INACTIVO'
+                ELSE 'ACTIVO'
+            END AS STATUS
+            FROM COMPUTER_COMPONENT AS computer_component
+                LEFT JOIN ASSET AS asset ON asset.ASSET_KEY = computer_component.ASSET_KEY
+                LEFT JOIN LOCATION AS location ON location.ID = computer_component.LOCATION_ID 
+                    OR location.ID = asset.LOCATION_ID
+                LEFT JOIN BUILDING AS building ON building.ID = location.BUILDING_ID
+                LEFT JOIN COMPUTER AS computer ON computer.ID = computer_component.COMPUTER_ID
+            WHERE computer.ID = ?`,
+            [request.params.id]
+        );
+        response.json(data);
+    }catch(error){
+        console.log('Error en "getComputerComponentsByComputerId()" controller\n',error);
+        response.status(500).json({error: 'Error al intentar obtener los Componentes del Computador'});
+    }
+}
