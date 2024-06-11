@@ -5,7 +5,11 @@ exports.getAssets = async (request, response) => {
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, category.NAME AS CATEGORY, asset.NAME AS NAME, brand.NAME AS BRAND,
             asset.MODEL, asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
-            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION
+            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN asset.BORROWED = 1 THEN 'PRESTADO'
+                ELSE NULL
+            END AS BORROWED
             FROM ASSET AS asset
                 LEFT JOIN CATEGORY AS category ON category.ID = asset.CATEGORY_ID
                 LEFT JOIN BRAND AS brand ON brand.ID = asset.BRAND_ID
@@ -29,7 +33,11 @@ exports.getAssetById = async (request, response) => {
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, category.NAME AS CATEGORY, asset.NAME AS NAME, brand.NAME AS BRAND,
             asset.MODEL, asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
-            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION
+            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN asset.BORROWED = 1 THEN 'PRESTADO'
+                ELSE NULL
+            END AS BORROWED
             FROM ASSET AS asset
                 LEFT JOIN CATEGORY AS category ON category.ID = asset.CATEGORY_ID
                 LEFT JOIN BRAND AS brand ON brand.ID = asset.BRAND_ID
@@ -50,12 +58,12 @@ exports.insertAsset = async (request, response) => {
     try{
         const {assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId} = request.body;
+            currentCustodian, locationId, borrowed} = request.body;
         const [dbResponse] = await connection.query(
-            `INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,CURDATE())`,
+            `INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())`,
             [assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId]
+            currentCustodian, locationId, borrowed]
         );
         response.json(dbResponse);
     }catch(error){
@@ -73,17 +81,17 @@ exports.updateAsset = async (request, response) => {
     try{
         const {categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId} = request.body;
+            currentCustodian, locationId, borrowed} = request.body;
         const assetKey = request.params.id
         const [dbResponse] = await connection.query(
             `UPDATE ASSET 
                 SET CATEGORY_ID = ?, NAME = ?, BRAND_ID = ?,
                 MODEL = ?, FEATURE = ?, SERIES = ?, ACQUISITION_DEPENDENCY_ID = ?,
-                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?   
+                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?, BORROWED = ? 
             WHERE ASSET_KEY = ?`,
             [categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId,assetKey]
+            currentCustodian, locationId, borrowed, assetKey]
         );
         response.json(dbResponse);
     }catch(error){

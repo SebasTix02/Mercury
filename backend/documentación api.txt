@@ -427,7 +427,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
                 "CURRENT_CUSTODIAN": "SALAZAR LOGROÃ‘O FRANKLIN",
                 "BUILDING": null,
-                "LOCATION": null
+                "LOCATION": null,
+                "BORROWED": "PRESTADO"
             },
             {
                 "ASSET_KEY": 521251,
@@ -441,7 +442,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
                 "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
                 "BUILDING": null,
-                "LOCATION": null
+                "LOCATION": null,
+                "BORROWED": null
             },
             {
                 "ASSET_KEY": 521252,
@@ -455,7 +457,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
                 "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
                 "BUILDING": null,
-                "LOCATION": null
+                "LOCATION": null,
+                "BORROWED": "PRESTADO"
             }
         ]
 
@@ -474,7 +477,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
             "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
             "BUILDING": null,
-            "LOCATION": null
+            "LOCATION": null,
+            "BORROWED": null
         }
 
 
@@ -492,7 +496,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "acquisitionDependencyId": 2,
             "entryDate": "2024-05-08",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
-            "locationId": 10
+            "locationId": 10,
+            "borrowed": 1
         }
 
         Devuelve:
@@ -519,7 +524,8 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "acquisitionDependencyId": 2,
             "entryDate": "2024-05-08",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
-            "locationId": 10
+            "locationId": 10,
+            "borrowed": 0
         }
 
         Devuelve:
@@ -781,6 +787,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "NAME": "COMPUTADOR DE ESCRITORIO",
                 "BUILDING": "BLOQUE 2",
                 "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+                "BORROWED": "PRESTADO",
                 "BRAND": "DELL",
                 "MODEL": "OPTIPLEX 7070",
                 "OPERATIVE_SYSTEM": "WINDOWS",
@@ -801,6 +808,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "NAME": "COMPUTADOR DE ESCRITORIO",
                 "BUILDING": null,
                 "LOCATION": null,
+                "BORROWED": null,
                 "BRAND": "DELL",
                 "MODEL": "OPTIPLEX 7070",
                 "OPERATIVE_SYSTEM": "WINDOWS",
@@ -827,6 +835,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "NAME": "COMPUTADOR DE ESCRITORIO",
             "BUILDING": "BLOQUE 2",
             "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+            "BORROWED": "PRESTADO",
             "BRAND": "DELL",
             "MODEL": "OPTIPLEX 7070",
             "OPERATIVE_SYSTEM": "WINDOWS",
@@ -856,6 +865,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2010-01-22",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 5,
+            "borrowed": 1,
             "ip": "A Eliminar",
             "operativeSystem": "A eliminar"
         }
@@ -886,6 +896,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2010-01-22",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 5,
+            "borrowed": 0,
             "ip": "A Eliminar",
             "operativeSystem": "A eliminar"
         }
