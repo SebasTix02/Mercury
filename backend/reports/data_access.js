@@ -109,7 +109,7 @@ exports.getAgeInfo = async () => {
         const [data] = await connection.query(
             `${assetBaseQuery}
             WHERE asset.CATEGORY_ID = 5
-            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
+            ORDER BY asset.ENTRY_DATE`
         );
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getAgeInfo()\\""}`);
