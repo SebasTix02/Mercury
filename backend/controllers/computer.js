@@ -4,7 +4,7 @@ exports.getComputers = async (request, response) => {
     try{
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, 
-            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
                 ELSE NULL
@@ -32,7 +32,7 @@ exports.getComputerById = async (request, response) => {
     try{
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, 
-            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
                 ELSE NULL
@@ -62,12 +62,12 @@ exports.insertComputer = async (request, response) => {
     try{
         const {assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed, ip, operativeSystem} = request.body;
+            currentCustodian, locationId, position, borrowed, ip, operativeSystem} = request.body;
         const [assetResponse] = await connection.query(
-            'INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())',
+            'INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())',
             [assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed]
+            currentCustodian, locationId, position, borrowed]
         );
         const [computerResponse] = await connection.query(
             'INSERT INTO COMPUTER VALUES(NULL,?,?,?,CURDATE())',
@@ -75,6 +75,7 @@ exports.insertComputer = async (request, response) => {
         );
         response.json(computerResponse);
     }catch(error){
+        console.log('Error en "insertComputer()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             msg = duplicateField[5].includes('IP')
@@ -83,7 +84,6 @@ exports.insertComputer = async (request, response) => {
 
             response.status(500).json({error: msg});
         } else {
-            console.log('Error en "insertComputer()" controller\n',error);
             response.status(500).json({error: 'Error al intentar insertar el computador'});
         }
     }
@@ -93,17 +93,18 @@ exports.updateComputer = async (request, response) => {
     try{
         const {categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed, ip, operativeSystem} = request.body;
+            currentCustodian, locationId, position, borrowed, ip, operativeSystem} = request.body;
         const assetKey = request.params.id
         const [assetResponse]  = await connection.query(
             `UPDATE ASSET
                 SET CATEGORY_ID = ?, NAME = ?, BRAND_ID = ?,
                 MODEL = ?, FEATURE = ?, SERIES = ?, ACQUISITION_DEPENDENCY_ID = ?,
-                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?, BORROWED = ?  
+                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?,
+                POSITION = ?, BORROWED = ?  
             WHERE ASSET_KEY = ?`,
             [categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed, assetKey]
+            currentCustodian, locationId, position, borrowed, assetKey]
         );
         const [computerComponentResponse]  = await connection.query(
             `UPDATE ASSET
@@ -128,6 +129,7 @@ exports.updateComputer = async (request, response) => {
         );
         response.json(computerResponse);
     }catch(error){
+        console.log('Error en "updateComputer()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             msg = duplicateField[5].includes('IP')
@@ -136,7 +138,6 @@ exports.updateComputer = async (request, response) => {
 
             response.status(500).json({error: msg});
         } else {
-            console.log('Error en "updateComputer()" controller\n',error);
             response.status(500).json({error: 'Error al intentar actualizar el computador'});
         }
     }
