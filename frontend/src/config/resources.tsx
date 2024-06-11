@@ -27,7 +27,7 @@ export const resources: IResourceItem[] = [
         label: 'Inventario',
         icon: <CopyOutlined/>
       }
-    },
+    }, 
     {
       name: 'Reportes',
       list: '/reportes',
