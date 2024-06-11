@@ -242,7 +242,7 @@ exports.getLocationReport = async (request, response) => {
 
 exports.getSoftwareReport = async (request, response) => {
     
-    const data = await dataAccess.getSoftwareInfo();
+    const data = await dataAccess.getSoftwareInfo(request.params.type);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;

@@ -155,9 +155,13 @@ exports.getLocationInfo = async (locationId) => {
     }
 }
 
-exports.getSoftwareInfo = async () => {
+exports.getSoftwareInfo = async (labType) => {
     try{
-        const [data] = await connection.query('SELECT * FROM SOFTWARE');
+        let query = 'SELECT * FROM SOFTWARE';
+        if(labType != undefined){
+            query += labType == 0 ? ` WHERE LAB_TYPE = 'COMPUTACIÓN'` : ` WHERE LAB_TYPE = 'ESPECIALIZACIÓN'`;
+        }
+        const [data] = await connection.query(query);
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getSoftwareInfo()\\""}`);
         } else {

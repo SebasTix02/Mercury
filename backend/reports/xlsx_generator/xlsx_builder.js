@@ -176,8 +176,8 @@ exports.generateLocationReport = async (locationId) => {
     return workbook.outputAsync();
 }
 
-exports.generateSoftwareReport = async () => {
-    const data = await dataAccess.getSoftwareInfo();
+exports.generateSoftwareReport = async (labType) => {
+    const data = await dataAccess.getSoftwareInfo(labType);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
