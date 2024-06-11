@@ -27,15 +27,7 @@ export const resources: IResourceItem[] = [
         label: 'Inventario',
         icon: <CopyOutlined/>
       }
-    },
-    {
-      name: 'Repotenciar',
-      list: '/repotenciar/1',
-      meta: {
-        label: 'Repotenciar',
-        icon: <ToolOutlined/>
-      }
-    },
+    }, 
     {
       name: 'Reportes',
       list: '/reportes',
