@@ -2,11 +2,11 @@ const separator = require('./separator');
 
 exports.fillAssetTable = (data,computerDescription) => {
     let filledRows = '';
-    let lastCategory = null
+    let lastLab = null
     data.forEach(row => {
-        if(lastCategory != row.category){
-            filledRows += separator.setSeparator(row.category,12,'separator-first-level');
-            lastCategory = row.category;
+        if(lastLab != row.location){
+            filledRows += separator.setSeparator(row.location,12,'separator-first-level');
+            lastLab = row.location;
         }
         filledRows += 
         `<tr>

@@ -75,7 +75,9 @@ exports.getUpeReportInfo = async () => {
     try{
         const [data] = await connection.query(
             `${assetBaseQuery}
-            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
+            WHERE LOWER(asset_location.NAME) LIKE '%laboratorio%'
+                OR LOWER(asset_location.NAME) LIKE '%aula%'
+            ORDER BY asset_location.NAME, category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
         );
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getUpeReportInfo()\\""}`);
