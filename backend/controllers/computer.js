@@ -3,7 +3,12 @@ const connection = require('../databaseConnection');
 exports.getComputers = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, 
+            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN asset.BORROWED = 1 THEN 'PRESTADO'
+                ELSE NULL
+            END AS BORROWED,
             brand.NAME AS BRAND, asset.MODEL, computer.OPERATIVE_SYSTEM, computer.IP, GET_TOTAL_CAPACITY(computer.ID,'RAM') AS RAM_CAPACITY, 
             GET_TOTAL_CAPACITY(computer.ID,'DISCO') AS DISK_CAPACITY, GET_TOTAL_CAPACITY(computer.ID,'TARJETA GRÁFICA') AS GRAPH_CAPACITY, 
             asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
@@ -26,7 +31,12 @@ exports.getComputers = async (request, response) => {
 exports.getComputerById = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            `SELECT asset.ASSET_KEY AS ASSET_KEY, computer.ID AS COMPUTER_ID, category.NAME AS CATEGORY, asset.NAME AS NAME, 
+            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN asset.BORROWED = 1 THEN 'PRESTADO'
+                ELSE NULL
+            END AS BORROWED,
             brand.NAME AS BRAND, asset.MODEL, computer.OPERATIVE_SYSTEM, computer.IP, GET_TOTAL_CAPACITY(computer.ID,'RAM') AS RAM_CAPACITY, 
             GET_TOTAL_CAPACITY(computer.ID,'DISCO') AS DISK_CAPACITY, GET_TOTAL_CAPACITY(computer.ID,'TARJETA GRÁFICA') AS GRAPH_CAPACITY, 
             asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
@@ -52,12 +62,12 @@ exports.insertComputer = async (request, response) => {
     try{
         const {assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, ip, operativeSystem} = request.body;
+            currentCustodian, locationId, borrowed, ip, operativeSystem} = request.body;
         const [assetResponse] = await connection.query(
-            'INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,CURDATE())',
+            'INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())',
             [assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId]
+            currentCustodian, locationId, borrowed]
         );
         const [computerResponse] = await connection.query(
             'INSERT INTO COMPUTER VALUES(NULL,?,?,?,CURDATE())',
@@ -83,17 +93,17 @@ exports.updateComputer = async (request, response) => {
     try{
         const {categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, ip, operativeSystem} = request.body;
+            currentCustodian, locationId, borrowed, ip, operativeSystem} = request.body;
         const assetKey = request.params.id
         const [assetResponse]  = await connection.query(
             `UPDATE ASSET
                 SET CATEGORY_ID = ?, NAME = ?, BRAND_ID = ?,
                 MODEL = ?, FEATURE = ?, SERIES = ?, ACQUISITION_DEPENDENCY_ID = ?,
-                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?   
+                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?, BORROWED = ?  
             WHERE ASSET_KEY = ?`,
             [categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, assetKey]
+            currentCustodian, locationId, borrowed, assetKey]
         );
         const [computerComponentResponse]  = await connection.query(
             `UPDATE ASSET
