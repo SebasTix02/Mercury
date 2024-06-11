@@ -89,3 +89,9 @@
 .software-table tbody tr:nth-child(odd){
     background-color: #CFDBD5
 }
+
+.computer-name{
+    display: block;
+    text-align: center;
+    font-size: 15px;
+}

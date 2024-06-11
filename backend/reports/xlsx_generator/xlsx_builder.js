@@ -1,7 +1,9 @@
 const dataAccess = require('../data_access');
 const assetConverter = require('../asset_converter');
+const componentConverter = require('../component_converter');
 const XlsxGenerator = require('xlsx-populate');
 
+// async function exec(){
 exports.generateUpeReport = async () => {
     const data = await dataAccess.getUpeReportInfo();
     if(data.hasOwnProperty('error')){
@@ -9,10 +11,11 @@ exports.generateUpeReport = async () => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
 
     const workbook = await XlsxGenerator.fromBlankAsync();
 
-    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Característica',
+    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Componentes',
     'Serie','Dependencia','Fecha Ingreso','Custodio Actual','Bloque','Ubicación'];
 
     const sheet = workbook.sheet(0);
@@ -42,6 +45,7 @@ exports.generateUpeReport = async () => {
     return workbook.outputAsync();
 }
 
+// async function exec(){
 exports.generateAgeReport = async () => {
     const data = await dataAccess.getAgeInfo();
     if(data.hasOwnProperty('error')){
@@ -49,10 +53,11 @@ exports.generateAgeReport = async () => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
 
     const workbook = await XlsxGenerator.fromBlankAsync();
 
-    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Característica',
+    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Componentes',
     'Serie','Dependencia','Fecha Ingreso','Edad','Custodio Actual','Bloque','Ubicación'];
     const sheet = workbook.sheet(0);
     let columsWidth = [0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -87,6 +92,7 @@ exports.generateAgeReport = async () => {
     return workbook.outputAsync();
 }
 
+// async function exec(dependencyId){
 exports.generateDependencyReport = async (dependencyId) => {
     const data = await dataAccess.getDependencyInfo(dependencyId);
     if(data.hasOwnProperty('error')){
@@ -94,10 +100,11 @@ exports.generateDependencyReport = async (dependencyId) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
 
     const workbook = await XlsxGenerator.fromBlankAsync();
 
-    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Característica',
+    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Componentes',
     'Serie','Dependencia','Fecha Ingreso','Custodio Actual','Bloque','Ubicación'];
 
     const sheet = workbook.sheet(0);
@@ -127,6 +134,7 @@ exports.generateDependencyReport = async (dependencyId) => {
     return workbook.outputAsync();
 }
 
+// async function exec(locationId){
 exports.generateLocationReport = async (locationId) => {
     const data = await dataAccess.getLocationInfo(locationId);
     if(data.hasOwnProperty('error')){
@@ -134,10 +142,11 @@ exports.generateLocationReport = async (locationId) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
 
     const workbook = await XlsxGenerator.fromBlankAsync();
 
-    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Característica',
+    const headers = ['Código', 'Categoría', 'Nombre', 'Marca', 'Modelo', 'Componentes',
     'Serie','Dependencia','Fecha Ingreso','Custodio Actual','Bloque','Ubicación'];
 
     const sheet = workbook.sheet(0);
@@ -167,8 +176,8 @@ exports.generateLocationReport = async (locationId) => {
     return workbook.outputAsync();
 }
 
-exports.generateSoftwareReport = async () => {
-    const data = await dataAccess.getSoftwareInfo();
+exports.generateSoftwareReport = async (labType) => {
+    const data = await dataAccess.getSoftwareInfo(labType);
     if(data.hasOwnProperty('error')){
         response.status(500).json(data);
         return;
@@ -205,6 +214,7 @@ exports.generateSoftwareReport = async () => {
     return workbook.outputAsync();
 }
 
+// async function exec(locationId){
 exports.generateComputersReport = async (locationId) => {
     const data = await dataAccess.getComputersInfo(locationId);
     if(data.hasOwnProperty('error')){
@@ -213,11 +223,12 @@ exports.generateComputersReport = async (locationId) => {
     }
 
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
 
     const workbook = await XlsxGenerator.fromBlankAsync();
 
     const headers = ['Código', 'Categoría', 'Nombre', 'Nombre', 'Nombre','Nombre', 'Nombre', 'Nombre', 'Nombre', 
-    'Nombre', 'Nombre', 'Nombre', 'Nombre', 'Marca', 'Modelo', 'Característica',
+    'Nombre', 'Nombre', 'Nombre', 'Nombre', 'Marca', 'Modelo', 'Componentes',
     'Serie','Dependencia','Fecha Ingreso','Custodio Actual','Bloque','Ubicación'];
 
     const sheet = workbook.sheet(0);

@@ -12,5 +12,6 @@ router.get('/dependency/:id',controller.getDependencyReport);
 router.get('/location',controller.getLocationReport);
 router.get('/location/:id',controller.getLocationReport);
 router.get('/software',controller.getSoftwareReport);
+router.get('/software/:type',controller.getSoftwareReport);
 
 module.exports = router;

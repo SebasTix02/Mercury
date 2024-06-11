@@ -68,14 +68,16 @@ FROM ASSET AS asset
     LEFT JOIN LOCATION AS cc_location ON cc_location.ID = computer_component.LOCATION_ID
     LEFT JOIN BUILDING AS asset_building ON asset_building.ID = asset_location.BUILDING_ID 
     LEFT JOIN BUILDING AS cc_building ON cc_building.ID = cc_location.BUILDING_ID
--- WHERE asset.ASSET_KEY = 1
+-- WHERE asset.ASSET_KEY = 34970757
 -- WHERE computer.ID IS NOT NULL`
 
 exports.getUpeReportInfo = async () => {
     try{
         const [data] = await connection.query(
             `${assetBaseQuery}
-            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
+            WHERE LOWER(asset_location.NAME) LIKE '%laboratorio%'
+                OR LOWER(asset_location.NAME) LIKE '%aula%'
+            ORDER BY asset_location.NAME, category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
         );
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getUpeReportInfo()\\""}`);
@@ -109,7 +111,7 @@ exports.getAgeInfo = async () => {
         const [data] = await connection.query(
             `${assetBaseQuery}
             WHERE asset.CATEGORY_ID = 5
-            ORDER BY category.NAME, asset.NAME, asset.ASSET_KEY, computer_component.ID`
+            ORDER BY asset.ENTRY_DATE`
         );
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getAgeInfo()\\""}`);
@@ -155,9 +157,13 @@ exports.getLocationInfo = async (locationId) => {
     }
 }
 
-exports.getSoftwareInfo = async () => {
+exports.getSoftwareInfo = async (labType) => {
     try{
-        const [data] = await connection.query('SELECT * FROM SOFTWARE');
+        let query = 'SELECT * FROM SOFTWARE';
+        if(labType != undefined){
+            query += labType == 0 ? ` WHERE LAB_TYPE = 'COMPUTACIÓN'` : ` WHERE LAB_TYPE = 'ESPECIALIZACIÓN'`;
+        }
+        const [data] = await connection.query(query);
         if(data.length == 0){
             return JSON.parse(`{"error": "La fuente no devolvió datos en \\"getSoftwareInfo()\\""}`);
         } else {

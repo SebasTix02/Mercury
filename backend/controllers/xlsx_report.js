@@ -65,7 +65,7 @@ exports.getSoftwareReport = async (request, response) => {
     response.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     let xlsxReport;
     try{
-        xlsxReport = await reportBuilder.generateSoftwareReport(request.params.id);
+        xlsxReport = await reportBuilder.generateSoftwareReport(request.params.type);
     }catch(error){
         response.status(500).send(error);
     }
