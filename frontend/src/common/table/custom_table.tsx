@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Table, Button, Input, Select } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Input, Select, Tag } from 'antd';
+import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 import './table.css'; 
-
 
 const { Option } = Select;
 
@@ -14,23 +13,47 @@ interface Props {
   searchFields: string[];
 }
 
+interface Filter {
+  column: string;
+  value: string;
+}
+
 const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, searchFields }) => {
-  const [searchText, setSearchText] = useState('');
-  const [searchColumn, setSearchColumn] = useState<string | undefined>(undefined);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [currentFilter, setCurrentFilter] = useState<Filter>({ column: '', value: '' });
 
   const handleSearch = () => {
-    if (searchText && searchColumn) {
-      const filteredData = dataSource.filter((item) =>
-        item[searchColumn].toLowerCase().includes(searchText.toLowerCase())
-      );
-      return filteredData;
+    return dataSource.filter((item) =>
+      filters.every((filter) => {
+        if (!filter.column) return true;
+        const itemValue = item[filter.column];
+        const filterValue = filter.value;
+
+        // Manejo de comparación para campos numéricos y textuales
+        if (typeof itemValue === 'number') {
+          return itemValue === Number(filterValue);
+        } else if (typeof itemValue === 'string') {
+          return itemValue.toLowerCase().includes(filterValue.toLowerCase());
+        } else {
+          return false;
+        }
+      })
+    );
+  };
+
+  const addFilter = () => {
+    if (currentFilter.column && currentFilter.value) {
+      setFilters((prevFilters) => [...prevFilters, currentFilter]);
+      setCurrentFilter({ column: '', value: '' });
     }
-    return dataSource;
+  };
+
+  const removeFilter = (index: number) => {
+    setFilters((prevFilters) => prevFilters.filter((_, i) => i !== index));
   };
 
   const clearFilters = () => {
-    setSearchText('');
-    setSearchColumn(undefined);
+    setFilters([]);
   };
 
   return (
@@ -41,7 +64,8 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
             className="search-select"
             placeholder="Seleccione campo"
             allowClear
-            onChange={(value) => setSearchColumn(value)}
+            value={currentFilter.column}
+            onChange={(value) => setCurrentFilter((prev) => ({ ...prev, column: value }))}
           >
             {columns.map((column) => (
               searchFields.includes(column.dataIndex) && (
@@ -53,12 +77,12 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
           </Select>
           <Input
             placeholder="Buscar..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+            value={currentFilter.value}
+            onChange={(e) => setCurrentFilter((prev) => ({ ...prev, value: e.target.value }))}
             className="search-input"
           />
-          <Button type="primary" icon={<SearchOutlined />} onClick={handleSearch} className="search-button">
-            Buscar
+          <Button type="primary" icon={<SearchOutlined />} onClick={addFilter} className="search-button">
+            Agregar Filtro
           </Button>
           <Button onClick={clearFilters} className="clear-button">
             Limpiar
@@ -70,8 +94,19 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
           </Button>
         )}
       </div>
+      <div className="filter-tags-container">
+        {filters.map((filter, index) => (
+          <Tag
+            key={index}
+            closable
+            onClose={() => removeFilter(index)}
+          >
+            {columns.find((col) => col.dataIndex === filter.column)?.title}: {filter.value}
+          </Tag>
+        ))}
+      </div>
       <Table
-        dataSource={searchColumn ? handleSearch() : dataSource}
+        dataSource={handleSearch()}
         columns={columns}
         scroll={{ x: '100%' }}
         style={{ overflowX: 'auto', marginTop: '20px' }}

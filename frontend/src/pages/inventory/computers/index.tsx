@@ -315,7 +315,7 @@ export const Inventario_Computadores = () => {
         <h1 style={{ marginBottom: '20px' }}>Inventario de Computadores</h1>
         <Row gutter={[16, 16]}>
         </Row>
-        <CustomTable dataSource={dataSource} columns={columns} rowKey="ASSET_KEY" searchFields={['NAME','CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} handleAdd={handleAdd}/>
+        <CustomTable dataSource={dataSource} columns={columns} rowKey="ASSET_KEY" searchFields={['NAME','CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN','BUILDING']} handleAdd={handleAdd}/>
       </div>
 
       {isEditModalVisible && (
