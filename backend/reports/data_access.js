@@ -68,7 +68,7 @@ FROM ASSET AS asset
     LEFT JOIN LOCATION AS cc_location ON cc_location.ID = computer_component.LOCATION_ID
     LEFT JOIN BUILDING AS asset_building ON asset_building.ID = asset_location.BUILDING_ID 
     LEFT JOIN BUILDING AS cc_building ON cc_building.ID = cc_location.BUILDING_ID
--- WHERE asset.ASSET_KEY = 1
+-- WHERE asset.ASSET_KEY = 34970757
 -- WHERE computer.ID IS NOT NULL`
 
 exports.getUpeReportInfo = async () => {

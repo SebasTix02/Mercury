@@ -1,5 +1,6 @@
 const dataAccess = require('../reports/data_access');
 const assetConverter = require('../reports/asset_converter');
+const componentConverter = require('../reports/component_converter');
 const reportBuilder = require('../reports/pdf_generator/report_builder');
 const reader = require('../reports/pdf_generator/file_reader');
 const pdf = require('html-pdf');
@@ -26,6 +27,7 @@ exports.getUpeReport = async (request, response) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
     const htmlReport =
     `<!DOCTYPE html>
     <html lang="en">
@@ -40,7 +42,7 @@ exports.getUpeReport = async (request, response) => {
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Característica</th>
+                    <th>Componentes</th>
                     <th>Serie</th>
                     <th>Dependencia</th>
                     <th>Fecha Ingreso</th>
@@ -69,6 +71,7 @@ exports.getComputersReport = async (request, response) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
     const htmlReport =
     `<!DOCTYPE html>
     <html lang="en">
@@ -83,7 +86,7 @@ exports.getComputersReport = async (request, response) => {
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Característica</th>
+                    <th>Componentes</th>
                     <th>Serie</th>
                     <th>Dependencia</th>
                     <th>Fecha Ingreso</th>
@@ -112,6 +115,7 @@ exports.getAgeReport = async (request, response) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
     const htmlReport =
     `<!DOCTYPE html>
     <html lang="en">
@@ -126,7 +130,7 @@ exports.getAgeReport = async (request, response) => {
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Característica</th>
+                    <th>Componentes</th>
                     <th>Serie</th>
                     <th>Dependencia</th>
                     <th>Fecha Ingreso</th>
@@ -156,6 +160,7 @@ exports.getDependencyReport = async (request, response) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
     const htmlReport =
     `<!DOCTYPE html>
     <html lang="en">
@@ -170,7 +175,7 @@ exports.getDependencyReport = async (request, response) => {
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Característica</th>
+                    <th>Componentes</th>
                     <th>Serie</th>
                     <th>Dependencia</th>
                     <th>Fecha Ingreso</th>
@@ -199,6 +204,7 @@ exports.getLocationReport = async (request, response) => {
         return;
     }
     const convertedAssets = assetConverter.getEntities(data);
+    componentConverter.simplifyCaseComponents(convertedAssets);
     const htmlReport =
     `<!DOCTYPE html>
     <html lang="en">
@@ -213,7 +219,7 @@ exports.getLocationReport = async (request, response) => {
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Modelo</th>
-                    <th>Característica</th>
+                    <th>Componentes</th>
                     <th>Serie</th>
                     <th>Dependencia</th>
                     <th>Fecha Ingreso</th>
