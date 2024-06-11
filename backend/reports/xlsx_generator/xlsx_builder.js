@@ -392,6 +392,6 @@ function getAge(entryDate){
     return new Date().getFullYear() - entryDate.getFullYear();
 }
 
-exec().then(() => {
-    console.log("Archivo Exportado");
-});
+// exec().then(() => {
+//     console.log("Archivo Exportado");
+// });

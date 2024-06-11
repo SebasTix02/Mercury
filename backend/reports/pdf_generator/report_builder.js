@@ -208,7 +208,7 @@ function fillComputer(asset){
                 });
             }
         });
-        return `${asset.name} / ${asset.operativeSystem}
+        return `<span class="computer-name">${asset.name} / ${asset.operativeSystem}</span>
         <h3>Componentes Computadora:</h3>
         <table class="inner-table">
             <thead>
