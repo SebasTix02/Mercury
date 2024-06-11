@@ -428,6 +428,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "CURRENT_CUSTODIAN": "SALAZAR LOGROÃ‘O FRANKLIN",
                 "BUILDING": null,
                 "LOCATION": null,
+                "POSITION": "PC01",
                 "BORROWED": "PRESTADO"
             },
             {
@@ -443,6 +444,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
                 "BUILDING": null,
                 "LOCATION": null,
+                "POSITION": "Pasillo",
                 "BORROWED": null
             },
             {
@@ -458,6 +460,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
                 "BUILDING": null,
                 "LOCATION": null,
+                "POSITION": "Cuarto Frío",
                 "BORROWED": "PRESTADO"
             }
         ]
@@ -478,6 +481,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "CURRENT_CUSTODIAN": "BONILLA SALAZAR ALICIA GENOVEVA",
             "BUILDING": null,
             "LOCATION": null,
+            "POSITION": "Pasillo",
             "BORROWED": null
         }
 
@@ -497,6 +501,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2024-05-08",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 10,
+            "position": "nueva",
             "borrowed": 1
         }
 
@@ -525,6 +530,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2024-05-08",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 10,
+            "position": "nueva",
             "borrowed": 0
         }
 
@@ -787,6 +793,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "NAME": "COMPUTADOR DE ESCRITORIO",
                 "BUILDING": "BLOQUE 2",
                 "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+                "POSITION": "nueva",
                 "BORROWED": "PRESTADO",
                 "BRAND": "DELL",
                 "MODEL": "OPTIPLEX 7070",
@@ -808,6 +815,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "NAME": "COMPUTADOR DE ESCRITORIO",
                 "BUILDING": null,
                 "LOCATION": null,
+                "POSITION": "nueva",
                 "BORROWED": null,
                 "BRAND": "DELL",
                 "MODEL": "OPTIPLEX 7070",
@@ -835,6 +843,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "NAME": "COMPUTADOR DE ESCRITORIO",
             "BUILDING": "BLOQUE 2",
             "LOCATION": "LABORATORIO  INDUSTRIAL 1",
+            "POSITION": "nueva",
             "BORROWED": "PRESTADO",
             "BRAND": "DELL",
             "MODEL": "OPTIPLEX 7070",
@@ -865,6 +874,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2010-01-22",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 5,
+            "position": "nueva",
             "borrowed": 1,
             "ip": "A Eliminar",
             "operativeSystem": "A eliminar"
@@ -896,6 +906,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "entryDate": "2010-01-22",
             "currentCustodian": "CHANGO PALATE MARIA ELVIA",
             "locationId": 5,
+            "position": "nueva",
             "borrowed": 0,
             "ip": "A Eliminar",
             "operativeSystem": "A eliminar"

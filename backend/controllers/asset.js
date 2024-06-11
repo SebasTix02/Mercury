@@ -5,7 +5,7 @@ exports.getAssets = async (request, response) => {
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, category.NAME AS CATEGORY, asset.NAME AS NAME, brand.NAME AS BRAND,
             asset.MODEL, asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
-            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
                 ELSE NULL
@@ -33,7 +33,7 @@ exports.getAssetById = async (request, response) => {
         const [data] = await connection.query(
             `SELECT asset.ASSET_KEY AS ASSET_KEY, category.NAME AS CATEGORY, asset.NAME AS NAME, brand.NAME AS BRAND,
             asset.MODEL, asset.FEATURE, asset.SERIES, dependency.NAME AS ACQUISITION_DEPENDENCY, asset.ENTRY_DATE AS ENTRY_DATE,
-            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION,
+            asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
                 ELSE NULL
@@ -58,20 +58,20 @@ exports.insertAsset = async (request, response) => {
     try{
         const {assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed} = request.body;
+            currentCustodian, locationId, position, borrowed} = request.body;
         const [dbResponse] = await connection.query(
-            `INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())`,
+            `INSERT INTO ASSET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,CURDATE())`,
             [assetKey, categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed]
+            currentCustodian, locationId, position, borrowed]
         );
         response.json(dbResponse);
     }catch(error){
+        console.log('Error en "insertAsset()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`});
         } else {
-            console.log('Error en "insertAsset()" controller\n',error);
             response.status(500).json({error: 'Error al intentar insertar el bien'});
         }
     }
@@ -81,25 +81,26 @@ exports.updateAsset = async (request, response) => {
     try{
         const {categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed} = request.body;
+            currentCustodian, locationId, position, borrowed} = request.body;
         const assetKey = request.params.id
         const [dbResponse] = await connection.query(
             `UPDATE ASSET 
                 SET CATEGORY_ID = ?, NAME = ?, BRAND_ID = ?,
                 MODEL = ?, FEATURE = ?, SERIES = ?, ACQUISITION_DEPENDENCY_ID = ?,
-                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?, BORROWED = ? 
+                ENTRY_DATE = ?, CURRENT_CUSTODIAN = ?, LOCATION_ID = ?, 
+                POSITION = ?, BORROWED = ? 
             WHERE ASSET_KEY = ?`,
             [categoryId, name, brandId, model, 
             feature, series, acquisitionDependencyId, entryDate, 
-            currentCustodian, locationId, borrowed, assetKey]
+            currentCustodian, locationId, position, borrowed, assetKey]
         );
         response.json(dbResponse);
     }catch(error){
+        console.log('Error en "updateAsset()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El código de bien ${duplicateField[2]} ya existe. Ingrese uno diferente`});
         } else {
-            console.log('Error en "updateAsset()" controller\n',error);
             response.status(500).json({error: 'Error al intentar actualizar el bien'});
         }
     }
