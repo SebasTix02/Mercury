@@ -151,7 +151,7 @@ exports.fillSoftwareTable = (data) => {
     let lastLabType = null
     data.forEach(row => {
         if(lastLabType != row.LAB_TYPE){
-            filledRows += separator.setSeparator(row.LAB_TYPE,7,'separator-first-level-software');
+            filledRows += separator.setSeparator(row.LAB_TYPE,8,'separator-first-level-software');
             lastLabType = row.LAB_TYPE
         }
         filledRows += 
@@ -162,6 +162,7 @@ exports.fillSoftwareTable = (data) => {
             <td>${row.LICENSE}</td>
             <td>${row.LICENSE_DURATION}</td>
             <td>${row.LAB_TYPE}</td>
+            <td>${row.DESCRIPTION ? row.DESCRIPTION : ''}</td>
             <td>${row.ENTRY_DATE.toLocaleDateString('es-ES')}</td>
         </tr>
         `;

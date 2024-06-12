@@ -570,6 +570,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "LICENSE": "PROPIETARIO",
                 "LICENSE_DURATION": "1 AÑO",
                 "LAB_TYPE": "ESPECIALIZACIÓN",
+                "DESCRIPTION": "CADENA DE MÁXIMO 100 CARACTERES",
                 "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
                 "CREATION_DATE": "2024-05-08T05:00:00.000Z"
             }
@@ -584,6 +585,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "LICENSE": "PROPIETARIO",
             "LICENSE_DURATION": "1 AÑO",
             "LAB_TYPE": "ESPECIALIZACIÓN",
+            "DESCRIPTION": "CADENA DE MÁXIMO 100 CARACTERES",
             "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
             "CREATION_DATE": "2024-05-08T05:00:00.000Z"
         }
@@ -597,6 +599,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "license": "PROPIETARIO",
             "licenseDuration": "1 LUSTRO",
             "labType": "CARPENTEER",
+            "description": "CADENA DE MÁXIMO 100 CARACTERES",
             "entryDate": "2024-05-08"
         }
 
@@ -620,6 +623,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "license": "PROPIETARIO",
             "licenseDuration": "1 LUSTRO",
             "labType": "CARPENTEER",
+            "description": "CADENA DE MÁXIMO 100 CARACTERES",
             "entryDate": "2024-05-08"
         }
 
@@ -687,6 +691,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
 
     POST http://localhost:4000/mercury/user
 
+    // Los posibles valores para role son 0 para usuario, 1 para laboratorista y 2 para admin
         Recibe:
         {
             "idNumber": "1850062876",
@@ -713,6 +718,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
 
     PUT http://localhost:4000/mercury/user/:id
 
+    // Los posibles valores para role son 0 para usuario, 1 para laboratorista y 2 para admin
         Recibe:
         {
             "idNumber": "1850062876",
