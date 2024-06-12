@@ -41,7 +41,7 @@ exports.updateSoftware = async (request, response) => {
         const [dbResponse] = await connection.query(
             `UPDATE SOFTWARE 
                 SET NAME = ?, VERSION = ?, LICENSE = ?, LICENSE_DURATION = ?,
-                LAB_TYPE = ?, ENTRY_DATE = ?, DESCRIPTION = ?
+                LAB_TYPE = ?, DESCRIPTION = ?, ENTRY_DATE = ? 
              WHERE ID = ?`,
             [name,version,license,licenseDuration,labType,description,entryDate,id]
         );
