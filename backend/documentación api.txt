@@ -1238,7 +1238,6 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             }
         ]
 
-
 12. Etiquetas QR
 
     GET http://localhost:4000/mercury/QR
@@ -1466,7 +1465,7 @@ http://localhost:4000/mercury/report/xlsx/software/:type
             }
         }
 
-14. Reasignación Masiva de Custodio
+15. Reasignación Masiva de Custodio
 
     POST http://localhost:4000/mercury/custodian
 

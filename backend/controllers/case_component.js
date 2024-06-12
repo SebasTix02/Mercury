@@ -198,7 +198,7 @@ exports.getCaseComponentByComputerId = async (request, response) => {
             WHERE computer.ID = ?`,
             [request.params.id]
         );
-        response.json(data[0]);
+        response.json(data);
     }catch(error){
         console.log('Error en "getCaseComponentByComputerId()" controller\n',error);
         response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete del Computador'});

@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from '../../components/layout';
-import { Button, Modal, Table, Form, Input, Space, Row, Col } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Space, Row, notification } from 'antd';
+import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined } from '@ant-design/icons';
+import CustomTable from '../../common/table/custom_table';
+import CustomModal from '../../common/modal/custom_modal';
+import { getAllUsers, addUser, editUser, deleteUser } from '../../providers/options/users';
+import { CustomColors, verifyIdNumber } from '../../common/constantsCommon'
+
 
 export const ListaUsuarios = () => {
-  const [dataSource, setDataSource] = useState([
-    { id: '1', nombre: 'John Doe',  telefono: '0999999991', cedula: '1850876632', correo: 'johndoe@gmail.com' },
-      { id: '2', nombre: 'Jane Smith', telefono: '0999999992', cedula: '1850876232', correo: 'janesmith@gmail.com' },
-      { id: '3', nombre: 'Bob Johnson', telefono: '0999999993', cedula: '1850875632', correo: 'bjohnson@gmail.com' },
-      { id: '4', nombre: 'Alice Brown',  telefono: '0999999994', cedula: '1850832632', correo: 'alicebrown@gmail.com' },
-      { id: '5', nombre: 'David Lee', telefono: '0999999995', cedula: '1850876552', correo: 'davidlee@gmail.com' },
-      { id: '6', nombre: 'Emma White', telefono: '0999999996', cedula: '1850877732', correo: 'emmawhite@gmail.com' },
-      { id: '7', nombre: 'Michael Clark',  telefono: '0999999997', cedula: '1858876632', correo: 'michaelclark@gmail.com' },
-      { id: '8', nombre: 'Sara Adams',  telefono: '0999999998', cedula: '1850879932', correo: 'saraadams@gmail.com' },
-      { id: '9', nombre: 'Chris Taylor',  telefono: '0999999999', cedula: '1850006632', correo: 'christaylor@gmail.com' },
-      { id: '10', nombre: 'Eva Martinez',  telefono: '0999999910', cedula: '1853276632', correo: 'evamartinez@gmail.com' },
-      { id: '11', nombre: 'Peter Wang', telefono: '0999999911', cedula: '18508456632', correo: 'peterwang@gmail.com' },
-      { id: '12', nombre: 'Sophia Kim', telefono: '0999999912', cedula: '1850877832', correo: 'sophiakim@gmail.com' },
-      { id: '13', nombre: 'Kevin Patel', telefono: '0999999913', cedula: '1850898632', correo: 'kevinpatel@gmail.com' },
-      { id: '14', nombre: 'Linda Johnson',telefono: '0999999914', cedula: '1852176632', correo: 'lindajohnson@gmail.com' },
-      { id: '15', nombre: 'Tom Wilson', telefono: '0999999915', cedula: '1850872121', correo: 'tomwilson@gmail.com' }
-  ]);
+  const [dataSource, setDataSource] = useState([])
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    getAllUsers()
+      .then((result:any) => {
+        if (result.success) {
+          setDataSource(result.users);
+        } else {
+          console.error(result.error.message);
+          notification.error({
+            message: 'Error de obtención de datos',
+            description: `No se pudo obtener los usuarios: ${result.error.message}`
+          });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+  
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
-  const [filteredDataSource, setFilteredDataSource] = useState(dataSource);
 
   const handleEdit = (record: any) => {
     setSelectedRecord(record);
@@ -40,64 +50,175 @@ export const ListaUsuarios = () => {
   };
 
   const handleAdd = () => {
+    setSelectedRecord(null)
     setIsAddModalVisible(true);
   };
 
-  const handleEditOk = () => {
+  const convertUserObject = (values:any) => {
+    const names = values.NAME.split(' ')
+    const lastnames = values.LASTNAME.split(' ')
+    return {
+      "idNumber": values.ID_NUMBER,
+      "firstName": names[0],
+      "middleName": names[1]  ? names[1] : undefined,
+      "lastname": lastnames[0],
+      "secondLastname": lastnames[1]  ? lastnames[1] : undefined,
+      "cellphone": values.CELLPHONE,
+      "email": values.EMAIL,
+      "password": values.PASSWORD
+    }
+  }
+
+  const handleEditOk = async (values:any) => {
+    const userService = convertUserObject(values)
+    const result:any = await editUser(selectedRecord.ID, userService);
+    if (!result.success) {
+      setIsEditModalVisible(false);
+      notification.error({
+        message: 'Error de actualización',
+        description: `No se pudo actualizar el usuario: ${result.error.message}`
+      });
+      return
+    }
+    const editedRaw = values
+    editedRaw.ID = selectedRecord.ID
+    const updatedData:any = dataSource.map((item:any) =>
+      item.ID == editedRaw.ID ? editedRaw : item
+    );
+    setDataSource(updatedData);
     setIsEditModalVisible(false);
+    notification.success({
+      message: 'Usuario actualizado',
+      description: 'El usuario ha sido actualizado exitosamente.'
+    });
   };
 
-  const handleDeleteOk = () => {
-    const newData = dataSource.filter((item) => item.id !== selectedRecord.id);
+  const handleDeleteOk = async () => {
+    const result:any = await deleteUser(selectedRecord.ID);
+    if (!result.success) {
+      setIsDeleteModalVisible(false);
+      notification.error({
+        message: 'Error de eliminación',
+        description: `No se pudo eliminar el usuario: ${result.error.message}`
+      });
+      return
+    }
+    const newData = dataSource.filter((item:any) => item.ID !== selectedRecord.ID);
     setDataSource(newData);
     setIsDeleteModalVisible(false);
+    notification.success({
+      message: 'Usuario eliminado',
+      description: 'El usuario ha sido eliminado exitosamente.'
+    });
   };
 
-  const handleAddOk = (values: any) => {
-    const newRecord = {
-      id: (dataSource.length + 1).toString(),
-      nombre: values.nombre,
-      telefono: values.telefono,
-      cedula: values.cedula,
-      correo: values.correo,
-    };
-    const updatedDataSource = [...dataSource, newRecord];
+  const handleAddOk = async (values: any) => {
+    const newUser = convertUserObject(values)
+  
+    const result:any = await addUser(newUser);
+    if (!result.success) {
+      setIsAddModalVisible(false);
+      notification.error({
+        message: 'Error de agregación',
+        description: `No se pudo agregar el usuario: ${result.error.message}`
+      });
+      return
+    }
+
+    const newRecord = {...values}
+    newRecord.ID = result.user.insertId;
+    
+    const updatedDataSource:any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
     setIsAddModalVisible(false);
-  };
-
-  const handleSearch = (value: string) => {
-    const filteredData = dataSource.filter((item) =>
-      item.nombre.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredDataSource(filteredData);
+    notification.success({
+      message: 'Usuario agregado',
+      description: 'El usuario ha sido agregado exitosamente.'
+    });
   };
 
   const columns = [
     {
       title: 'Id',
-      dataIndex: 'id',
+      dataIndex: 'ID',
       key: 'id',
     },
     {
+      title: 'Cédula',
+      dataIndex: 'ID_NUMBER',
+      key: 'idNumber',
+      rules: [
+        { required: true, message: '¡Por favor ingrese la cédula!' },
+        { validator: verifyIdNumber }
+      ]
+    },
+    {
       title: 'Nombre',
-      dataIndex: 'nombre',
-      key: 'nombre',
+      dataIndex: 'NAME',
+      key: 'firstName',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el nombre!' },
+        {
+          validator: (_:any, value:any) => {
+            const names = value.split(' ');
+            if (names.length > 2) {
+              return Promise.reject('¡Por favor ingresa un nombre o dos separados por espacio!');
+            }
+            return Promise.resolve();
+          },
+        },
+      ]
+    },
+    {
+      title: 'Apellido',
+      dataIndex: 'LASTNAME',
+      key: 'lastName',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el apellido!' },
+        {
+          validator: (_:any, value:any) => {
+            const names = value.split(' ');
+            if (names.length > 2) {
+              return Promise.reject('¡Por favor ingresa un apellido o dos separados por espacio!');
+            }
+            return Promise.resolve();
+          },
+        },
+      ]
     },
     {
       title: 'Teléfono',
-      dataIndex: 'telefono',
-      key: 'telefono',
-    },
-    {
-      title: 'Cédula',
-      dataIndex: 'cedula',
-      key: 'cedula',
+      dataIndex: 'CELLPHONE',
+      key: 'cellphone',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el teléfono!' },
+        { min: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { max: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { pattern: /^[0-9]+$/, message: 'El teléfono debe contener solo números.' }
+      ]
     },
     {
       title: 'Correo',
-      dataIndex: 'correo',
-      key: 'correo',
+      dataIndex: 'EMAIL',
+      key: 'email',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el correo!' },
+        {
+          type: 'email',
+          message: '¡Por favor ingresa un correo electrónico válido!',
+        },
+        { max: 40, message: 'El correo debe tener máximo 40 caracteres.' },
+      ]
+    },
+    {
+      title: 'Contraseña',
+      dataIndex: 'PASSWORD',
+      key: 'password',
+      rules: [
+        { required: true, message: '¡Por favor ingresa la contraseña!' },
+        { min: 8, message: 'La contraseña debe tener al menos 8 caracteres.' },
+        { max: 16, message: 'La contraseña debe tener máximo 16 caracteres.' },
+      ]
     },
     {
       title: 'Acciones',
@@ -120,90 +241,53 @@ export const ListaUsuarios = () => {
       <div style={{ padding: '20px' }}>
         <h1 style={{ marginBottom: '20px' }}>Lista de Usuarios</h1>
         <Row gutter={[16, 16]}>
-          <Col span={12}>
-            <Input
-              placeholder="Buscar por nombre"
-              prefix={<SearchOutlined />}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-          </Col>
-          <Col span={12} style={{ textAlign: 'right' }}>
-            <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-              Agregar
-            </Button>
-          </Col>
         </Row>
-
-        <Table
-          dataSource={filteredDataSource}
-          columns={columns}
-          scroll={{ x: '100%' }}
-          style={{ overflowX: 'auto', marginTop: '20px' }}
-          pagination={{ pageSize: 6 }} 
-        />
+        <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
+          searchFields={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
       </div>
 
-      <Modal
-        title="Editar Usuario"
-        visible={isEditModalVisible}
-        onOk={handleEditOk}
-        onCancel={() => setIsEditModalVisible(false)}
-      >
-        <Form
-          layout="vertical"
-          onFinish={(values) => handleEditOk()}
-          initialValues={selectedRecord}
-        >
-          <Form.Item label="Nombre" name="nombre">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Teléfono" name="telefono">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Cédula" name="cedula">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Correo" name="correo">
-            <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
+      {isEditModalVisible && (
+        <CustomModal
+          modalTitle="Editar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
+          isVisible={isEditModalVisible}
+          handleVisible={setIsEditModalVisible}
+          handleAddEdit={handleEditOk}
+          columns={columns}
+          selectedRecord={selectedRecord}
+          icon={<UserSwitchOutlined/>}
+          iconColor={CustomColors.WHITE}
+          iconBackgroundColor={CustomColors.PRIMARY}
+        />
+      )}
 
-      <Modal
-        title="Confirmar Eliminación"
-        visible={isDeleteModalVisible}
-        onOk={handleDeleteOk}
-        onCancel={() => setIsDeleteModalVisible(false)}
-      >
-        <p>¿Estás seguro de que deseas eliminar este usuario?</p>
-      </Modal>
+      <CustomModal
+        text='¿Estás seguro de que deseas eliminar este usuario?'
+        modalTitle="Confirmar Eliminación"
+        isVisible={isDeleteModalVisible}
+        handleOk={handleDeleteOk}
+        handleVisible={setIsDeleteModalVisible}
+        icon={<UserDeleteOutlined/>}
+        iconColor={CustomColors.WHITE}
+        iconBackgroundColor={CustomColors.DANGEROUS}
+      />
 
-      <Modal
-        title="Agregar Usuario"
-        visible={isAddModalVisible}
-        onCancel={() => setIsAddModalVisible(false)}
-        footer={null}
-      >
-        <Form layout="vertical" onFinish={handleAddOk}>
-          <Form.Item label="Nombre" name="nombre" rules={[{ required: true, message: '¡Por favor ingresa el nombre!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Teléfono" name="telefono" rules={[{ required: true, message: '¡Por favor ingresa el teléfono!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Cédula" name="cedula" rules={[{ required: true, message: '¡Por favor ingresa la cédula!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Correo" name="correo" rules={[{ required: true, message: '¡Por favor ingresa el correo!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Agregar
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+      {isAddModalVisible && (
+        <CustomModal
+          modalTitle="Agregar Usuario"
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
+          isVisible={isAddModalVisible}
+          handleVisible={setIsAddModalVisible}
+          isAdding ={true}
+          handleAddEdit={handleAddOk}
+          columns={columns}
+          selectedRecord={selectedRecord}
+          icon={<UserAddOutlined/>}
+          iconColor={CustomColors.WHITE}
+          iconBackgroundColor={CustomColors.SUCCESS}
+        />
+      )}
+
     </Layout>
   );
 };
