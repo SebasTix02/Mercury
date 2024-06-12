@@ -16,6 +16,7 @@ const pdfReportRoutes = require('./routes/pdf_report');
 const xlsxReportRoutes = require('./routes/xlsx_report');
 const qrRoutes = require('./routes/qr');
 const dashboardRoutes = require('./routes/dashboard');
+const custodianRoutes = require('./routes/custodian');
 
 const HTTP_SERVER = express();
 
@@ -45,6 +46,7 @@ HTTP_SERVER.use('/mercury/report/pdf', pdfReportRoutes);
 HTTP_SERVER.use('/mercury/report/xlsx', xlsxReportRoutes);
 HTTP_SERVER.use('/mercury/QR', qrRoutes);
 HTTP_SERVER.use('/mercury/dashboard', dashboardRoutes);
+HTTP_SERVER.use('/mercury/custodian', custodianRoutes);
 
 // Arranque del servidor
 HTTP_SERVER.listen(4000, () => {
