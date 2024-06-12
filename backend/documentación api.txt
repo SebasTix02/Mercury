@@ -660,6 +660,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "MIDDLE_NAME": null,
                 "LASTNAME": "Kahnwald",
                 "SECOND_LASTNAME": null,
+                "ROLE": 1,
                 "CELLPHONE": "03-25876",
                 "EMAIL": "random@gmail.com",
                 "PASSWORD": "1_23",
@@ -676,6 +677,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "FIRST_NAME": "Jonas",
             "MIDDLE_NAME": null,
             "LASTNAME": "Kahnwald",
+            "ROLE": 2,
             "SECOND_LASTNAME": null,
             "CELLPHONE": "03-25876",
             "EMAIL": "random@gmail.com",
@@ -692,6 +694,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "middleName": null,
             "lastname": "Kahnwald",
             "secondLastname": null,
+            "role": 0,
             "cellphone": "03-25876",
             "email": "random@gmail.com",
             "password": "1_23"
@@ -717,6 +720,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "middleName": null,
             "lastname": "Kahnwald",
             "secondLastname": null,
+            "role": 1,
             "cellphone": "03-25876",
             "email": "random@gmail.com",
             "password": "1_23"
@@ -767,8 +771,9 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
         Devuelve:
         {
             "ID_NUMBER": "1850062876",
-            "FIRST_NAME": "Jonas",
-            "LASTNAME": "Kahnwald"
+            "FIRST_NAME": "Juan",
+            "LASTNAME": "Morales",
+            "ROLE": "ADMIN"
         }
 
     Error
