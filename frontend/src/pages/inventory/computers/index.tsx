@@ -195,6 +195,8 @@ export const Inventario_Computadores = () => {
     });
   };
 
+  const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
   const columns = [
     {
       title: 'ID_Activo',
@@ -257,6 +259,9 @@ export const Inventario_Computadores = () => {
       title: 'IP',
       dataIndex: 'IP',
       key: 'ip',
+      rules:[
+        { pattern: ipv4Regex, message: '¡Por favor ingresa una IP válida!' },
+      ]
     },
     {
       title: 'Capacidad de RAM',
