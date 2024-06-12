@@ -37,10 +37,10 @@ export const Inventario_Computadores = () => {
             getAllBrands(),
             getAllDependencies(),
           ]);
-
+          const filteredCategory = categoriesData.categories.filter((category:any) => category.NAME === "EQUIPO ELECTRONICO")
           setBuildings(buildData.buildings);
           setLocations(locationData.locations);
-          setCategories(categoriesData.categories);
+          setCategories(filteredCategory);
           setBrands(brandsData.brands);
           setDependencies(dependenciesData.dependencies);
 
