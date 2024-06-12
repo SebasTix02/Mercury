@@ -221,7 +221,7 @@ export const Software = () => {
   return (
     <Layout>
       <div style={{ padding: '20px' }}>
-        <h1 style={{ marginBottom: '20px' }}>Lista de Software's</h1>
+        <h1 style={{ marginBottom: '20px' }}>Lista de Software</h1>
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
