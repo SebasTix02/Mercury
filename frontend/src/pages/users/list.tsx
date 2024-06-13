@@ -170,8 +170,8 @@ export const ListaUsuarios = () => {
       dataIndex: 'ID_NUMBER',
       key: 'idNumber',
       rules: [
-        // { required: true, message: '¡Por favor ingrese la cédula!' },
-        // { validator: verifyIdNumber }
+        { required: true, message: '¡Por favor ingrese la cédula!' },
+        { validator: verifyIdNumber }
       ]
     },
     {
@@ -214,8 +214,8 @@ export const ListaUsuarios = () => {
       key: 'cellphone',
       rules: [
         { required: true, message: '¡Por favor ingresa el teléfono!' },
-        // { min: 10, message: 'El teléfono debe tener 10 dígitos.' },
-        // { max: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { min: 10, message: 'El teléfono debe tener 10 dígitos.' },
+        { max: 10, message: 'El teléfono debe tener 10 dígitos.' },
         { pattern: /^[0-9]+$/, message: 'El teléfono debe contener solo números.' }
       ]
     },
@@ -225,10 +225,10 @@ export const ListaUsuarios = () => {
       key: 'email',
       rules: [
         { required: true, message: '¡Por favor ingresa el correo!' },
-        // {
-        //   type: 'email',
-        //   message: '¡Por favor ingresa un correo electrónico válido!',
-        // },
+        {
+          type: 'email',
+          message: '¡Por favor ingresa un correo electrónico válido!',
+        },
         { max: 40, message: 'El correo debe tener máximo 40 caracteres.' },
       ]
     },
@@ -238,7 +238,7 @@ export const ListaUsuarios = () => {
       key: 'password',
       rules: [
         { required: true, message: '¡Por favor ingresa la contraseña!' },
-        // { min: 8, message: 'La contraseña debe tener al menos 8 caracteres.' },
+        { min: 8, message: 'La contraseña debe tener al menos 8 caracteres.' },
         { max: 16, message: 'La contraseña debe tener máximo 16 caracteres.' },
       ]
     },
