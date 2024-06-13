@@ -12,6 +12,7 @@ import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
+import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
 export const Inventario_Computadores = () => {
   const { scannedCode } = useParams();
@@ -22,6 +23,7 @@ export const Inventario_Computadores = () => {
   const [categories, setCategories] = useState([])
   const [brands, setBrands] = useState([])
   const [dependencies, setDependencies] = useState([])
+  const [custodians, setCustodians] = useState<any>([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,12 +32,13 @@ export const Inventario_Computadores = () => {
         const result:any = await getAllComputers();
         if (result.success) {
           setDataSource(result.computers);
-          const [buildData, locationData, categoriesData, brandsData, dependenciesData] = await Promise.all([
+          const [buildData, locationData, categoriesData, brandsData, dependenciesData, custodiansData] = await Promise.all([
             getAllBuildings(),
             getAllLocations(),
             getAllCategories(),
             getAllBrands(),
             getAllDependencies(),
+            getAllUsers(),
           ]);
           const filteredCategory = categoriesData.categories.filter((category:any) => category.NAME === "EQUIPO ELECTRONICO")
           setBuildings(buildData.buildings);
@@ -43,6 +46,7 @@ export const Inventario_Computadores = () => {
           setCategories(filteredCategory);
           setBrands(brandsData.brands);
           setDependencies(dependenciesData.dependencies);
+          setCustodians(custodiansData.users);
 
           if (scannedCode) {
             const parsedCode = parseInt(scannedCode, 10);
@@ -100,6 +104,17 @@ export const Inventario_Computadores = () => {
     setIsAddModalVisible(true);
   };
 
+  const getCustodianName = (values:any) => {
+    const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
+    ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
+    : values.CURRENT_CUSTODIAN;
+
+    const custodianName = typeof custodian === 'object' && custodian !== null 
+    ? `${custodian.NAME} ${custodian.LASTNAME}` 
+    : custodian;
+    return custodianName;
+  }
+
   const handleEditOk = async (values: any) => {
     var objectEdit={
       "categoryId": values.CATEGORY,
@@ -110,12 +125,11 @@ export const Inventario_Computadores = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
   }
-  console.log(values);
     const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -168,7 +182,7 @@ export const Inventario_Computadores = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
@@ -327,7 +341,7 @@ export const Inventario_Computadores = () => {
         <CustomModal
           modalTitle="Editar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -354,7 +368,7 @@ export const Inventario_Computadores = () => {
         <CustomModal
           modalTitle="Agregar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}

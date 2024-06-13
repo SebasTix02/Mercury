@@ -74,7 +74,7 @@ const CustomModal: React.FC<Props> = ({
                         {selectInput ? (
                             <Select>
                                 {selectInput[1].map((opt: any) => (
-                                    <Option key={opt.ID} value={opt.ID}>{opt.NAME}</Option>
+                                    <Option key={opt.ID} value={opt.ID}>{opt.NAME}{column.dataIndex.includes("CUSTODIAN") && " "+opt.LASTNAME}</Option>
                                 ))}
                             </Select>
                         ) : dateTypeInputs.includes(index) ? (

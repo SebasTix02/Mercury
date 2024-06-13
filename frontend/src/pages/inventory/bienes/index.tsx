@@ -12,6 +12,7 @@ import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
+import { getAllUsers } from '../../../providers/options/users';
 
 export const Inventario_Bienes = () => {
   type Category = {
@@ -39,6 +40,7 @@ export const Inventario_Bienes = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [dependencies, setDependencies] = useState<Dependency[]>([]);
+  const [custodians, setCustodians] = useState<any>([])
   const [locations, setLocations] = useState<Location[]>([]);
   
   const [loading, setLoading] = useState(true);
@@ -62,6 +64,9 @@ export const Inventario_Bienes = () => {
           });
           getAllDependencies().then((dependenciesData: any) => {
             setDependencies(dependenciesData.dependencies);
+          });
+          getAllUsers().then((usersData: any) => {
+            setCustodians(usersData.users);
           });
         } else {
           console.error(result.error.message);
@@ -115,6 +120,17 @@ export const Inventario_Bienes = () => {
     setIsAddModalVisible(true);
   };
 
+  const getCustodianName = (values:any) => {
+    const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
+    ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
+    : values.CURRENT_CUSTODIAN;
+
+    const custodianName = typeof custodian === 'object' && custodian !== null 
+    ? `${custodian.NAME} ${custodian.LASTNAME}` 
+    : custodian;
+    return custodianName;
+  }
+
   const handleEditOk = async (values: any) => {
     const objectEdit = {
       "categoryId": values.CATEGORY,
@@ -125,12 +141,11 @@ export const Inventario_Bienes = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
     };
-    console.log(values);
     const result: any = await editAsset(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -184,7 +199,7 @@ export const Inventario_Bienes = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
@@ -307,7 +322,7 @@ export const Inventario_Bienes = () => {
         <CustomModal
           modalTitle="Editar Activo"
           formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies],[8, custodians], [9, locations]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -336,7 +351,7 @@ export const Inventario_Bienes = () => {
         <CustomModal
           modalTitle="Agregar Activo"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}
