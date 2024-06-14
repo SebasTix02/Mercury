@@ -6,83 +6,80 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../../common/table/custom_table';
 import CustomModal from '../../../common/modal/custom_modal';
 import { CustomColors } from '../../../common/constantsCommon';
-import { addAsset, deleteAsset, editAsset, getAllAssets } from '../../../providers/options/asset';
+import { addAsset, deleteAsset, editAsset, getAllAssets, getAssetByAssetKey } from '../../../providers/options/asset';
 import { getAllBuildings } from '../../../providers/options/building';
 import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 import { getAllUsers } from '../../../providers/options/users';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Inventario_Bienes = () => {
-  type Category = {
-    id: number;
-    name: string;
-  };
-  
-  type Brand = {
-    id: number;
-    name: string;
-  };
-  
-  type Dependency = {
-    id: number;
-    name: string;
-  };
-  
-  type Location = {
-    id: number;
-    name: string;
-  };
-  
+  const { scannedCode } = useParams();
+  const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [dependencies, setDependencies] = useState<Dependency[]>([]);
-  const [custodians, setCustodians] = useState<any>([])
-  const [locations, setLocations] = useState<Location[]>([]);
-  
+  const [locations, setLocations] = useState([]);
+  const [categories, setCategories] = useState<any>([]);
+  const [brands, setBrands] = useState([]);
+  const [dependencies, setDependencies] = useState([]);
+  const [custodians, setCustodians] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllAssets()
-      .then((result: any) => {
+    const fetchData = async () => {
+      try {
+        const result: any = await getAllAssets();
         if (result.success) {
           setDataSource(result.assets);
-          getAllBuildings().then((buildData: any) => {
-            setBuildings(buildData.buildings);
-          });
-          getAllLocations().then((locationData: any) => {
-            setLocations(locationData.locations);
-          });
-          getAllCategories().then((categoriesData: any) => {
-            setCategories(categoriesData.categories);
-          });
-          getAllBrands().then((brandsData: any) => {
-            setBrands(brandsData.brands);
-          });
-          getAllDependencies().then((dependenciesData: any) => {
-            setDependencies(dependenciesData.dependencies);
-          });
-          getAllUsers().then((usersData: any) => {
-            setCustodians(usersData.users);
-          });
+          const [buildData, locationData, categoriesData, brandsData, dependenciesData, custodiansData] = await Promise.all([
+            getAllBuildings(),
+            getAllLocations(),
+            getAllCategories(),
+            getAllBrands(),
+            getAllDependencies(),
+            getAllUsers(),
+          ]);
+          setBuildings(buildData.buildings);
+          setLocations(locationData.locations);
+          setCategories(categoriesData.categories);
+          setBrands(brandsData.brands);
+          setDependencies(dependenciesData.dependencies);
+          setCustodians(custodiansData.users);
+          
+          if (scannedCode) {
+            const parsedCode = parseInt(scannedCode, 10);
+            const assetResult: any = await getAssetByAssetKey(parsedCode);
+            if (assetResult.success) {
+              setSelectedRecord(assetResult.asset);
+              setIsEditModalVisible(true);
+            } else {
+              notification.error({
+                message: 'Error de obtención de datos',
+                description: `No se pudo obtener el bien con el código escaneado: ${assetResult.error.message}`,
+              });
+            }
+          }
         } else {
-          console.error(result.error.message);
           notification.error({
             message: 'Error de obtención de datos',
-            description: `No se pudo obtener los activos: ${result.error.message}`,
+            description: `No se pudo obtener los bienes: ${result.error.message}`,
           });
         }
-      })
-      .catch((error) => {
+      } catch (error: any) {
         console.error(error);
-      })
-      .finally(() => {
+        notification.error({
+          message: 'Error de obtención de datos',
+          description: `Ocurrió un error al obtener los datos: ${error.message}`,
+        });
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [scannedCode]);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -94,10 +91,10 @@ export const Inventario_Bienes = () => {
     console.log("Categories:", categories);
     const editRecord = {
       ...record,
-      CATEGORY: categories.find((cat) => cat.id === record.CATEGORY) || {},
-      BRAND: brands.find((brand) => brand.id === record.BRAND) || {},
-      ACQUISITION_DEPENDENCY: dependencies.find((dep) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
-      LOCATION: locations.find((loc) => loc.id === record.LOCATION) || {},
+      CATEGORY: categories.find((cat:any) => cat.id === record.CATEGORY) || {},
+      BRAND: brands.find((brand:any) => brand.id === record.BRAND) || {},
+      ACQUISITION_DEPENDENCY: dependencies.find((dep:any) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
+      LOCATION: locations.find((loc:any) => loc.id === record.LOCATION) || {},
     };
     setSelectedRecord(editRecord);
     setIsEditModalVisible(true);

@@ -74,6 +74,7 @@ function App() {
                   <Route path="/repotenciar/:id" element={<Repotenciacion />} />
                   <Route path="/escaner" element={<QRScanner />} />
                   <Route path="/bienes" element={<Inventario_Bienes />} />
+                  <Route path="/bienes/:scannedCode" element={<Inventario_Bienes />} />
                   <Route path="/reportes" element={<Reports />} />
                   <Route path="/repotenciar/:id" element={<Repotenciacion />} />
                 </Routes>
