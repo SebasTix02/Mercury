@@ -358,7 +358,7 @@ export const Inventario_Bienes = () => {
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
           columns={columns}
-          selectedRecord={selectedRecord} // Asegurar que selectedRecord se pase aquí
+          selectedRecord={selectedRecord}
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
