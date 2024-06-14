@@ -14,7 +14,6 @@ import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
-import { error } from 'console';
 export const Inventario_Computadores = () => {
   const { scannedCode } = useParams();
   const navigate = useNavigate();
@@ -380,6 +379,7 @@ export const Inventario_Computadores = () => {
           modalTitle="Editar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+          dateTypeInputs={[7]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -407,6 +407,7 @@ export const Inventario_Computadores = () => {
           modalTitle="Agregar Computador"
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+          dateTypeInputs={[7]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}
