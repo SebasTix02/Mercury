@@ -14,12 +14,11 @@ export const getAllBrands = async () => {
             success: true,
             brands: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las marcas.",
+                message: error.response.data.error,
             },
         };
     }
@@ -34,12 +33,11 @@ export const getBrand = async (brandId:number) => {
             success: true,
             brand: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener la marca.",
+                message: error.response.data.error,
             },
         };
     }
@@ -54,12 +52,11 @@ export const addBrand = async (name:{}) => {
             success: true,
             brand: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir la marca.",
+                message: error.response.data.error,
             },
         };
     }
@@ -73,12 +70,11 @@ export const editBrand = async (brandId: number, name:{}) => {
             success: true,
             brand: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar la marca.",
+                message: error.response.data.error,
             },
         };
     }
@@ -92,12 +88,11 @@ export const deleteBrand = async (brandId: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar la marca.",
+                message: error.response.data.error,
             },
         };
     }

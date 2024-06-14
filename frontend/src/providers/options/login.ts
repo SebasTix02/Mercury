@@ -11,13 +11,11 @@ export const loginUser = async (loginData:any) => {
             success: true,
             user: data,
         };
-    } catch (e) {
-        const error:any = e as Error;
-        console.log(error.response.data.error)
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.response.data.error : "Error al loguearse",
+                message: error.response.data.error,
             },
         };
     }

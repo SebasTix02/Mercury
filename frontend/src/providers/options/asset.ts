@@ -11,12 +11,11 @@ export const getAllAssets = async () => {
             success: true,
             assets: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener los bienes",
+                message: error.response.data.error,
             },
         };
     }
@@ -30,12 +29,11 @@ export const getAssetByAssetKey = async (assetKey: number) => {
             success: true,
             asset: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener los bienes",
+                message: error.response.data.error,
             },
         };
     }
@@ -49,12 +47,11 @@ export const addAsset = async (assetData: any) => {
             success: true,
             asset: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir el bien",
+                message: error.response.data.error,
             },
         };
     }
@@ -68,12 +65,11 @@ export const editAsset = async (assetKey: number, assetData: any) => {
             success: true,
             asset: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar el bien",
+                message: error.response.data.error,
             },
         };
     }
@@ -87,12 +83,11 @@ export const deleteAsset = async (assetKey: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar el bien",
+                message: error.response.data.error,
             },
         };
     }

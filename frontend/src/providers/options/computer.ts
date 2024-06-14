@@ -11,12 +11,11 @@ export const getAllComputers = async () => {
             success: true,
             computers: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener computadores",
+                message: error.response.data.error,
             },
         };
     }
@@ -30,12 +29,11 @@ export const getComputerByAssetKey = async (assetKey: number) => {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -49,12 +47,11 @@ export const addComputer = async (computerData: any) => {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -68,12 +65,11 @@ export const editComputer = async (assetKey: number, computerData: any) => {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -87,12 +83,11 @@ export const deleteComputer = async (assetKey: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar computador",
+                message: error.response.data.error,
             },
         };
     }

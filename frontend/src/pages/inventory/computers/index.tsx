@@ -14,13 +14,14 @@ import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
+import { error } from 'console';
 export const Inventario_Computadores = () => {
   const { scannedCode } = useParams();
   const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([])
   const [locations, setLocations] = useState([])
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<any>([])
   const [brands, setBrands] = useState([])
   const [dependencies, setDependencies] = useState([])
   const [custodians, setCustodians] = useState<any>([])
@@ -47,7 +48,7 @@ export const Inventario_Computadores = () => {
           setBrands(brandsData.brands);
           setDependencies(dependenciesData.dependencies);
           setCustodians(custodiansData.users);
-
+          
           if (scannedCode) {
             const parsedCode = parseInt(scannedCode, 10);
             const computerResult:any = await getComputerByAssetKey(parsedCode);
@@ -104,6 +105,17 @@ export const Inventario_Computadores = () => {
     setIsAddModalVisible(true);
   };
 
+  const status = [
+    {
+     ID: 0,
+     NAME: 'NO PRESTADO'
+    },
+    {
+     ID: 1,
+     NAME: 'PRESTADO'
+    },
+  ]
+
   const getCustodianName = (values:any) => {
     const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
     ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
@@ -115,20 +127,29 @@ export const Inventario_Computadores = () => {
     return custodianName;
   }
 
+  const getColumnNameId = (values: any, field: string, isName: boolean, status: any[]) => {
+    const statusItem = typeof values[field] === 'number'
+      ? status.find((l: any) => l.ID === values[field])
+      : status.find((l: any) => l.NAME === values[field]);
+    return isName ? statusItem?.NAME : statusItem?.ID;
+  };
+
   const handleEditOk = async (values: any) => {
     var objectEdit={
-      "categoryId": values.CATEGORY,
+      "categoryId": categories[0].ID,
       "name": values.NAME,
-      "brandId": values.BRAND,
+      "brandId": getColumnNameId(values, 'BRAND', false, brands),
       "model": values.MODEL,
       "feature": null,
       "series": values.SERIES,
-      "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
+      "acquisitionDependencyId": getColumnNameId(values, 'ACQUISITION_DEPENDENCY', false, dependencies),
       "entryDate": values.ENTRY_DATE,
       "currentCustodian": getCustodianName(values),
-      "locationId": values.LOCATION,
+      "locationId": getColumnNameId(values, 'LOCATION', false, brands),
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
+      "operativeSystem": values.OPERATIVE_SYSTEM,
+      "borrowed": getColumnNameId(values, 'BORROWD', false, status),
+      "position": values.POSITION
   }
     const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
@@ -185,20 +206,24 @@ export const Inventario_Computadores = () => {
       "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
-  }
+      "operativeSystem": values.OPERATIVE_SYSTEM,
+      "borrowed": values.BORROWED,
+      "position": values.POSITION
+    }
+    
     const result: any = await addComputer(objectAdd);
     if (!result.success) {
-      setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
         description: `No se pudo agregar el computador: ${result.error.message}`,
       });
       return;
     }
-
+    
+    setIsAddModalVisible(false);
     const newRecord = { ...values };
     newRecord.ASSET_KEY = result.computer.insertId;
+    newRecord.BORROWED = getColumnNameId(values, 'BORROWED', true, status);
 
     const updatedDataSource: any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
@@ -316,6 +341,19 @@ export const Inventario_Computadores = () => {
       key: 'currentCustodian',
     },
     {
+      title: 'Localización',
+      dataIndex: 'POSITION',
+      key: 'position',
+      rules: [
+        { max: 100, message: '¡Debe contener máximo 100 caracteres!' },
+      ]
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'BORROWED',
+      key: 'borrowed',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -340,8 +378,8 @@ export const Inventario_Computadores = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -367,8 +405,8 @@ export const Inventario_Computadores = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}

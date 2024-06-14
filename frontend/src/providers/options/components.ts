@@ -14,12 +14,11 @@ export const getAllComputerComponents = async () => {
             success: true,
             components: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al obtener componentes de computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -32,13 +31,11 @@ export const getComputerComponentById = async (id: number) => {
             success: true,
             component: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
-            
             success: false,
             error: {
-                message: error.message || "Error al obtener componente de computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -50,12 +47,11 @@ export const getComputerComponentsByComputerId = async (id: number) => {
             success: true,
             components: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al obtener componentes de computadora",
+                message: error.response.data.error,
             },
         };
     }
@@ -67,12 +63,11 @@ export const addComputerComponent = async (componentData: any) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al añadir componente de computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -85,12 +80,11 @@ export const editComputerComponent = async (id:number, componentData: any) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al editar componente de computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -103,12 +97,11 @@ export const deleteComputerComponent = async (id:Number) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al eliminar componente de computador",
+                message: error.response.data.error,
             },
         };
     }
@@ -123,12 +116,11 @@ export const getAllCaseComponents = async () => {
             success: true,
             components: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al obtener componentes de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -141,12 +133,11 @@ export const getCaseComponentById = async (id:Number) => {
             success: true,
             component: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al obtener componente de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -159,12 +150,11 @@ export const addCaseComponent = async (componentData:any) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al añadir componente de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -177,12 +167,11 @@ export const editCaseComponent = async (id:Number, componentData:any) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al editar componente de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -195,12 +184,11 @@ export const deleteCaseComponent = async (id:Number) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al eliminar componente de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -213,12 +201,11 @@ export const unsubscribeCaseComponent = async (id:Number) => {
             success: true,
             result: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al dar de baja componente de gabinete",
+                message: error.response.data.error,
             },
         };
     }
@@ -231,12 +218,11 @@ export const getCaseComponentsRelated = async (id:Number) => {
             success: true,
             components: response.data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: error.message || "Error al obtener componentes relacionados de gabinete",
+                message: error.response.data.error,
             },
         };
     }

@@ -11,12 +11,11 @@ export const getAllLocations = async () => {
             success: true,
             locations: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las ubicaciones.",
+                message: error.response.data.error,
             },
         };
     }
@@ -30,12 +29,11 @@ export const getLocation = async (locationId:number) => {
             success: true,
             location: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las ubicaciones.",
+                message: error.response.data.error,
             },
         };
     }
@@ -50,12 +48,11 @@ export const addLocation = async (location:{}) => {
             success: true,
             location: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir la ubicación.",
+                message: error.response.data.error,
             },
         };
     }
@@ -69,12 +66,11 @@ export const editLocation = async (locationId: number, location:{}) => {
             success: true,
             location: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar la ubicación.",
+                message: error.response.data.error,
             },
         };
     }
@@ -88,12 +84,11 @@ export const deleteLocation = async (locationId: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar la ubicación.",
+                message: error.response.data.error,
             },
         };
     }

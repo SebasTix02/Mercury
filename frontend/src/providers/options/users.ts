@@ -11,12 +11,11 @@ export const getAllUsers = async () => {
             success: true,
             users: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener usuarios",
+                message: error.response.data.error,
             },
         };
     }
@@ -31,12 +30,11 @@ export const addUser = async (userData:any) => {
             success: true,
             user: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir usuario",
+                message: error.response.data.error,
             },
         };
     }
@@ -50,12 +48,11 @@ export const editUser = async (userId: number, userData: any) => {
             success: true,
             user: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar usuario",
+                message: error.response.data.error,
             },
         };
     }
@@ -69,12 +66,11 @@ export const deleteUser = async (userId: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar usuario",
+                message: error.response.data.error,
             },
         };
     }
