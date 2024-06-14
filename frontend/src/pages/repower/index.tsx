@@ -616,6 +616,7 @@ export const Repotenciacion = () => {
           modalTitle="Editar Componente de Gabinete"
           formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE', 'CAPACITY', 'STATUS', 'IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
           selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
+          dateTypeInputs={[8]}
           isVisible={isEditCaseComponentModalVisible}
           handleVisible={setIsEditCaseComponentModalVisible}
           handleAddEdit={handleEditCaseComponentOk}
@@ -641,8 +642,9 @@ export const Repotenciacion = () => {
       {isAddCaseComponentModalVisible && (
         <CustomModal
           modalTitle="Agregar Componente de Gabinete"
-          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE','CAPACITY','STATUS','IS_UPGRADE']}
+          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE','CAPACITY','STATUS','IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
           selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
+          dateTypeInputs={[8]}
           isVisible={isAddCaseComponentModalVisible}
           handleVisible={setIsAddCaseComponentModalVisible}
           isAdding={true}
