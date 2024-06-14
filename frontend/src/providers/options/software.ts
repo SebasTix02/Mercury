@@ -14,12 +14,11 @@ export const getAllSoftware = async () => {
             success: true,
             software: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener el software.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -34,12 +33,11 @@ export const getSoftware = async (softwareId:number) => {
             success: true,
             software: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener el software.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -54,12 +52,11 @@ export const addSoftware = async (software:{}) => {
             success: true,
             software: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir el software.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -73,12 +70,11 @@ export const editSoftware = async (softwareId: number, software:{}) => {
             success: true,
             software: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar el software.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -92,12 +88,11 @@ export const deleteSoftware = async (softwareId: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar el software.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

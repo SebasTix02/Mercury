@@ -19,12 +19,11 @@ export const getInfoLabels = async () => {
             success: true,
             categories: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener la información",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -36,9 +35,12 @@ export const sendAssetKeys = async (assets: Asset[]) => {
         saveAs(new Blob([response.data]), 'qr_tags.pdf');
 
         return response.data;
-    } catch (e) {
-        const error = e as Error;
-        message.error(`Error al enviar los asset keys: ${error.message}`);
-        throw error;
+    } catch (error:any) {
+        return {
+            success: false,
+            error: {
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
+            },
+        };
     }
 };

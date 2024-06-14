@@ -12,6 +12,7 @@ import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
+import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
 export const Inventario_Computadores = () => {
   const { scannedCode } = useParams();
@@ -19,9 +20,10 @@ export const Inventario_Computadores = () => {
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([])
   const [locations, setLocations] = useState([])
-  const [categories, setCategories] = useState([])
+  const [categories, setCategories] = useState<any>([])
   const [brands, setBrands] = useState([])
   const [dependencies, setDependencies] = useState([])
+  const [custodians, setCustodians] = useState<any>([])
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,20 +32,22 @@ export const Inventario_Computadores = () => {
         const result:any = await getAllComputers();
         if (result.success) {
           setDataSource(result.computers);
-          const [buildData, locationData, categoriesData, brandsData, dependenciesData] = await Promise.all([
+          const [buildData, locationData, categoriesData, brandsData, dependenciesData, custodiansData] = await Promise.all([
             getAllBuildings(),
             getAllLocations(),
             getAllCategories(),
             getAllBrands(),
             getAllDependencies(),
+            getAllUsers(),
           ]);
-
+          const filteredCategory = categoriesData.categories.filter((category:any) => category.NAME === "EQUIPO ELECTRONICO")
           setBuildings(buildData.buildings);
           setLocations(locationData.locations);
-          setCategories(categoriesData.categories);
+          setCategories(filteredCategory);
           setBrands(brandsData.brands);
           setDependencies(dependenciesData.dependencies);
-
+          setCustodians(custodiansData.users);
+          
           if (scannedCode) {
             const parsedCode = parseInt(scannedCode, 10);
             const computerResult:any = await getComputerByAssetKey(parsedCode);
@@ -100,22 +104,52 @@ export const Inventario_Computadores = () => {
     setIsAddModalVisible(true);
   };
 
+  const status = [
+    {
+     ID: 0,
+     NAME: 'NO PRESTADO'
+    },
+    {
+     ID: 1,
+     NAME: 'PRESTADO'
+    },
+  ]
+
+  const getCustodianName = (values:any) => {
+    const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
+    ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
+    : values.CURRENT_CUSTODIAN;
+
+    const custodianName = typeof custodian === 'object' && custodian !== null 
+    ? `${custodian.NAME} ${custodian.LASTNAME}` 
+    : custodian;
+    return custodianName;
+  }
+
+  const getColumnNameId = (values: any, field: string, isName: boolean, status: any[]) => {
+    const statusItem = typeof values[field] === 'number'
+      ? status.find((l: any) => l.ID === values[field])
+      : status.find((l: any) => l.NAME === values[field]);
+    return isName ? statusItem?.NAME : statusItem?.ID;
+  };
+
   const handleEditOk = async (values: any) => {
     var objectEdit={
-      "categoryId": values.CATEGORY,
+      "categoryId": categories[0].ID,
       "name": values.NAME,
-      "brandId": values.BRAND,
+      "brandId": getColumnNameId(values, 'BRAND', false, brands),
       "model": values.MODEL,
       "feature": null,
       "series": values.SERIES,
-      "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
+      "acquisitionDependencyId": getColumnNameId(values, 'ACQUISITION_DEPENDENCY', false, dependencies),
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
-      "locationId": values.LOCATION,
+      "currentCustodian": getCustodianName(values),
+      "locationId": getColumnNameId(values, 'LOCATION', false, brands),
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
+      "operativeSystem": values.OPERATIVE_SYSTEM,
+      "borrowed": getColumnNameId(values, 'BORROWD', false, status),
+      "position": values.POSITION
   }
-  console.log(values);
     const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -168,23 +202,27 @@ export const Inventario_Computadores = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
-  }
+      "operativeSystem": values.OPERATIVE_SYSTEM,
+      "borrowed": values.BORROWED,
+      "position": values.POSITION
+    }
+    
     const result: any = await addComputer(objectAdd);
     if (!result.success) {
-      setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
         description: `No se pudo agregar el computador: ${result.error.message}`,
       });
       return;
     }
-
+    
+    setIsAddModalVisible(false);
     const newRecord = { ...values };
     newRecord.ASSET_KEY = result.computer.insertId;
+    newRecord.BORROWED = getColumnNameId(values, 'BORROWED', true, status);
 
     const updatedDataSource: any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
@@ -194,6 +232,8 @@ export const Inventario_Computadores = () => {
       description: 'El computador ha sido agregado exitosamente.',
     });
   };
+
+  const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
   const columns = [
     {
@@ -257,6 +297,9 @@ export const Inventario_Computadores = () => {
       title: 'IP',
       dataIndex: 'IP',
       key: 'ip',
+      rules:[
+        { pattern: ipv4Regex, message: '¡Por favor ingresa una IP válida!' },
+      ]
     },
     {
       title: 'Capacidad de RAM',
@@ -297,6 +340,19 @@ export const Inventario_Computadores = () => {
       key: 'currentCustodian',
     },
     {
+      title: 'Localización',
+      dataIndex: 'POSITION',
+      key: 'position',
+      rules: [
+        { max: 100, message: '¡Debe contener máximo 100 caracteres!' },
+      ]
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'BORROWED',
+      key: 'borrowed',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -321,8 +377,9 @@ export const Inventario_Computadores = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+          dateTypeInputs={[7]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -348,8 +405,9 @@ export const Inventario_Computadores = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Computador"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+          dateTypeInputs={[7]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}

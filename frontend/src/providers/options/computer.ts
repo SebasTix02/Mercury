@@ -6,17 +6,19 @@ const API_COMPUTER = `${API_URL}/computer`;
 export const getAllComputers = async () => {
     try {
         const response = await axios.get(`${API_COMPUTER}`);
-        const data = response.data;
+        const data = response.data.map((item:any) => ({
+            ...item,
+            ENTRY_DATE: new Date(item.ENTRY_DATE).toISOString().split('T')[0]
+        }));
         return {
             success: true,
             computers: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener computadores",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -26,16 +28,16 @@ export const getComputerByAssetKey = async (assetKey: number) => {
     try {
         const response = await axios.get(`${API_COMPUTER}/${assetKey}`);
         const data = response.data;
+        data.ENTRY_DATE = new Date(data.ENTRY_DATE).toISOString().split('T')[0];
         return {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener computador",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -49,12 +51,11 @@ export const addComputer = async (computerData: any) => {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir computador",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -68,12 +69,11 @@ export const editComputer = async (assetKey: number, computerData: any) => {
             success: true,
             computer: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar computador",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -87,12 +87,11 @@ export const deleteComputer = async (assetKey: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar computador",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

@@ -90,7 +90,9 @@ export const QRScanner = () => {
     if (result) {
         const code = result.match(/\d+/g) || [];
         if (result.includes("computer")){
-            navigate(`/computadores/${code}`);
+          navigate(`/computadores/${code}`);
+        }else{
+          navigate(`/bienes/${code}`);
         }
     }
   }, [result, navigate]);

@@ -24,11 +24,11 @@ exports.getCaseComponents = async (request, response) => {
             END AS CAPACITY,
             CASE
                 WHEN case_component.STATUS = 1 THEN 'ACTIVO'
-                ELSE 'BAJA'
+                ELSE 'INACTIVO'
             END AS STATUS,
             CASE
                 WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
-                ELSE NULL
+                ELSE 'NO'
             END AS IS_UPGRADE,
             case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
             FROM CASE_COMPONENT AS case_component
@@ -67,11 +67,11 @@ exports.getCaseComponentById = async (request, response) => {
             END AS CAPACITY,
             CASE
                 WHEN case_component.STATUS = 1 THEN 'ACTIVO'
-                ELSE 'BAJA'
+                ELSE 'INACTIVO'
             END AS STATUS,
             CASE
                 WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
-                ELSE NULL
+                ELSE 'NO'
             END AS IS_UPGRADE,
             case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
             FROM CASE_COMPONENT AS case_component

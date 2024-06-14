@@ -11,12 +11,11 @@ export const getDashboardValues = async () => {
             success: true,
             dashboard: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener los valores del Dashboard.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

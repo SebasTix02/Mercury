@@ -14,12 +14,11 @@ export const getAllDependencies = async () => {
             success: true,
             dependencies: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener las dependencias.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -34,12 +33,11 @@ export const getDependency = async (dependencyId:number) => {
             success: true,
             dependency: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al obtener la dependencia.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -54,12 +52,11 @@ export const addDependency = async (name:{}) => {
             success: true,
             dependency: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al añadir la dependencia.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -73,12 +70,11 @@ export const editDependency = async (dependencyId: number, name:{}) => {
             success: true,
             dependency: data,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al editar la dependencia.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -92,12 +88,11 @@ export const deleteDependency = async (dependencyId: number) => {
             success: true,
             message: data.message,
         };
-    } catch (e) {
-        const error = e as Error;
+    } catch (error:any) {
         return {
             success: false,
             error: {
-                message: "message" in error ? error.message : "Error al eliminar la dependencia.",
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
