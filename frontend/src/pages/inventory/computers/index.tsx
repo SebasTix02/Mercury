@@ -388,6 +388,7 @@ export const Inventario_Computadores = () => {
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
+          handleRepowerButton={() => handleRepower(selectedRecord)}
         />
       )}
 
@@ -416,7 +417,7 @@ export const Inventario_Computadores = () => {
           selectedRecord={selectedRecord}
           icon={<UserAddOutlined />}
           iconColor={CustomColors.WHITE}
-          iconBackgroundColor={CustomColors.SUCCESS}
+          iconBackgroundColor={CustomColors.SUCCESS}          
         />
       )}
     </Layout>

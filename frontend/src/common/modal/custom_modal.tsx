@@ -19,6 +19,7 @@ interface Props {
     formColumns?: string[];
     selectTypeInputs?: any[];
     dateTypeInputs?: number[];
+    handleRepowerButton?:any;
 }
 
 const CustomModal: React.FC<Props> = ({
@@ -36,7 +37,8 @@ const CustomModal: React.FC<Props> = ({
     iconBackgroundColor,
     formColumns = [],
     selectTypeInputs = [],
-    dateTypeInputs = []
+    dateTypeInputs = [],
+    handleRepowerButton
 }) => {
     const [form] = Form.useForm();
 
@@ -128,6 +130,14 @@ const CustomModal: React.FC<Props> = ({
                             <span style={{ color: 'rgb(14,17,17)' }}>{modalTitle}</span>
                         </Space>
                         <Divider />
+                        {handleRepowerButton && 
+                            <Button
+                            type='primary'
+                                onClick={handleRepowerButton}
+                            >
+                                Repotenciar
+                            </Button>
+                        }
                     </div>
                 }
                 visible={isVisible}
