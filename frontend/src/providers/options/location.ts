@@ -15,7 +15,7 @@ export const getAllLocations = async () => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -33,7 +33,7 @@ export const getLocation = async (locationId:number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -52,7 +52,7 @@ export const addLocation = async (location:{}) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -70,7 +70,7 @@ export const editLocation = async (locationId: number, location:{}) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -88,7 +88,7 @@ export const deleteLocation = async (locationId: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

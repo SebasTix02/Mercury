@@ -18,7 +18,7 @@ export const getAllComputerComponents = async () => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -35,7 +35,7 @@ export const getComputerComponentById = async (id: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -51,7 +51,7 @@ export const getComputerComponentsByComputerId = async (id: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -67,7 +67,7 @@ export const addComputerComponent = async (componentData: any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -84,7 +84,7 @@ export const editComputerComponent = async (id:number, componentData: any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -101,7 +101,7 @@ export const deleteComputerComponent = async (id:Number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -120,7 +120,7 @@ export const getAllCaseComponents = async () => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -137,7 +137,7 @@ export const getCaseComponentById = async (id:Number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -154,7 +154,7 @@ export const addCaseComponent = async (componentData:any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -171,7 +171,7 @@ export const editCaseComponent = async (id:Number, componentData:any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -188,7 +188,7 @@ export const deleteCaseComponent = async (id:Number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -205,7 +205,7 @@ export const unsubscribeCaseComponent = async (id:Number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -222,7 +222,7 @@ export const getCaseComponentsRelated = async (id:Number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

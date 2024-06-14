@@ -15,7 +15,7 @@ export const getAllComputers = async () => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -33,7 +33,7 @@ export const getComputerByAssetKey = async (assetKey: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -51,7 +51,7 @@ export const addComputer = async (computerData: any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -69,7 +69,7 @@ export const editComputer = async (assetKey: number, computerData: any) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -87,7 +87,7 @@ export const deleteComputer = async (assetKey: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }

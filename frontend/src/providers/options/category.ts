@@ -18,7 +18,7 @@ export const getAllCategories = async () => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -37,7 +37,7 @@ export const getCategory = async (categoryId:number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -56,7 +56,7 @@ export const addCategory = async (name:{}) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -74,7 +74,7 @@ export const editCategory = async (categoryId: number, name:{}) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
@@ -92,7 +92,7 @@ export const deleteCategory = async (categoryId: number) => {
         return {
             success: false,
             error: {
-                message: error.response.data.error,
+                message: error.response ? error.response.data.error : 'Sin respuesta desde el servidor Back-end.',
             },
         };
     }
