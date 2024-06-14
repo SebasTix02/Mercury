@@ -141,6 +141,35 @@ export const Repotenciacion = () => {
     setIsAddComputerComponentModalVisible(true);
   };
 
+  const status = [
+    {
+     ID: 0,
+     NAME: 'INACTIVO'
+    },
+    {
+     ID: 1,
+     NAME: 'ACTIVO'
+    },
+  ]
+
+  const isUpgrade = [
+    {
+     ID: 0,
+     NAME: 'NO'
+    },
+    {
+     ID: 1,
+     NAME: 'SI'
+    },
+  ]
+
+  const getColumnNameId = (values: any, field: string, isName: boolean, status: any[]) => {
+    const statusItem = typeof values[field] === 'number'
+      ? status.find((l: any) => l.ID === values[field])
+      : status.find((l: any) => l.NAME === values[field]);
+    return isName ? statusItem?.NAME : statusItem?.ID;
+  };
+
   const handleEditComputerComponentOk = async (values: any) => {
     let ubicacion = null;
     console.log(typeof values.LOCATION)
@@ -166,7 +195,7 @@ export const Repotenciacion = () => {
         "isCase": 0,
         "locationId": ubicacion!.ID,
         "position": values.POSITION,
-        "status": values.STATUS === "ACTIVO" ? 1 : 0
+        "status": getColumnNameId(values, 'STATUS', false, status)
     };
     console.log(objectEdit)
     console.log(ubicacion)
@@ -176,7 +205,7 @@ export const Repotenciacion = () => {
       "BUILDING": ubicacion!.BUILDING,
       "LOCATION": ubicacion!.NAME,
       "POSITION": values.POSITION,
-      "STATUS": values.STATUS
+      "STATUS": getColumnNameId(values, 'STATUS', true, status)
   }
 
     const result: any = await editComputerComponent(selectedComputerComponent!.ID, objectEdit);
@@ -236,7 +265,7 @@ export const Repotenciacion = () => {
       "isCase": isCase,
       "locationId": values.LOCATION,
       "position": values.POSITION,
-      "status": values.STATUS === "ACTIVO" ? 1 : 0
+      "status": getColumnNameId(values, 'STATUS', false, status)
   }
     const result: any = await addComputerComponent(objectAdd);
     if (!result.success) {
@@ -301,13 +330,13 @@ export const Repotenciacion = () => {
     console.log("id" + idMarca + "/nombre: " + nombreMarca)
     const objectEdit = {
       "assetKey": null,"name": values.NAME,"brandId": idMarca,
-      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": values.STATUS,
-      "isUpgrade": values.IS_UPGRADE === "SI" ? 1 : 0,"upgradeDate": values.UPGRADE_DATE,"upgradeDetail": values.UPGRADE_DETAIL,
+      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": getColumnNameId(values, 'STATUS', false, status),
+      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade),"upgradeDate": values.UPGRADE_DATE,"upgradeDetail": values.UPGRADE_DETAIL,
     }
     const objectShow = {
       "NAME": values.NAME,"BRAND": nombreMarca,
-      "MODEL": values.MODEL,"SERIES": values.SERIES,"TYPE": values.TYPE,"CAPACITY": values.CAPACITY,"STATUS": values.STATUS,
-      "IS_UPGRADE": values.IS_UPGRADE,"UPGRADE_DATE": values.UPGRADE_DATE,"UPGRADE_DETAIL": values.UPGRADE_DETAIL,
+      "MODEL": values.MODEL,"SERIES": values.SERIES,"TYPE": values.TYPE,"CAPACITY": values.CAPACITY,"STATUS": getColumnNameId(values, 'STATUS', true, status),
+      "IS_UPGRADE": getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade),"UPGRADE_DATE": values.UPGRADE_DATE,"UPGRADE_DETAIL": values.UPGRADE_DETAIL,
     }
     console.log(objectShow)
     const result: any = await editCaseComponent(selectedCaseComponent!.ID, objectEdit);
@@ -356,11 +385,11 @@ export const Repotenciacion = () => {
     const formattedDate = currentDate.getFullYear() + '-' + 
                           String(currentDate.getMonth() + 1).padStart(2, '0') + '-' + 
                           String(currentDate.getDate()).padStart(2, '0');
-    const fecha = values.IS_UPGRADE === "SI" ? formattedDate : null;
+    const fecha = getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade) === "SI" ? formattedDate : null;
     const objectEdit = {
       "caseId": caseId,"assetKey": null,"name": values.NAME,"brandId": values.BRAND,
-      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": values.STATUS,
-      "isUpgrade": values.IS_UPGRADE === "SI" ? 1 : 0,"upgradeDate": fecha,"upgradeDetail": null,
+      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": getColumnNameId(values, 'STATUS', false, status),
+      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade),"upgradeDate": fecha,"upgradeDetail": null,
     }
     console.log(objectEdit)
     const result: any = await addCaseComponent(objectEdit);
@@ -542,7 +571,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Editar Componente de Computadora"
           formColumns={['NAME', 'LOCATION', 'POSITION', 'STATUS']}
-          selectTypeInputs={[[1, locations]]}
+          selectTypeInputs={[[1, locations],[3, status]]}
           isVisible={isEditComputerComponentModalVisible}
           handleVisible={setIsEditComputerComponentModalVisible}
           handleAddEdit={handleEditComputerComponentOk}
@@ -569,7 +598,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Agregar Componente de Computadora"
           formColumns={['NAME', 'LOCATION', 'POSITION', 'STATUS']}
-          selectTypeInputs={[[1, locations]]}
+          selectTypeInputs={[[1, locations],[3, status]]}
           isVisible={isAddComputerComponentModalVisible}
           handleVisible={setIsAddComputerComponentModalVisible}
           isAdding={true}
@@ -586,7 +615,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Editar Componente de Gabinete"
           formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE', 'CAPACITY', 'STATUS', 'IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
-          selectTypeInputs={[[1, brands]]}
+          selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
           isVisible={isEditCaseComponentModalVisible}
           handleVisible={setIsEditCaseComponentModalVisible}
           handleAddEdit={handleEditCaseComponentOk}
@@ -613,7 +642,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Agregar Componente de Gabinete"
           formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE','CAPACITY','STATUS','IS_UPGRADE']}
-          selectTypeInputs={[[1, brands]]}
+          selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
           isVisible={isAddCaseComponentModalVisible}
           handleVisible={setIsAddCaseComponentModalVisible}
           isAdding={true}

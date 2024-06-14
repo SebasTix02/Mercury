@@ -120,6 +120,17 @@ export const Inventario_Bienes = () => {
     setIsAddModalVisible(true);
   };
 
+  const status = [
+    {
+     ID: 0,
+     NAME: 'NO PRESTADO'
+    },
+    {
+     ID: 1,
+     NAME: 'PRESTADO'
+    },
+  ]
+
   const getCustodianName = (values:any) => {
     const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
     ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
@@ -130,6 +141,13 @@ export const Inventario_Bienes = () => {
     : custodian;
     return custodianName;
   }
+
+  const getColumnNameId = (values: any, field: string, isName: boolean, status: any[]) => {
+    const statusItem = typeof values[field] === 'number'
+      ? status.find((l: any) => l.ID === values[field])
+      : status.find((l: any) => l.NAME === values[field]);
+    return isName ? statusItem?.NAME : statusItem?.ID;
+  };
 
   const handleEditOk = async (values: any) => {
     const objectEdit = {
@@ -298,6 +316,19 @@ export const Inventario_Bienes = () => {
       key: 'current_custodian',
     },
     {
+      title: 'Localización',
+      dataIndex: 'POSITION',
+      key: 'position',
+      rules: [
+        { max: 100, message: '¡Debe contener máximo 100 caracteres!' },
+      ]
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'BORROWED',
+      key: 'borrowed',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -321,8 +352,8 @@ export const Inventario_Bienes = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Activo"
-          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies],[8, custodians], [9, locations]]}
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies],[8, custodians], [9, locations],[13, status]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -350,8 +381,8 @@ export const Inventario_Bienes = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Activo"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations]]}
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}
