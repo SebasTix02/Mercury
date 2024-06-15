@@ -218,7 +218,6 @@ export const getCaseComponentsRelated = async (id: Number) => {
             ...item,
             UPGRADE_DATE: item.UPGRADE_DATE ? new Date(item.UPGRADE_DATE).toISOString().split('T')[0] : null
         }));
-        console.table(data)
         return {
             success: true,
             components: data,
