@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Space, Row, notification, Tabs, Input } from 'antd';
 import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined, SearchOutlined } from '@ant-design/icons';
-import {  useNavigate, useParams } from 'react-router-dom';
-import { editComputerComponent,getAllComputerComponents, getComputerComponentsByComputerId, addComputerComponent
-  ,deleteComputerComponent, getAllCaseComponents, getCaseComponentById,addCaseComponent,editCaseComponent,deleteCaseComponent
-  ,unsubscribeCaseComponent, getCaseComponentsRelated
- } from '../../providers/options/components';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  editComputerComponent, getAllComputerComponents, getComputerComponentsByComputerId, addComputerComponent
+  , deleteComputerComponent, getAllCaseComponents, getCaseComponentById, addCaseComponent, editCaseComponent, deleteCaseComponent
+  , unsubscribeCaseComponent, getCaseComponentsRelated
+} from '../../providers/options/components';
 import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { CustomColors } from '../../common/constantsCommon';
@@ -21,7 +22,7 @@ interface Component {
   NAME: string;
   BRAND: string;
   MODEL: string;
-  SERIES:string;
+  SERIES: string;
   TYPE: string;
   CAPACITY: string;
   STATUS: string;
@@ -65,16 +66,16 @@ export const Repotenciacion = () => {
   useEffect(() => {
     if (id) {
       fetchComponentsById(id);
-      getAllBuildings().then((buildData:any) => {
+      getAllBuildings().then((buildData: any) => {
         setBuildings(buildData.buildings);
       })
-      getAllLocations().then((locationData:any) => {
+      getAllLocations().then((locationData: any) => {
         setLocations(locationData.locations);
       })
-      getAllBrands().then((brandData:any) => {
+      getAllBrands().then((brandData: any) => {
         setBrands(brandData.brands);
       })
-      getCaseComponentsRelated(Number.parseInt(id)).then((casesData:any) => {
+      getCaseComponentsRelated(Number.parseInt(id)).then((casesData: any) => {
         setCases(casesData.components[0].CASE_ID);
       })
     }
@@ -84,13 +85,13 @@ export const Repotenciacion = () => {
       // Reiniciar los estados para evitar duplicados
       setComputerComponents([]);
       setCaseComponents([]);
-  
+
       setLoadingComputerComponents(true);
       setLoadingCaseComponents(true);
-  
+
       const computerComponentResult = await getComputerComponentsByComputerId(Number.parseInt(id));
       const caseComponentResult = await getCaseComponentsRelated(Number.parseInt(id));
-  
+
       if (computerComponentResult.success) {
         setComputerComponents(computerComponentResult.components);
       } else {
@@ -99,7 +100,7 @@ export const Repotenciacion = () => {
           description: `No se pudo obtener los componentes de computadora: ${computerComponentResult.error?.message}`,
         });
       }
-  
+
       if (caseComponentResult.success) {
         setCaseComponents(caseComponentResult.components);
       } else {
@@ -115,12 +116,12 @@ export const Repotenciacion = () => {
       setLoadingCaseComponents(false);
     }
   };
-  
-  
+
+
 
   const handleSearchById = async (searchId: string) => {
     await fetchComponentsById(searchId);
-    id=searchId
+    id = searchId
     const newUrl = `/repotenciar/${searchId}`; // Define la nueva URL
     window.history.pushState({ path: newUrl }, '', newUrl);
   };
@@ -143,23 +144,23 @@ export const Repotenciacion = () => {
 
   const status = [
     {
-     ID: 0,
-     NAME: 'INACTIVO'
+      ID: 0,
+      NAME: 'INACTIVO'
     },
     {
-     ID: 1,
-     NAME: 'ACTIVO'
+      ID: 1,
+      NAME: 'ACTIVO'
     },
   ]
 
   const isUpgrade = [
     {
-     ID: 0,
-     NAME: 'NO'
+      ID: 0,
+      NAME: 'NO'
     },
     {
-     ID: 1,
-     NAME: 'SI'
+      ID: 1,
+      NAME: 'SI'
     },
   ]
 
@@ -174,28 +175,28 @@ export const Repotenciacion = () => {
     let ubicacion = null;
     console.log(typeof values.LOCATION)
     if (typeof values.LOCATION === 'number') {
-        locations.map((item: any) => {
-        if (item.ID === values.LOCATION) { 
-          ubicacion = item; 
+      locations.map((item: any) => {
+        if (item.ID === values.LOCATION) {
+          ubicacion = item;
         }
         return item;
-    });
-    }else{ // Inicializa la variable fuera del mapeo
+      });
+    } else { // Inicializa la variable fuera del mapeo
       locations.map((item: any) => {
-          if (item.NAME === values.LOCATION) { 
-            ubicacion = item; 
-          }
-          return item;
+        if (item.NAME === values.LOCATION) {
+          ubicacion = item;
+        }
+        return item;
       });
     }
-    
+
     var objectEdit = {
-        "assetKey": null, // Asegúrate de incluir el assetKey si es necesario
-        "name": values.NAME,
-        "isCase": 0,
-        "locationId": ubicacion!.ID,
-        "position": values.POSITION,
-        "status": getColumnNameId(values, 'STATUS', false, status)
+      "assetKey": null, // Asegúrate de incluir el assetKey si es necesario
+      "name": values.NAME,
+      "isCase": 0,
+      "locationId": ubicacion!.ID,
+      "position": values.POSITION,
+      "status": getColumnNameId(values, 'STATUS', false, status)
     };
     console.log(objectEdit)
     console.log(ubicacion)
@@ -206,30 +207,30 @@ export const Repotenciacion = () => {
       "LOCATION": ubicacion!.NAME,
       "POSITION": values.POSITION,
       "STATUS": getColumnNameId(values, 'STATUS', true, status)
-  }
+    }
 
     const result: any = await editComputerComponent(selectedComputerComponent!.ID, objectEdit);
     if (!result.success) {
-        notification.error({
-            message: 'Error de actualización',
-            description: `No se pudo actualizar el componente de computadora: ${result.error.message}`,
-        });
-        setIsEditComputerComponentModalVisible(false);
-        return;
+      notification.error({
+        message: 'Error de actualización',
+        description: `No se pudo actualizar el componente de computadora: ${result.error.message}`,
+      });
+      setIsEditComputerComponentModalVisible(false);
+      return;
     }
 
     const updatedData = computerComponents.map((item: any) =>
-        item.ID === selectedComputerComponent!.ID ? { ...item, ...valoresMostrar } : item
+      item.ID === selectedComputerComponent!.ID ? { ...item, ...valoresMostrar } : item
     );
     console.log(locations)
     console.log(updatedData)
     setComputerComponents(updatedData); // Actualiza el estado con los datos editados
     setIsEditComputerComponentModalVisible(false); // Cierra el modal
     notification.success({
-        message: 'Componente de Computadora actualizado',
-        description: 'El componente de computadora ha sido actualizado exitosamente.',
+      message: 'Componente de Computadora actualizado',
+      description: 'El componente de computadora ha sido actualizado exitosamente.',
     });
-};
+  };
 
 
   const handleDeleteComputerComponentOk = async () => {
@@ -260,13 +261,13 @@ export const Repotenciacion = () => {
     }
     var objectAdd = {
       "computerId": id,
-      "assetKey": null,
+      "assetKey": values.ASSET_KEY,
       "name": values.NAME,
       "isCase": isCase,
       "locationId": values.LOCATION,
       "position": values.POSITION,
       "status": getColumnNameId(values, 'STATUS', false, status)
-  }
+    }
     const result: any = await addComputerComponent(objectAdd);
     if (!result.success) {
       setIsAddComputerComponentModalVisible(false);
@@ -287,7 +288,7 @@ export const Repotenciacion = () => {
       message: 'Componente de Computadora agregado',
       description: 'El componente de computadora ha sido agregado exitosamente.',
     });
-    
+
   };
 
   // Case Component Handlers
@@ -308,35 +309,49 @@ export const Repotenciacion = () => {
 
   const handleEditCaseComponentOk = async (values: any) => {
     let nombreMarca = null;
-    let idMarca = null; 
+    let idMarca = null;
     console.log(typeof values.BRAND + "/dato: " + values.BRAND)
     if (typeof values.BRAND === 'string') {
       brands.map((item: any) => {
-        if (item.NAME == values.BRAND) { 
-          idMarca = item.ID; 
+        if (item.NAME == values.BRAND) {
+          idMarca = item.ID;
           nombreMarca = item.NAME
         }
         return item;
       });
-    }else{ // Inicializa la variable fuera del mapeo
+    } else { // Inicializa la variable fuera del mapeo
       brands.map((item: any) => {
-          if (item.ID == values.BRAND) { 
-            idMarca = item.ID; 
-            nombreMarca = item.NAME
-          }
-          return item;
+        if (item.ID == values.BRAND) {
+          idMarca = item.ID;
+          nombreMarca = item.NAME
+        }
+        return item;
       });
     }
+    const capacidad:string = values.CAPACITY;
+    const numero = parseInt(capacidad.substring(0, capacidad.indexOf(' ')))
+    var sufijo = "GB"
+    if (capacidad.includes("T")) {
+      sufijo = "TB"
+      values.CAPACITY = numero*1000
+    }else if (capacidad.includes("M")) {
+      sufijo = "MB"
+      values.CAPACITY = numero/1000
+    }else if (capacidad.includes("K")) {
+      sufijo = "KB"
+      values.CAPACITY = numero/1000000
+    }
+    
     console.log("id" + idMarca + "/nombre: " + nombreMarca)
     const objectEdit = {
-      "assetKey": null,"name": values.NAME,"brandId": idMarca,
-      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": getColumnNameId(values, 'STATUS', false, status),
-      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade),"upgradeDate": values.UPGRADE_DATE,"upgradeDetail": values.UPGRADE_DETAIL,
+      "assetKey": null, "name": values.NAME, "brandId": idMarca,
+      "model": values.MODEL, "series": values.SERIES, "type": values.TYPE, "capacity": values.CAPACITY, "status": getColumnNameId(values, 'STATUS', false, status),
+      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade), "upgradeDate": values.UPGRADE_DATE, "upgradeDetail": values.UPGRADE_DETAIL,
     }
     const objectShow = {
-      "NAME": values.NAME,"BRAND": nombreMarca,
-      "MODEL": values.MODEL,"SERIES": values.SERIES,"TYPE": values.TYPE,"CAPACITY": values.CAPACITY,"STATUS": getColumnNameId(values, 'STATUS', true, status),
-      "IS_UPGRADE": getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade),"UPGRADE_DATE": values.UPGRADE_DATE,"UPGRADE_DETAIL": values.UPGRADE_DETAIL,
+      "NAME": values.NAME, "BRAND": nombreMarca,
+      "MODEL": values.MODEL, "SERIES": values.SERIES, "TYPE": values.TYPE, "CAPACITY": numero+" "+sufijo, "STATUS": getColumnNameId(values, 'STATUS', true, status),
+      "IS_UPGRADE": getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade), "UPGRADE_DATE": values.UPGRADE_DATE, "UPGRADE_DETAIL": values.UPGRADE_DETAIL,
     }
     console.log(objectShow)
     const result: any = await editCaseComponent(selectedCaseComponent!.ID, objectEdit);
@@ -351,7 +366,7 @@ export const Repotenciacion = () => {
     const updatedData = caseComponents.map((item: any) =>
       item.ID === selectedCaseComponent!.ID ? { ...item, ...objectShow } : item
     );
-    console.log("values: "+ values.BRAND + "nombre: " +nombreMarca)
+    console.log("values: " + values.BRAND + "nombre: " + nombreMarca)
     console.log(updatedData)
     setCaseComponents(updatedData);
     setIsEditCaseComponentModalVisible(false);
@@ -382,14 +397,14 @@ export const Repotenciacion = () => {
 
   const handleAddCaseComponentOk = async (values: any) => {
     const currentDate = new Date();
-    const formattedDate = currentDate.getFullYear() + '-' + 
-                          String(currentDate.getMonth() + 1).padStart(2, '0') + '-' + 
-                          String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = currentDate.getFullYear() + '-' +
+      String(currentDate.getMonth() + 1).padStart(2, '0') + '-' +
+      String(currentDate.getDate()).padStart(2, '0');
     const fecha = getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade) === "SI" ? formattedDate : null;
     const objectEdit = {
-      "caseId": caseId,"assetKey": null,"name": values.NAME,"brandId": values.BRAND,
-      "model": values.MODEL,"series": values.SERIES,"type": values.TYPE,"capacity": values.CAPACITY,"status": getColumnNameId(values, 'STATUS', false, status),
-      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade),"upgradeDate": fecha,"upgradeDetail": null,
+      "caseId": caseId, "assetKey": null, "name": values.NAME, "brandId": values.BRAND,
+      "model": values.MODEL, "series": values.SERIES, "type": values.TYPE, "capacity": values.CAPACITY, "status": getColumnNameId(values, 'STATUS', false, status),
+      "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade), "upgradeDate": fecha, "upgradeDetail": null,
     }
     console.log(objectEdit)
     const result: any = await addCaseComponent(objectEdit);
@@ -419,6 +434,11 @@ export const Repotenciacion = () => {
       title: 'ID',
       dataIndex: 'ID',
       key: 'id',
+    },
+    {
+      title: 'Codigo del bien',
+      dataIndex: 'ASSET_KEY',
+      key: 'asset_key',
     },
     {
       title: 'Nombre',
@@ -462,7 +482,7 @@ export const Repotenciacion = () => {
       ),
     },
   ];
-
+  const capacityRegex = /^\d+\s?[A-Z]B$/;
   const caseComponentColumns = [
     {
       title: 'ID',
@@ -501,6 +521,9 @@ export const Repotenciacion = () => {
       title: 'Capacidad',
       dataIndex: 'CAPACITY',
       key: 'capacity',
+      rules: [
+        { pattern: capacityRegex, message: '¡Por favor ingresa un capacidad valida EJ. 100 GB!' },
+      ]
     },
     {
       title: 'Estado',
@@ -547,20 +570,20 @@ export const Repotenciacion = () => {
         />
         <Tabs defaultActiveKey="1">
           <TabPane tab="Componentes de Computadora" key="1">
-            <CustomTable 
-              dataSource={computerComponents} 
-              columns={computerComponentColumns} 
-              rowKey="ID" 
-              searchFields={['NAME', 'BUILDING', 'LOCATION', 'POSITION']} 
+            <CustomTable
+              dataSource={computerComponents}
+              columns={computerComponentColumns}
+              rowKey="ID"
+              searchFields={['NAME', 'BUILDING', 'LOCATION', 'POSITION']}
               handleAdd={handleAddComputerComponent}
             />
           </TabPane>
           <TabPane tab="Componentes de Gabinete" key="2">
-            <CustomTable 
-              dataSource={caseComponents} 
-              columns={caseComponentColumns} 
-              rowKey="ID" 
-              searchFields={['NAME', 'BRAND', 'MODEL', 'TYPE']} 
+            <CustomTable
+              dataSource={caseComponents}
+              columns={caseComponentColumns}
+              rowKey="ID"
+              searchFields={['NAME', 'BRAND', 'MODEL', 'TYPE']}
               handleAdd={handleAddCaseComponent}
             />
           </TabPane>
@@ -571,7 +594,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Editar Componente de Computadora"
           formColumns={['NAME', 'LOCATION', 'POSITION', 'STATUS']}
-          selectTypeInputs={[[1, locations],[3, status]]}
+          selectTypeInputs={[[1, locations], [3, status]]}
           isVisible={isEditComputerComponentModalVisible}
           handleVisible={setIsEditComputerComponentModalVisible}
           handleAddEdit={handleEditComputerComponentOk}
@@ -597,8 +620,8 @@ export const Repotenciacion = () => {
       {isAddComputerComponentModalVisible && (
         <CustomModal
           modalTitle="Agregar Componente de Computadora"
-          formColumns={['NAME', 'LOCATION', 'POSITION', 'STATUS']}
-          selectTypeInputs={[[1, locations],[3, status]]}
+          formColumns={['ASSET_KEY', 'NAME', 'LOCATION', 'POSITION', 'STATUS']}
+          selectTypeInputs={[[2, locations], [4, status]]}
           isVisible={isAddComputerComponentModalVisible}
           handleVisible={setIsAddComputerComponentModalVisible}
           isAdding={true}
@@ -615,7 +638,7 @@ export const Repotenciacion = () => {
         <CustomModal
           modalTitle="Editar Componente de Gabinete"
           formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE', 'CAPACITY', 'STATUS', 'IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
-          selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
+          selectTypeInputs={[[1, brands], [6, status], [7, isUpgrade]]}
           dateTypeInputs={[8]}
           isVisible={isEditCaseComponentModalVisible}
           handleVisible={setIsEditCaseComponentModalVisible}
@@ -642,8 +665,8 @@ export const Repotenciacion = () => {
       {isAddCaseComponentModalVisible && (
         <CustomModal
           modalTitle="Agregar Componente de Gabinete"
-          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE','CAPACITY','STATUS','IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
-          selectTypeInputs={[[1, brands],[6, status],[7, isUpgrade]]}
+          formColumns={['NAME', 'BRAND', 'MODEL', 'SERIES', 'TYPE', 'CAPACITY', 'STATUS', 'IS_UPGRADE', 'UPGRADE_DATE', 'UPGRADE_DETAIL']}
+          selectTypeInputs={[[1, brands], [6, status], [7, isUpgrade]]}
           dateTypeInputs={[8]}
           isVisible={isAddCaseComponentModalVisible}
           handleVisible={setIsAddCaseComponentModalVisible}
