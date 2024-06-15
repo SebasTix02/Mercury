@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Space, Row, notification, Tabs, Input } from 'antd';
+import { Button, Space, Row, notification, Tabs, Input, Table } from 'antd';
 import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined, SearchOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -15,6 +15,7 @@ import Layout from '../../components/layout';
 import { getAllBuildings } from '../../providers/options/building';
 import { getAllLocations } from '../../providers/options/location';
 import { getAllBrands } from '../../providers/options/brand';
+import { getAllComputers } from '../../providers/options/computer';
 const { TabPane } = Tabs;
 /*Agregar crud de repotenciacion para repotenciar */
 interface Component {
@@ -46,6 +47,8 @@ export const Repotenciacion = () => {
   const [locations, setLocations] = useState([])
   const [brands, setBrands] = useState([])
   const [caseId, setCases] = useState()
+  const [computers, setComputers] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
   // Computer Components State
   const [computerComponents, setComputerComponents] = useState<ComputerComponent[]>([]);
   const [loadingComputerComponents, setLoadingComputerComponents] = useState(true);
@@ -77,6 +80,12 @@ export const Repotenciacion = () => {
       })
       getCaseComponentsRelated(Number.parseInt(id)).then((casesData: any) => {
         setCases(casesData.components[0].CASE_ID);
+      })
+      getAllComputers().then((computers: any) => {
+        const computer = computers.computers.find((computer: any) => computer.COMPUTER_ID == id);
+        const computadora: any = [computer]
+        setComputers(computers.computers)
+        setDataSource(computadora)
       })
     }
   }, [id]);
@@ -121,6 +130,9 @@ export const Repotenciacion = () => {
 
   const handleSearchById = async (searchId: string) => {
     await fetchComponentsById(searchId);
+    const computer = computers.find((computer: any) => computer.COMPUTER_ID == searchId);
+    const computadora: any = [computer]
+    setDataSource(computadora)
     id = searchId
     const newUrl = `/repotenciar/${searchId}`; // Define la nueva URL
     window.history.pushState({ path: newUrl }, '', newUrl);
@@ -328,20 +340,20 @@ export const Repotenciacion = () => {
         return item;
       });
     }
-    const capacidad:string = values.CAPACITY;
+    const capacidad: string = values.CAPACITY;
     const numero = parseInt(capacidad.substring(0, capacidad.indexOf(' ')))
     var sufijo = "GB"
     if (capacidad.includes("T")) {
       sufijo = "TB"
-      values.CAPACITY = numero*1000
-    }else if (capacidad.includes("M")) {
+      values.CAPACITY = numero * 1000
+    } else if (capacidad.includes("M")) {
       sufijo = "MB"
-      values.CAPACITY = numero/1000
-    }else if (capacidad.includes("K")) {
+      values.CAPACITY = numero / 1000
+    } else if (capacidad.includes("K")) {
       sufijo = "KB"
-      values.CAPACITY = numero/1000000
+      values.CAPACITY = numero / 1000000
     }
-    
+
     console.log("id" + idMarca + "/nombre: " + nombreMarca)
     const objectEdit = {
       "assetKey": null, "name": values.NAME, "brandId": idMarca,
@@ -350,7 +362,7 @@ export const Repotenciacion = () => {
     }
     const objectShow = {
       "NAME": values.NAME, "BRAND": nombreMarca,
-      "MODEL": values.MODEL, "SERIES": values.SERIES, "TYPE": values.TYPE, "CAPACITY": numero+" "+sufijo, "STATUS": getColumnNameId(values, 'STATUS', true, status),
+      "MODEL": values.MODEL, "SERIES": values.SERIES, "TYPE": values.TYPE, "CAPACITY": numero + " " + sufijo, "STATUS": getColumnNameId(values, 'STATUS', true, status),
       "IS_UPGRADE": getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade), "UPGRADE_DATE": values.UPGRADE_DATE, "UPGRADE_DETAIL": values.UPGRADE_DETAIL,
     }
     console.log(objectShow)
@@ -556,9 +568,66 @@ export const Repotenciacion = () => {
       ),
     },
   ];
-
+  const columns = [
+    {
+      title: 'ID_Activo',
+      dataIndex: 'ASSET_KEY',
+      key: 'asset_Key',
+    },
+    {
+      title: 'ID',
+      dataIndex: 'COMPUTER_ID',
+      key: 'computer_id',
+    },
+    {
+      title: 'Categoría',
+      dataIndex: 'CATEGORY',
+      key: 'category'
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'NAME',
+      key: 'name',
+    },
+    {
+      title: 'Bloque',
+      dataIndex: 'BUILDING',
+      key: 'building'
+    },
+    {
+      title: 'Ubicación',
+      dataIndex: 'LOCATION',
+      key: 'location'
+    },
+    {
+      title: 'Marca',
+      dataIndex: 'BRAND',
+      key: 'brand'
+    },
+    {
+      title: 'Modelo',
+      dataIndex: 'MODEL',
+      key: 'model',
+    },
+    {
+      title: 'Custodio Actual',
+      dataIndex: 'CURRENT_CUSTODIAN',
+      key: 'currentCustodian',
+    },
+    {
+      title: 'Localización',
+      dataIndex: 'POSITION',
+      key: 'position'
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'BORROWED',
+      key: 'borrowed',
+    }
+  ];
   return (
     <Layout>
+
       <div style={{ padding: '20px' }}>
         <h1 style={{ marginBottom: '20px' }}>Repotenciación</h1>
         <Input.Search
@@ -568,6 +637,7 @@ export const Repotenciacion = () => {
           onSearch={handleSearchById}
           style={{ marginBottom: '20px' }}
         />
+        <Table dataSource={dataSource} columns={columns} pagination={false} scroll={{ x: '100%' }} size="small" bordered={false} />
         <Tabs defaultActiveKey="1">
           <TabPane tab="Componentes de Computadora" key="1">
             <CustomTable
