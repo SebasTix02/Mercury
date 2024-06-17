@@ -3,7 +3,8 @@ const connection = require('../databaseConnection');
 exports.getCaseComponents = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
@@ -24,11 +25,11 @@ exports.getCaseComponents = async (request, response) => {
             END AS CAPACITY,
             CASE
                 WHEN case_component.STATUS = 1 THEN 'ACTIVO'
-                ELSE 'BAJA'
+                ELSE 'INACTIVO'
             END AS STATUS,
             CASE
                 WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
-                ELSE NULL
+                ELSE 'NO'
             END AS IS_UPGRADE,
             case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
             FROM CASE_COMPONENT AS case_component
@@ -46,7 +47,8 @@ exports.getCaseComponents = async (request, response) => {
 exports.getCaseComponentById = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
@@ -67,11 +69,11 @@ exports.getCaseComponentById = async (request, response) => {
             END AS CAPACITY,
             CASE
                 WHEN case_component.STATUS = 1 THEN 'ACTIVO'
-                ELSE 'BAJA'
+                ELSE 'INACTIVO'
             END AS STATUS,
             CASE
                 WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
-                ELSE NULL
+                ELSE 'NO'
             END AS IS_UPGRADE,
             case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
             FROM CASE_COMPONENT AS case_component
@@ -160,7 +162,8 @@ exports.unsubscribeCaseComponent = async (request, response) => {
 exports.getCaseComponentByComputerId = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             computer_component.ID AS CASE_ID,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
@@ -182,11 +185,11 @@ exports.getCaseComponentByComputerId = async (request, response) => {
             END AS CAPACITY,
             CASE
                 WHEN case_component.STATUS = 1 THEN 'ACTIVO'
-                ELSE 'BAJA'
+                ELSE 'INACTIVO'
             END AS STATUS,
             CASE
                 WHEN case_component.IS_UPGRADE = 1 THEN 'SI'
-                ELSE NULL
+                ELSE 'NO'
             END AS IS_UPGRADE,
             case_component.UPGRADE_DATE, case_component.UPGRADE_DETAIL
             FROM CASE_COMPONENT AS case_component
@@ -198,7 +201,7 @@ exports.getCaseComponentByComputerId = async (request, response) => {
             WHERE computer.ID = ?`,
             [request.params.id]
         );
-        response.json(data[0]);
+        response.json(data);
     }catch(error){
         console.log('Error en "getCaseComponentByComputerId()" controller\n',error);
         response.status(500).json({error: 'Error al intentar obtener los componentes del Gabinete del Computador'});
