@@ -108,7 +108,7 @@ exports.updateComputer = async (request, response) => {
         );
         const [computerComponentResponse]  = await connection.query(
             `UPDATE ASSET
-                SET  LOCATION_ID = ?   
+                SET  LOCATION_ID = ?, POSITION = ?   
             WHERE ASSET_KEY IN (
                 SELECT ASSET_KEY 
                 FROM COMPUTER_COMPONENT
@@ -119,7 +119,7 @@ exports.updateComputer = async (request, response) => {
                     WHERE ASSET_KEY = ?
                 )
             )`,
-            [locationId, assetKey]
+            [locationId, position, assetKey]
         );
         const [computerResponse]  = await connection.query(
             `UPDATE COMPUTER

@@ -104,6 +104,8 @@ exports.insertCaseComponent = async (request, response) => {
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else if(error.errno == 1644){
+            response.status(500).json({error: error.sqlMessage});   
         } else {
             console.log('Error en "insertCaseComponent()" controller\n',error);
             response.status(500).json({error: 'Error al intentar insertar el Componente del Gabinete'});
