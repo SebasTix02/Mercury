@@ -8,7 +8,7 @@ exports.getCustodianAssets = async (request, response) => {
             asset.CURRENT_CUSTODIAN AS CURRENT_CUSTODIAN, building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
-                ELSE NULL
+                ELSE 'NO PRESTADO'
             END AS BORROWED
             FROM ASSET AS asset
                 LEFT JOIN CATEGORY AS category ON category.ID = asset.CATEGORY_ID
