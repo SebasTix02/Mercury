@@ -152,13 +152,13 @@ export const Inventario_Computadores = () => {
   }
     const result: any = await editComputer(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
-      setIsEditModalVisible(false);
       notification.error({
         message: 'Error de actualización',
         description: `No se pudo actualizar el computador: ${result.error.message}`,
       });
       return;
     }
+    setIsEditModalVisible(false);
     const editedRaw = values;
     editedRaw.ASSET_KEY = selectedRecord.ASSET_KEY;
     const updatedData: any = dataSource.map((item: any) =>
@@ -388,6 +388,7 @@ export const Inventario_Computadores = () => {
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
+          handleRepowerButton={() => handleRepower(selectedRecord)}
         />
       )}
 
@@ -416,7 +417,7 @@ export const Inventario_Computadores = () => {
           selectedRecord={selectedRecord}
           icon={<UserAddOutlined />}
           iconColor={CustomColors.WHITE}
-          iconBackgroundColor={CustomColors.SUCCESS}
+          iconBackgroundColor={CustomColors.SUCCESS}          
         />
       )}
     </Layout>

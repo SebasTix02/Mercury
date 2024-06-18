@@ -1,7 +1,7 @@
 import { Row, Button, Space, Modal } from "antd";
 import Layout from "../../components/layout";
 import React, { useState, useEffect } from 'react';
-import { GoldOutlined, DesktopOutlined, CodeOutlined } from '@ant-design/icons';
+import { GoldOutlined, DesktopOutlined, CodeOutlined, SwapOutlined } from '@ant-design/icons';
 import "../options.css";
 import FormularioBG from "./formBG";
 import FormComp from "./formComp";
@@ -85,6 +85,14 @@ export const Inventario = () => {
                 onClick={() => navigate("/software")}
                 >
                 Software
+              </Button>
+              <Button 
+                type="primary" 
+                icon={<SwapOutlined />} 
+                className="custom-button"
+                onClick={() => navigate("/transferencia")}
+                >
+                Transferencias
               </Button>
             </div>
           </Space>
