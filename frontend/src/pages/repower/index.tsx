@@ -644,15 +644,24 @@ export const Repotenciacion = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Componentes de Computadora" key="1">
             <CustomTable
+              dataSource={computerComponents}
+              columns={computerComponentColumns}
+              rowKey="ID"
+              searchFields={['NAME', 'BUILDING', 'LOCATION', 'POSITION']}
               handleAdd={handleAddComputerComponent}
             />
           </TabPane>
           <TabPane tab="Componentes de Gabinete" key="2">
             <CustomTable
+              dataSource={caseComponents}
+              columns={caseComponentColumns}
+              rowKey="ID"
+              searchFields={['NAME', 'BRAND', 'MODEL', 'TYPE']}
               handleAdd={handleAddCaseComponent}
             />
           </TabPane>
         </Tabs>
+
       </div>
 
       {isEditComputerComponentModalVisible && (
