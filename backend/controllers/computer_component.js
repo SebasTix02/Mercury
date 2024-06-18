@@ -12,7 +12,11 @@ exports.getComputerComponents = async (request, response) => {
                 )
                 ELSE computer_component.NAME
             END AS NAME,
-            building.NAME AS BUILDING, location.NAME AS LOCATION, computer_component.POSITION,
+            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN computer_component.ASSET_KEY IS NOT NULL THEN asset.POSITION
+                ELSE computer_component.POSITION 
+            END AS POSITION,
             CASE 
                 WHEN computer_component.STATUS = 0 THEN 'INACTIVO'
                 ELSE 'ACTIVO'
@@ -42,7 +46,11 @@ exports.getComputerComponentById = async (request, response) => {
                 )
                 ELSE computer_component.NAME
             END AS NAME,
-            building.NAME AS BUILDING, location.NAME AS LOCATION, computer_component.POSITION,
+            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN computer_component.ASSET_KEY IS NOT NULL THEN asset.POSITION
+                ELSE computer_component.POSITION 
+            END AS POSITION,
             CASE 
                 WHEN computer_component.STATUS = 0 THEN 'INACTIVO'
                 ELSE 'ACTIVO'
@@ -71,11 +79,13 @@ exports.insertComputerComponent = async (request, response) => {
         );
         response.json(dbResponse);
     }catch(error){
+        console.log('Error en "insertComputerComponent()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else if(error.errno == 1644){
+            response.status(500).json({error: error.sqlMessage});   
         } else {
-            console.log('Error en "insertComputerComponent()" controller\n',error);
             response.status(500).json({error: 'Error al intentar insertar el Componente del Computador'});
         }
     }
@@ -87,18 +97,19 @@ exports.updateComputerComponent = async (request, response) => {
         const id = request.params.id;
         const [dbResponse] = await connection.query(
             `UPDATE COMPUTER_COMPONENT
-                SET ASSET_KEY = ?, NAME = ?, IS_CASE = ?, LOCATION_ID = ?,
+                SET ASSET_KEY = ?, NAME = ?,
+                IS_CASE = ?, LOCATION_ID = ?,
                 POSITION = ?, STATUS = ?
              WHERE ID = ?`,
             [assetKey, name, isCase, locationId, position, status, id]
         );
         response.json(dbResponse);
     }catch(error){
+        console.log('Error en "updateComputerComponent()" controller\n',error);
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
         } else {
-            console.log('Error en "updateComputerComponent()" controller\n',error);
             response.status(500).json({error: 'Error al intentar actualizar el Componente del Computador'});
         }
     }
@@ -127,7 +138,11 @@ exports.getComputerComponentsByComputerId = async (request, response) => {
                 )
                 ELSE computer_component.NAME
             END AS NAME,
-            building.NAME AS BUILDING, location.NAME AS LOCATION, computer_component.POSITION,
+            building.NAME AS BUILDING, location.NAME AS LOCATION,
+            CASE
+                WHEN computer_component.ASSET_KEY IS NOT NULL THEN asset.POSITION
+                ELSE computer_component.POSITION 
+            END AS POSITION,
             CASE 
                 WHEN computer_component.STATUS = 0 THEN 'INACTIVO'
                 ELSE 'ACTIVO'

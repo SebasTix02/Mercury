@@ -477,7 +477,7 @@ export const Repotenciacion = () => {
       key: 'position',
     },
     {
-      title: 'estado',
+      title: 'Estado',
       dataIndex: 'STATUS',
       key: 'status',
     },
@@ -546,7 +546,7 @@ export const Repotenciacion = () => {
       key: 'status',
     },
     {
-      title: 'Es Mejora?',
+      title: 'Es Repotencia?',
       dataIndex: 'IS_UPGRADE',
       key: 'is_upgrade',
     },
@@ -644,19 +644,11 @@ export const Repotenciacion = () => {
         <Tabs defaultActiveKey="1">
           <TabPane tab="Componentes de Computadora" key="1">
             <CustomTable
-              dataSource={computerComponents}
-              columns={computerComponentColumns}
-              rowKey="ID"
-              searchFields={['NAME', 'BUILDING', 'LOCATION', 'POSITION']}
               handleAdd={handleAddComputerComponent}
             />
           </TabPane>
           <TabPane tab="Componentes de Gabinete" key="2">
             <CustomTable
-              dataSource={caseComponents}
-              columns={caseComponentColumns}
-              rowKey="ID"
-              searchFields={['NAME', 'BRAND', 'MODEL', 'TYPE']}
               handleAdd={handleAddCaseComponent}
             />
           </TabPane>

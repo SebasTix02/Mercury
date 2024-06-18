@@ -30,6 +30,7 @@ import { Inventario_Bienes } from "./pages/inventory/bienes";
 import Reports from "./pages/reports/reports";
 import { Repotenciacion } from "./pages/repower";
 import { QRScanner } from "./pages/qr_scanner/qr_scanner";
+import TransferAssets from "./pages/inventory/transfer/transfer";
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
                   <Route path="/bienes/:scannedCode" element={<Inventario_Bienes />} />
                   <Route path="/reportes" element={<Reports />} />
                   <Route path="/repotenciar/:id" element={<Repotenciacion />} />
+                  <Route path="/transferencia" element={<TransferAssets />} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />
