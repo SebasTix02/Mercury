@@ -3,7 +3,8 @@ const connection = require('../databaseConnection');
 exports.getCaseComponents = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
@@ -46,7 +47,8 @@ exports.getCaseComponents = async (request, response) => {
 exports.getCaseComponentById = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
                 ELSE case_component.NAME
@@ -102,6 +104,8 @@ exports.insertCaseComponent = async (request, response) => {
         if(error.errno == 1062){
             duplicateField = error.sqlMessage.split(' ');
             response.status(500).json({error: `El componente de código ${duplicateField[2]} ya está asignado a otro computador. Ingrese uno diferente`});
+        } else if(error.errno == 1644){
+            response.status(500).json({error: error.sqlMessage});   
         } else {
             console.log('Error en "insertCaseComponent()" controller\n',error);
             response.status(500).json({error: 'Error al intentar insertar el Componente del Gabinete'});
@@ -160,7 +164,8 @@ exports.unsubscribeCaseComponent = async (request, response) => {
 exports.getCaseComponentByComputerId = async (request, response) => {
     try{
         const [data] = await connection.query(
-            `SELECT case_component.ID, 
+            `SELECT case_component.ID,
+            case_component.ASSET_KEY,
             computer_component.ID AS CASE_ID,
             CASE 
                 WHEN case_component.ASSET_KEY IS NOT NULL THEN asset.NAME
