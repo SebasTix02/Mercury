@@ -269,19 +269,35 @@ export const Repotenciacion = () => {
   };
 
   const handleAddComputerComponentOk = async (values: any) => {
-    const nombre = values.NAME.toLowerCase();
+    
     var isCase = 0;
-    if (nombre.includes('case') || nombre.includes('gabinete')) {
-      isCase = 1;
-    }
-    var objectAdd = {
-      "computerId": id,
-      "assetKey": values.ASSET_KEY,
-      "name": values.NAME,
-      "isCase": isCase,
-      "locationId": values.LOCATION,
-      "position": values.POSITION,
-      "status": getColumnNameId(values, 'STATUS', false, status)
+    
+    let objectAdd;
+
+    if (values.ASSET_KEY === null || values.ASSET_KEY === undefined) {
+      const nombre = values.NAME.toLowerCase();
+      if (nombre.includes('case') || nombre.includes('gabinete')) {
+        isCase = 1;
+      }
+      objectAdd = {
+        "computerId": id,
+        "assetKey": values.ASSET_KEY,
+        "name": values.NAME,
+        "isCase": isCase,
+        "locationId": values.LOCATION,
+        "position": values.POSITION,
+        "status": getColumnNameId(values, 'STATUS', false, status)
+      };
+    } else {
+      objectAdd = {
+        "computerId": id,
+        "assetKey": values.ASSET_KEY,
+        "name": null,
+        "isCase": isCase,
+        "locationId": null,
+        "position": null,
+        "status": getColumnNameId(values, 'STATUS', false, status)
+      };
     }
     const result: any = await addComputerComponent(objectAdd);
     if (!result.success) {
@@ -406,18 +422,27 @@ export const Repotenciacion = () => {
   };
 
   const handleAddCaseComponentOk = async (values: any) => {
-    console.table(values)
+    var objectAdd;
     const currentDate = new Date();
     const formattedDate = currentDate.getFullYear() + '-' +
       String(currentDate.getMonth() + 1).padStart(2, '0') + '-' +
       String(currentDate.getDate()).padStart(2, '0');
     const fecha = getColumnNameId(values, 'IS_UPGRADE', true, isUpgrade) === "SI" ? formattedDate : null;
-    const objectEdit = {
-      "caseId": caseId, "assetKey": values.ASSET_KEY, "name": values.NAME, "brandId": values.BRAND,
+    if (values.ASSET_KEY === null || values.ASSET_KEY === undefined) {
+      
+      objectAdd = {
+        "caseId": caseId, "assetKey": values.ASSET_KEY, "name": values.NAME, "brandId": values.BRAND,
       "model": values.MODEL, "series": values.SERIES, "type": values.TYPE, "capacity": values.CAPACITY, "status": getColumnNameId(values, 'STATUS', false, status),
       "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade), "upgradeDate": fecha, "upgradeDetail": values.UPGRADE_DETAIL,
+      };
+    } else {
+        objectAdd = {
+          "caseId": caseId, "assetKey": values.ASSET_KEY, "name": values.NAME, "brandId": null,
+        "model": null, "series": null, "type": values.TYPE, "capacity": values.CAPACITY, "status": getColumnNameId(values, 'STATUS', false, status),
+        "isUpgrade": getColumnNameId(values, 'IS_UPGRADE', false, isUpgrade), "upgradeDate": null, "upgradeDetail": values.UPGRADE_DETAIL,
+        };
     }
-    const result: any = await addCaseComponent(objectEdit);
+    const result: any = await addCaseComponent(objectAdd);
     if (!result.success) {
       setIsAddCaseComponentModalVisible(false);
       notification.error({
@@ -468,7 +493,7 @@ export const Repotenciacion = () => {
       dataIndex: 'LOCATION',
       key: 'location',
       rules: [
-        { required: true, message: '¡Por favor selecciona la ubicacion!' },
+        { required: true, message: '¡Por favor selecciona la ubicación!' },
       ]
     },
     {
