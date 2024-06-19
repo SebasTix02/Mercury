@@ -211,14 +211,18 @@ export const unsubscribeCaseComponent = async (id:Number) => {
     }
 };
 
-export const getCaseComponentsRelated = async (id:Number) => {
+export const getCaseComponentsRelated = async (id: Number) => {
     try {
         const response = await axios.get(`${API_CASE_COMPONENT}/case_related/${id}`);
+        const data = response.data.map((item: any) => ({
+            ...item,
+            UPGRADE_DATE: item.UPGRADE_DATE ? new Date(item.UPGRADE_DATE).toISOString().split('T')[0] : null
+        }));
         return {
             success: true,
-            components: response.data,
+            components: data,
         };
-    } catch (error:any) {
+    } catch (error: any) {
         return {
             success: false,
             error: {
@@ -227,3 +231,4 @@ export const getCaseComponentsRelated = async (id:Number) => {
         };
     }
 };
+
