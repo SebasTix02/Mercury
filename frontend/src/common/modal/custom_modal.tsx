@@ -19,6 +19,7 @@ interface Props {
     formColumns?: string[];
     selectTypeInputs?: any[];
     dateTypeInputs?: number[];
+    handleRepowerButton?:any;
 }
 
 const CustomModal: React.FC<Props> = ({
@@ -36,7 +37,8 @@ const CustomModal: React.FC<Props> = ({
     iconBackgroundColor,
     formColumns = [],
     selectTypeInputs = [],
-    dateTypeInputs = []
+    dateTypeInputs = [],
+    handleRepowerButton
 }) => {
     const [form] = Form.useForm();
 
@@ -72,13 +74,25 @@ const CustomModal: React.FC<Props> = ({
                         name={column.dataIndex}
                         rules={column.rules}>
                         {selectInput ? (
-                            <Select>
+                            <Select
+                                showSearch
+                                optionFilterProp="children"
+                                filterOption={(input, option) => {
+                                    const children = option?.props.children;
+                                    if (typeof children === 'string') {
+                                        return children.toLowerCase().includes(input.toLowerCase());
+                                    } else if (Array.isArray(children)) {
+                                        return children.join('').toLowerCase().includes(input.toLowerCase());
+                                    }
+                                    return false;
+                                }}
+                            >
                                 {selectInput[1].map((opt: any) => (
-                                    <Option key={opt.ID} value={opt.ID}>{opt.NAME}</Option>
+                                    <Option key={opt.ID} value={opt.ID}>{opt.NAME}{column.dataIndex.includes("CUSTODIAN") && " " + opt.LASTNAME}</Option>
                                 ))}
                             </Select>
                         ) : dateTypeInputs.includes(index) ? (
-                            <input type='date' style={{borderRadius:'8px', padding:'4px', borderStyle:'solid', borderWidth:'1px', width:'100%'}} />
+                            <input type='date' style={{ borderRadius: '8px', padding: '4px', borderStyle: 'solid', borderWidth: '1px', width: '100%' }} />
                         ) : (
                             <Input />
                         )}
@@ -116,6 +130,14 @@ const CustomModal: React.FC<Props> = ({
                             <span style={{ color: 'rgb(14,17,17)' }}>{modalTitle}</span>
                         </Space>
                         <Divider />
+                        {handleRepowerButton && 
+                            <Button
+                            type='primary'
+                                onClick={handleRepowerButton}
+                            >
+                                Repotenciar
+                            </Button>
+                        }
                     </div>
                 }
                 visible={isVisible}

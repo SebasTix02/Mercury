@@ -6,78 +6,80 @@ import { EditOutlined, DeleteOutlined, UserAddOutlined, UserDeleteOutlined, User
 import CustomTable from '../../../common/table/custom_table';
 import CustomModal from '../../../common/modal/custom_modal';
 import { CustomColors } from '../../../common/constantsCommon';
-import { addAsset, deleteAsset, editAsset, getAllAssets } from '../../../providers/options/asset';
+import { addAsset, deleteAsset, editAsset, getAllAssets, getAssetByAssetKey } from '../../../providers/options/asset';
 import { getAllBuildings } from '../../../providers/options/building';
 import { getAllLocations } from '../../../providers/options/location';
 import { getAllCategories } from '../../../providers/options/category';
 import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
+import { getAllUsers } from '../../../providers/options/users';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const Inventario_Bienes = () => {
-  type Category = {
-    id: number;
-    name: string;
-  };
-  
-  type Brand = {
-    id: number;
-    name: string;
-  };
-  
-  type Dependency = {
-    id: number;
-    name: string;
-  };
-  
-  type Location = {
-    id: number;
-    name: string;
-  };
-  
+  const { scannedCode } = useParams();
+  const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
   const [buildings, setBuildings] = useState([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [dependencies, setDependencies] = useState<Dependency[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
-  
+  const [locations, setLocations] = useState([]);
+  const [categories, setCategories] = useState<any>([]);
+  const [brands, setBrands] = useState([]);
+  const [dependencies, setDependencies] = useState([]);
+  const [custodians, setCustodians] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getAllAssets()
-      .then((result: any) => {
+    const fetchData = async () => {
+      try {
+        const result: any = await getAllAssets();
         if (result.success) {
           setDataSource(result.assets);
-          getAllBuildings().then((buildData: any) => {
-            setBuildings(buildData.buildings);
-          });
-          getAllLocations().then((locationData: any) => {
-            setLocations(locationData.locations);
-          });
-          getAllCategories().then((categoriesData: any) => {
-            setCategories(categoriesData.categories);
-          });
-          getAllBrands().then((brandsData: any) => {
-            setBrands(brandsData.brands);
-          });
-          getAllDependencies().then((dependenciesData: any) => {
-            setDependencies(dependenciesData.dependencies);
-          });
+          const [buildData, locationData, categoriesData, brandsData, dependenciesData, custodiansData] = await Promise.all([
+            getAllBuildings(),
+            getAllLocations(),
+            getAllCategories(),
+            getAllBrands(),
+            getAllDependencies(),
+            getAllUsers(),
+          ]);
+          setBuildings(buildData.buildings);
+          setLocations(locationData.locations);
+          setCategories(categoriesData.categories);
+          setBrands(brandsData.brands);
+          setDependencies(dependenciesData.dependencies);
+          setCustodians(custodiansData.users);
+          
+          if (scannedCode) {
+            const parsedCode = parseInt(scannedCode, 10);
+            const assetResult: any = await getAssetByAssetKey(parsedCode);
+            if (assetResult.success) {
+              setSelectedRecord(assetResult.asset);
+              setIsEditModalVisible(true);
+            } else {
+              notification.error({
+                message: 'Error de obtención de datos',
+                description: `No se pudo obtener el bien con el código escaneado: ${assetResult.error.message}`,
+              });
+            }
+          }
         } else {
-          console.error(result.error.message);
           notification.error({
             message: 'Error de obtención de datos',
-            description: `No se pudo obtener los activos: ${result.error.message}`,
+            description: `No se pudo obtener los bienes: ${result.error.message}`,
           });
         }
-      })
-      .catch((error) => {
+      } catch (error: any) {
         console.error(error);
-      })
-      .finally(() => {
+        notification.error({
+          message: 'Error de obtención de datos',
+          description: `Ocurrió un error al obtener los datos: ${error.message}`,
+        });
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [scannedCode]);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -89,10 +91,10 @@ export const Inventario_Bienes = () => {
     console.log("Categories:", categories);
     const editRecord = {
       ...record,
-      CATEGORY: categories.find((cat) => cat.id === record.CATEGORY) || {},
-      BRAND: brands.find((brand) => brand.id === record.BRAND) || {},
-      ACQUISITION_DEPENDENCY: dependencies.find((dep) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
-      LOCATION: locations.find((loc) => loc.id === record.LOCATION) || {},
+      CATEGORY: categories.find((cat:any) => cat.id === record.CATEGORY) || {},
+      BRAND: brands.find((brand:any) => brand.id === record.BRAND) || {},
+      ACQUISITION_DEPENDENCY: dependencies.find((dep:any) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
+      LOCATION: locations.find((loc:any) => loc.id === record.LOCATION) || {},
     };
     setSelectedRecord(editRecord);
     setIsEditModalVisible(true);
@@ -115,6 +117,35 @@ export const Inventario_Bienes = () => {
     setIsAddModalVisible(true);
   };
 
+  const status = [
+    {
+     ID: 0,
+     NAME: 'NO PRESTADO'
+    },
+    {
+     ID: 1,
+     NAME: 'PRESTADO'
+    },
+  ]
+
+  const getCustodianName = (values:any) => {
+    const custodian = typeof values.CURRENT_CUSTODIAN === 'number'
+    ? custodians.find((l:any) => l.ID === values.CURRENT_CUSTODIAN)
+    : values.CURRENT_CUSTODIAN;
+
+    const custodianName = typeof custodian === 'object' && custodian !== null 
+    ? `${custodian.NAME} ${custodian.LASTNAME}` 
+    : custodian;
+    return custodianName;
+  }
+
+  const getColumnNameId = (values: any, field: string, isName: boolean, status: any[]) => {
+    const statusItem = typeof values[field] === 'number'
+      ? status.find((l: any) => l.ID === values[field])
+      : status.find((l: any) => l.NAME === values[field]);
+    return isName ? statusItem?.NAME : statusItem?.ID;
+  };
+
   const handleEditOk = async (values: any) => {
     const objectEdit = {
       "categoryId": values.CATEGORY,
@@ -125,12 +156,11 @@ export const Inventario_Bienes = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
     };
-    console.log(values);
     const result: any = await editAsset(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -184,7 +214,7 @@ export const Inventario_Bienes = () => {
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
-      "currentCustodian": values.CURRENT_CUSTODIAN,
+      "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
       "operativeSystem": values.OPERATIVE_SYSTEM
@@ -283,6 +313,19 @@ export const Inventario_Bienes = () => {
       key: 'current_custodian',
     },
     {
+      title: 'Localización',
+      dataIndex: 'POSITION',
+      key: 'position',
+      rules: [
+        { max: 100, message: '¡Debe contener máximo 100 caracteres!' },
+      ]
+    },
+    {
+      title: 'Estado',
+      dataIndex: 'BORROWED',
+      key: 'borrowed',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -306,14 +349,19 @@ export const Inventario_Bienes = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Activo"
+<<<<<<< HEAD
           formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
           selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
           dateTypeInputs={[7]}
+=======
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies],[8, custodians], [9, locations],[13, status]]}
+>>>>>>> origin/main
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
           columns={columns}
-          selectedRecord={selectedRecord} // Asegurar que selectedRecord se pase aquí
+          selectedRecord={selectedRecord}
           icon={<UserSwitchOutlined />}
           iconColor={CustomColors.WHITE}
           iconBackgroundColor={CustomColors.PRIMARY}
@@ -336,9 +384,14 @@ export const Inventario_Bienes = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Activo"
+<<<<<<< HEAD
           formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
           selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[9, locations]]}
           dateTypeInputs={[7]}
+=======
+          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+>>>>>>> origin/main
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}

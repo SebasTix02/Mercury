@@ -5,6 +5,11 @@ exports.getUsers = async (request, response) => {
         const [data] = await connection.query(
             `SELECT ID, ID_NUMBER, CONCAT_WS(' ',FIRST_NAME,MIDDLE_NAME) AS NAME,
             CONCAT_WS(' ', LASTNAME, SECOND_LASTNAME) AS LASTNAME, 
+            CASE 
+                WHEN ROLE = 0 THEN 'USUARIO'
+                WHEN ROLE = 1 THEN 'LABORATORISTA'
+                WHEN ROLE = 2 THEN 'ADMIN'
+            END AS ROLE,
             CELLPHONE, EMAIL, PASSWORD
             FROM USER`
         );
@@ -20,6 +25,11 @@ exports.getUserById = async (request, response) => {
         const [data] = await connection.query(
             `SELECT ID, ID_NUMBER, CONCAT_WS(' ',FIRST_NAME,MIDDLE_NAME) AS NAME,
             CONCAT_WS(' ', LASTNAME, SECOND_LASTNAME) AS LASTNAME, 
+            CASE 
+                WHEN ROLE = 0 THEN 'USUARIO'
+                WHEN ROLE = 1 THEN 'LABORATORISTA'
+                WHEN ROLE = 2 THEN 'ADMIN'
+            END AS ROLE,
             CELLPHONE, EMAIL, PASSWORD
             FROM USER
             WHERE ID = ?`,
@@ -34,10 +44,10 @@ exports.getUserById = async (request, response) => {
 
 exports.insertUser = async (request, response) => {
     try{
-        const{idNumber,firstName,middleName,lastname,secondLastname,cellphone,email,password} = request.body;
+        const{idNumber,firstName,middleName,lastname,secondLastname,role,cellphone,email,password} = request.body;
         const [dbResponse] = await connection.query(
-            'INSERT INTO USER VALUES(NULL,?,?,?,?,?,?,?,?,CURDATE())',
-            [idNumber,firstName,middleName,lastname,secondLastname,cellphone,email,password]
+            'INSERT INTO USER VALUES(NULL,?,?,?,?,?,?,?,?,?,CURDATE())',
+            [idNumber,firstName,middleName,lastname,secondLastname,role,cellphone,email,password]
         );
         response.json(dbResponse);
     }catch(error){
@@ -52,14 +62,14 @@ exports.insertUser = async (request, response) => {
 
 exports.updateUser = async (request, response) => {
     try{
-        const{idNumber,firstName,middleName,lastname,secondLastname,cellphone,email,password} = request.body;
+        const{idNumber,firstName,middleName,lastname,secondLastname,role,cellphone,email,password} = request.body;
         const id = request.params.id;
         const [dbResponse] = await connection.query(
             `UPDATE USER 
                 SET ID_NUMBER = ?, FIRST_NAME = ?, MIDDLE_NAME = ?, LASTNAME = ?,
-                SECOND_LASTNAME = ?, CELLPHONE = ?, EMAIL = ?, PASSWORD = ?
+                SECOND_LASTNAME = ?, ROLE = ?, CELLPHONE = ?, EMAIL = ?, PASSWORD = ?
              WHERE ID = ?`,
-            [idNumber,firstName,middleName,lastname,secondLastname,cellphone,email,password,id]
+            [idNumber,firstName,middleName,lastname,secondLastname,role,cellphone,email,password,id]
         );
         response.json(dbResponse);
     }catch(error){

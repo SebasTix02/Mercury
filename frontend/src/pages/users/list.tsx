@@ -54,6 +54,21 @@ export const ListaUsuarios = () => {
     setIsAddModalVisible(true);
   };
 
+  const roles = [
+    {
+      ID: 0,
+      NAME: 'USUARIO'
+    },
+    {
+     ID: 1,
+     NAME: 'LABORATORISTA'
+    },
+    {
+     ID: 2,
+     NAME: 'ADMIN'
+    },
+  ]
+
   const convertUserObject = (values:any) => {
     const names = values.NAME.split(' ')
     const lastnames = values.LASTNAME.split(' ')
@@ -65,12 +80,16 @@ export const ListaUsuarios = () => {
       "secondLastname": lastnames[1]  ? lastnames[1] : undefined,
       "cellphone": values.CELLPHONE,
       "email": values.EMAIL,
-      "password": values.PASSWORD
+      "password": values.PASSWORD,
+      "role": values.ROLE
     }
   }
 
   const handleEditOk = async (values:any) => {
     const userService = convertUserObject(values)
+    if(typeof userService.role !== 'number'){
+      userService.role = roles.find((r:any) => r.NAME === values.ROLE)?.ID;
+    }
     const result:any = await editUser(selectedRecord.ID, userService);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -82,6 +101,9 @@ export const ListaUsuarios = () => {
     }
     const editedRaw = values
     editedRaw.ID = selectedRecord.ID
+    if(typeof values.ROLE === 'number'){
+      editedRaw.ROLE = roles.find((r:any) => r.ID === values.ROLE)?.NAME;
+    }
     const updatedData:any = dataSource.map((item:any) =>
       item.ID == editedRaw.ID ? editedRaw : item
     );
@@ -114,9 +136,9 @@ export const ListaUsuarios = () => {
 
   const handleAddOk = async (values: any) => {
     const newUser = convertUserObject(values)
-  
     const result:any = await addUser(newUser);
     if (!result.success) {
+      
       setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
@@ -127,7 +149,7 @@ export const ListaUsuarios = () => {
 
     const newRecord = {...values}
     newRecord.ID = result.user.insertId;
-    
+    newRecord.ROLE = roles.find((r:any) => r.ID === values.ROLE)?.NAME;
     const updatedDataSource:any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
     setIsAddModalVisible(false);
@@ -221,6 +243,14 @@ export const ListaUsuarios = () => {
       ]
     },
     {
+      title: 'Rol',
+      dataIndex: 'ROLE',
+      key: 'rol',
+      rules: [
+        { required: true, message: '¡Por favor ingresa el rol!' },
+      ]
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -243,13 +273,14 @@ export const ListaUsuarios = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL']}/>
+          searchFields={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'ROLE']}/>
       </div>
 
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Usuario"
-          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD', 'ROLE']}
+          selectTypeInputs={[[6, roles]]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
           handleAddEdit={handleEditOk}
@@ -275,7 +306,8 @@ export const ListaUsuarios = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Usuario"
-          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD']}
+          formColumns={['ID_NUMBER', 'NAME', 'LASTNAME', 'CELLPHONE', 'EMAIL', 'PASSWORD', 'ROLE']}
+          selectTypeInputs={[[6, roles]]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding ={true}

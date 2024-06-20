@@ -22,10 +22,10 @@ exports.getSoftwareById = async (request, response) => {
 
 exports.insertSoftware = async (request, response) => {
     try{
-        const{name,version,license,licenseDuration,labType,entryDate} = request.body;
+        const{name,version,license,licenseDuration,labType,description,entryDate} = request.body;
         const [dbResponse] = await connection.query(
-            'INSERT INTO SOFTWARE VALUES(NULL,?,?,?,?,?,?,CURDATE())',
-            [name,version,license,licenseDuration,labType,entryDate]
+            'INSERT INTO SOFTWARE VALUES(NULL,?,?,?,?,?,?,?,CURDATE())',
+            [name,version,license,licenseDuration,labType,description,entryDate]
         );
         response.json(dbResponse);
     }catch(error){
@@ -36,14 +36,14 @@ exports.insertSoftware = async (request, response) => {
 
 exports.updateSoftware = async (request, response) => {
     try{
-        const{name,version,license,licenseDuration,labType,entryDate} = request.body;
+        const{name,version,license,licenseDuration,labType,description,entryDate} = request.body;
         const id = request.params.id;
         const [dbResponse] = await connection.query(
             `UPDATE SOFTWARE 
                 SET NAME = ?, VERSION = ?, LICENSE = ?, LICENSE_DURATION = ?,
-                LAB_TYPE = ?, ENTRY_DATE = ?
+                LAB_TYPE = ?, DESCRIPTION = ?, ENTRY_DATE = ? 
              WHERE ID = ?`,
-            [name,version,license,licenseDuration,labType,entryDate,id]
+            [name,version,license,licenseDuration,labType,description,entryDate,id]
         );
         response.json(dbResponse);
     }catch(error){

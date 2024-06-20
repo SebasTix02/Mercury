@@ -65,16 +65,31 @@ export const Software = () => {
     },
   ]
 
+  const labsType = [
+    {
+     ID: 1,
+     NAME: 'ESPECIALIZACIÓN'
+    },
+    {
+     ID: 2,
+     NAME: 'COMPUTACIÓN'
+    },
+  ]
+
   const convertSoftwareObject = (values:any) => {
     const license = typeof values.LICENSE === 'number'
     ? licenses.find(l => l.ID === values.LICENSE)?.NAME
     : values.LICENSE;
+    const labType = typeof values.LAB_TYPE === 'number'
+    ? labsType.find(l => l.ID === values.LAB_TYPE)?.NAME
+    : values.LAB_TYPE;
     return {
       name: values.NAME,
       version: values.VERSION,
       license: license,
       licenseDuration: values.LICENSE_DURATION,
-      labType: values.LAB_TYPE,
+      labType: labType,
+      description: values.DESCRIPTION,
       entryDate: values.ENTRY_DATE
     }
   }
@@ -124,6 +139,7 @@ export const Software = () => {
 
   const handleAddOk = async (values: any) => {
     const swObj = convertSoftwareObject(values)
+    console.log("OBJECT: ", swObj)
     const result:any = await addSoftware(swObj);
     if (!result.success) {
       setIsAddModalVisible(false);
@@ -191,7 +207,6 @@ export const Software = () => {
       key: 'lab_type',
       rules: [
         { required: true, message: '¡Por favor ingresa el tipo de laboratorio!' },
-        { max: 50, message: '¡Debe contener máximo 50 caracteres!' },
       ]
     },
     {
@@ -200,6 +215,14 @@ export const Software = () => {
       key: 'entry_date',
       rules: [
         { required: true, message: '¡Por favor ingresa la fecha de adquisición!' },
+      ]
+    },
+    {
+      title: 'Descripción',
+      dataIndex: 'DESCRIPTION',
+      key: 'description',
+      rules: [
+        { max: 100, message: '¡Debe contener máximo 100 caracteres!' },
       ]
     },
     {
@@ -221,7 +244,7 @@ export const Software = () => {
   return (
     <Layout>
       <div style={{ padding: '20px' }}>
-        <h1 style={{ marginBottom: '20px' }}>Lista de Ubicaciones</h1>
+        <h1 style={{ marginBottom: '20px' }}>Lista de Software</h1>
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
@@ -231,8 +254,8 @@ export const Software = () => {
       {isEditModalVisible && (
         <CustomModal
           modalTitle="Editar Software"
-          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
-          selectTypeInputs={[[2, licenses]]}
+          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE', 'DESCRIPTION']}
+          selectTypeInputs={[[2, licenses], [4, labsType]]}
           dateTypeInputs={[5]}
           isVisible={isEditModalVisible}
           handleVisible={setIsEditModalVisible}
@@ -259,8 +282,8 @@ export const Software = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Software"
-          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE']}
-          selectTypeInputs={[[2, licenses]]}
+          formColumns={['NAME', 'VERSION', 'LICENSE', 'LICENSE_DURATION', 'LAB_TYPE', 'ENTRY_DATE', 'DESCRIPTION']}
+          selectTypeInputs={[[2, licenses], [4, labsType]]}
           dateTypeInputs={[5]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}

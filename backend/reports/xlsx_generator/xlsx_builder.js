@@ -186,17 +186,17 @@ exports.generateSoftwareReport = async (labType) => {
     const workbook = await XlsxGenerator.fromBlankAsync();
 
     const headers = ['Id', 'Nombre', 'Versión', 'Licencia', 'Duración de la Licencia',
-    'Tipo de Laboratorio', 'Fecha de Adquisición'];
+    'Tipo de Laboratorio', 'Descripción', 'Fecha de Adquisición'];
 
     const sheet = workbook.sheet(0);
-    let columsWidth = [0,0,0,0,0,0,0]
+    let columsWidth = [0,0,0,0,0,0,0,0];
 
     setHeaders(sheet,headers,columsWidth);
 
     for(let i = 0; i < data.length; i++){
         let software = data[i];
         let softwareInfo = [software.ID, software.NAME, software.VERSION, software.LICENSE, 
-            software.LICENSE_DURATION, software.LAB_TYPE, software.ENTRY_DATE.toLocaleDateString('es-ES')];
+            software.LICENSE_DURATION, software.LAB_TYPE, software.DESCRIPTION, software.ENTRY_DATE.toLocaleDateString('es-ES')];
 
         for(let j = 0; j < softwareInfo.length; j++){
             fillCell(sheet,i + 1,j,softwareInfo[j],columsWidth);

@@ -570,6 +570,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "LICENSE": "PROPIETARIO",
                 "LICENSE_DURATION": "1 AÑO",
                 "LAB_TYPE": "ESPECIALIZACIÓN",
+                "DESCRIPTION": "CADENA DE MÁXIMO 100 CARACTERES",
                 "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
                 "CREATION_DATE": "2024-05-08T05:00:00.000Z"
             }
@@ -584,6 +585,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "LICENSE": "PROPIETARIO",
             "LICENSE_DURATION": "1 AÑO",
             "LAB_TYPE": "ESPECIALIZACIÓN",
+            "DESCRIPTION": "CADENA DE MÁXIMO 100 CARACTERES",
             "ENTRY_DATE": "2024-05-08T05:00:00.000Z",
             "CREATION_DATE": "2024-05-08T05:00:00.000Z"
         }
@@ -597,6 +599,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "license": "PROPIETARIO",
             "licenseDuration": "1 LUSTRO",
             "labType": "CARPENTEER",
+            "description": "CADENA DE MÁXIMO 100 CARACTERES",
             "entryDate": "2024-05-08"
         }
 
@@ -620,6 +623,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "license": "PROPIETARIO",
             "licenseDuration": "1 LUSTRO",
             "labType": "CARPENTEER",
+            "description": "CADENA DE MÁXIMO 100 CARACTERES",
             "entryDate": "2024-05-08"
         }
 
@@ -660,6 +664,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
                 "MIDDLE_NAME": null,
                 "LASTNAME": "Kahnwald",
                 "SECOND_LASTNAME": null,
+                "ROLE": 1,
                 "CELLPHONE": "03-25876",
                 "EMAIL": "random@gmail.com",
                 "PASSWORD": "1_23",
@@ -676,6 +681,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "FIRST_NAME": "Jonas",
             "MIDDLE_NAME": null,
             "LASTNAME": "Kahnwald",
+            "ROLE": 2,
             "SECOND_LASTNAME": null,
             "CELLPHONE": "03-25876",
             "EMAIL": "random@gmail.com",
@@ -685,6 +691,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
 
     POST http://localhost:4000/mercury/user
 
+    // Los posibles valores para role son 0 para usuario, 1 para laboratorista y 2 para admin
         Recibe:
         {
             "idNumber": "1850062876",
@@ -692,6 +699,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "middleName": null,
             "lastname": "Kahnwald",
             "secondLastname": null,
+            "role": 0,
             "cellphone": "03-25876",
             "email": "random@gmail.com",
             "password": "1_23"
@@ -710,6 +718,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
 
     PUT http://localhost:4000/mercury/user/:id
 
+    // Los posibles valores para role son 0 para usuario, 1 para laboratorista y 2 para admin
         Recibe:
         {
             "idNumber": "1850062876",
@@ -717,6 +726,7 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
             "middleName": null,
             "lastname": "Kahnwald",
             "secondLastname": null,
+            "role": 1,
             "cellphone": "03-25876",
             "email": "random@gmail.com",
             "password": "1_23"
@@ -767,8 +777,9 @@ OJO: NO TOMAR EN CUENTA PARA LA TABLA EL CAMPO CREATION_DATE. ESTE SE ENVÍA SIM
         Devuelve:
         {
             "ID_NUMBER": "1850062876",
-            "FIRST_NAME": "Jonas",
-            "LASTNAME": "Kahnwald"
+            "FIRST_NAME": "Juan",
+            "LASTNAME": "Morales",
+            "ROLE": "ADMIN"
         }
 
     Error
@@ -1452,4 +1463,82 @@ http://localhost:4000/mercury/report/xlsx/software/:type
                 title: "Bienes Adquiridos este Año Mensualmente",
                 values: [{"TAG": "anything", "COUNT": 0},{"TAG": "anything", "COUNT": 0}]
             }
+        }
+
+15. Reasignación Masiva de Custodio
+
+    POST http://localhost:4000/mercury/custodian
+
+        Recibe:
+        {
+            "currentCustodian": "ROMERO MESA JOSE"
+        }
+
+        Devuelve:
+        [
+            {
+                "ASSET_KEY": 521253,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "NEC M322X",
+                "FEATURE": null,
+                "SERIES": "4600905EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 1",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "ROMERO MESA JOSE",
+                "BUILDING": null,
+                "LOCATION": null,
+                "POSITION": null,
+                "BORROWED": null
+            },
+            {
+                "ASSET_KEY": 521254,
+                "CATEGORY": "EQUIPOS DE OFICINA Y ADMINISTRACION",
+                "NAME": "PROYECTOR",
+                "BRAND": "NEC",
+                "MODEL": "NEC M322X",
+                "FEATURE": null,
+                "SERIES": "4600891EC",
+                "ACQUISITION_DEPENDENCY": "DEPENDENCIA 2",
+                "ENTRY_DATE": "2014-09-18T05:00:00.000Z",
+                "CURRENT_CUSTODIAN": "ROMERO MESA JOSE",
+                "BUILDING": null,
+                "LOCATION": null,
+                "POSITION": null,
+                "BORROWED": null
+            }
+        ]
+
+    PUT http://localhost:4000/mercury/custodian
+
+        Recibe:
+        {
+            "newCustodian": "EL PEPE",
+            "assets": 
+                [
+                    521253, 521254, 521259, 521263, 598124, 598125, 598126, 598127, 598128,
+                    598129, 723494, 723495, 723496, 723499, 723502, 723503, 723504, 723505,
+                    723506, 723507, 723508, 723509, 723510, 723512, 723513, 723515, 723517,
+                    723518, 723519, 723520, 723521, 723526, 723527, 723528, 723529, 723532,
+                    723534, 723535, 723537, 723543, 723545, 723546, 723551, 730102, 1836039,
+                    3342667, 3342668, 3342669, 3342670, 3348277, 3348278, 3360175, 3360176,
+                    3360177, 3362779, 3362780, 3362781, 3362782, 3362784, 3362785, 3362786,
+                    3362787, 3362788, 3362789, 3362790, 3362791, 3362792, 3362793, 3362794,
+                    3362795, 3362796, 3362797, 3362798, 3362799, 3362800, 3362802, 3362803,
+                    3362804, 3362805, 3362806, 3362808, 3362809, 3362810, 3362811, 3362812,
+                    3362813, 3362814, 3362815, 3362816, 3362817, 3362818, 3362819, 3362820
+                ]
+        }
+
+        Devuelve:
+
+        {
+            "fieldCount": 0,
+            "affectedRows": 93,
+            "insertId": 0,
+            "info": "Rows matched: 93  Changed: 93  Warnings: 0",
+            "serverStatus": 2,
+            "warningStatus": 0,
+            "changedRows": 93
         }

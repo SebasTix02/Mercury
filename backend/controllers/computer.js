@@ -7,7 +7,7 @@ exports.getComputers = async (request, response) => {
             building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
-                ELSE NULL
+                ELSE 'NO PRESTADO'
             END AS BORROWED,
             brand.NAME AS BRAND, asset.MODEL, computer.OPERATIVE_SYSTEM, computer.IP, GET_TOTAL_CAPACITY(computer.ID,'RAM') AS RAM_CAPACITY, 
             GET_TOTAL_CAPACITY(computer.ID,'DISCO') AS DISK_CAPACITY, GET_TOTAL_CAPACITY(computer.ID,'TARJETA GRÁFICA') AS GRAPH_CAPACITY, 
@@ -35,7 +35,7 @@ exports.getComputerById = async (request, response) => {
             building.NAME AS BUILDING, location.NAME AS LOCATION, asset.POSITION,
             CASE
                 WHEN asset.BORROWED = 1 THEN 'PRESTADO'
-                ELSE NULL
+                ELSE 'NO PRESTADO'
             END AS BORROWED,
             brand.NAME AS BRAND, asset.MODEL, computer.OPERATIVE_SYSTEM, computer.IP, GET_TOTAL_CAPACITY(computer.ID,'RAM') AS RAM_CAPACITY, 
             GET_TOTAL_CAPACITY(computer.ID,'DISCO') AS DISK_CAPACITY, GET_TOTAL_CAPACITY(computer.ID,'TARJETA GRÁFICA') AS GRAPH_CAPACITY, 
@@ -108,7 +108,7 @@ exports.updateComputer = async (request, response) => {
         );
         const [computerComponentResponse]  = await connection.query(
             `UPDATE ASSET
-                SET  LOCATION_ID = ?   
+                SET  LOCATION_ID = ?, POSITION = ?   
             WHERE ASSET_KEY IN (
                 SELECT ASSET_KEY 
                 FROM COMPUTER_COMPONENT
@@ -119,7 +119,7 @@ exports.updateComputer = async (request, response) => {
                     WHERE ASSET_KEY = ?
                 )
             )`,
-            [locationId, assetKey]
+            [locationId, position, assetKey]
         );
         const [computerResponse]  = await connection.query(
             `UPDATE COMPUTER
