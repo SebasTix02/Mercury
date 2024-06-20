@@ -144,7 +144,7 @@ export const Inventario_Bienes = () => {
       "name": updatedValues.NAME,
       "brandId": getColumnNameId(updatedValues, 'BRAND', false, brands),
       "model": updatedValues.MODEL,
-      "feature": null,
+      "feature": updatedValues.FEATURE,
       "series": updatedValues.SERIES,
       "acquisitionDependencyId": getColumnNameId(updatedValues, 'ACQUISITION_DEPENDENCY', false, dependencies),
       "entryDate": updatedValues.ENTRY_DATE,
@@ -220,7 +220,7 @@ export const Inventario_Bienes = () => {
       "name": values.NAME,
       "brandId": values.BRAND,
       "model": values.MODEL,
-      "feature": null,
+      "feature": values.FEATURE,
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
@@ -339,6 +339,11 @@ export const Inventario_Bienes = () => {
       key: 'borrowed',
     },
     {
+      title: 'Característica',
+      dataIndex: 'FEATURE',
+      key: 'feature',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
@@ -366,7 +371,7 @@ export const Inventario_Bienes = () => {
       {isEditModalVisible && (
         <CustomModal
         modalTitle="Editar Bien"
-        formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
+        formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED','FEATURE']}
         selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [8, custodians], [9, locations], [13, status]]}
         dateTypeInputs={[7]}
         isVisible={isEditModalVisible}
@@ -394,7 +399,7 @@ export const Inventario_Bienes = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Activo"
-          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM']}
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED','FEATURE']}
           selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
           dateTypeInputs={[7]}
           isVisible={isAddModalVisible}
