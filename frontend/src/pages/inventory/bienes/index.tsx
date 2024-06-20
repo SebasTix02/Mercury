@@ -87,30 +87,15 @@ export const Inventario_Bienes = () => {
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
   const handleEdit = (record: any) => {
-    console.log("Record CATEGORY:", record.CATEGORY);
-    console.log("Categories:", categories);
-    const editRecord = {
-      ...record,
-      CATEGORY: categories.find((cat:any) => cat.id === record.CATEGORY) || {},
-      BRAND: brands.find((brand:any) => brand.id === record.BRAND) || {},
-      ACQUISITION_DEPENDENCY: dependencies.find((dep:any) => dep.id === record.ACQUISITION_DEPENDENCY) || {},
-      LOCATION: locations.find((loc:any) => loc.id === record.LOCATION) || {},
-    };
-    setSelectedRecord(editRecord);
+    setSelectedRecord(record);
     setIsEditModalVisible(true);
   };
-  
-  
-  
 
   const handleDelete = (record: any) => {
     setSelectedRecord(record);
     setIsDeleteModalVisible(true);
   };
 
-  const handleRepower = (record: any) => {
-    alert("repotenciacion en proceso");
-  };
 
   const handleAdd = () => {
     setSelectedRecord(null);
@@ -147,20 +132,29 @@ export const Inventario_Bienes = () => {
   };
 
   const handleEditOk = async (values: any) => {
-    const objectEdit = {
-      "categoryId": values.CATEGORY,
-      "name": values.NAME,
-      "brandId": values.BRAND,
-      "model": values.MODEL,
-      "feature": null,
-      "series": values.SERIES,
-      "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
-      "entryDate": values.ENTRY_DATE,
-      "currentCustodian": getCustodianName(values),
-      "locationId": values.LOCATION,
-      "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
+    console.table(values);
+
+    // Mantener los valores existentes para los campos no editados
+    const updatedValues = {
+        ...selectedRecord,
+        ...values
     };
+    var objectEdit = {
+      "categoryId": categories[0].ID,
+      "name": updatedValues.NAME,
+      "brandId": getColumnNameId(updatedValues, 'BRAND', false, brands),
+      "model": updatedValues.MODEL,
+      "feature": updatedValues.FEATURE,
+      "series": updatedValues.SERIES,
+      "acquisitionDependencyId": getColumnNameId(updatedValues, 'ACQUISITION_DEPENDENCY', false, dependencies),
+      "entryDate": updatedValues.ENTRY_DATE,
+      "currentCustodian": getCustodianName(updatedValues),
+      "locationId": getColumnNameId(updatedValues, 'LOCATION', false, locations),
+      "ip": updatedValues.IP,
+      "operativeSystem": updatedValues.OPERATIVE_SYSTEM,
+      "borrowed": getColumnNameId(updatedValues, 'BORROWED', false, status),
+      "position": updatedValues.POSITION
+  };
     const result: any = await editAsset(selectedRecord.ASSET_KEY, objectEdit);
     if (!result.success) {
       setIsEditModalVisible(false);
@@ -170,8 +164,24 @@ export const Inventario_Bienes = () => {
       });
       return;
     }
-    const editedRaw = values;
-    editedRaw.ASSET_KEY = selectedRecord.ASSET_KEY;
+
+    const editedRaw = { ...selectedRecord, ...updatedValues };
+
+    const convertField = (field: string, statusList: any[]) => {
+      const statusItem = statusList.find((item: any) => item.ID === updatedValues[field]);
+      return statusItem ? statusItem.NAME : updatedValues[field];
+  };
+      editedRaw.BRAND = convertField('BRAND', brands);
+      editedRaw.ACQUISITION_DEPENDENCY = convertField('ACQUISITION_DEPENDENCY', dependencies);
+      editedRaw.LOCATION = convertField('LOCATION', locations);
+      editedRaw.BORROWED = convertField('BORROWED', status);
+      editedRaw.ASSET_KEY = selectedRecord.ASSET_KEY;
+
+    const locationItem:any = locations.find((loc: any) => loc.ID === updatedValues.LOCATION);
+    if (locationItem) {
+        editedRaw.BUILDING = locationItem.BUILDING;
+    }
+
     const updatedData: any = dataSource.map((item: any) =>
       item.ASSET_KEY === editedRaw.ASSET_KEY ? editedRaw : item
     );
@@ -210,18 +220,19 @@ export const Inventario_Bienes = () => {
       "name": values.NAME,
       "brandId": values.BRAND,
       "model": values.MODEL,
-      "feature": null,
+      "feature": values.FEATURE,
       "series": values.SERIES,
       "acquisitionDependencyId": values.ACQUISITION_DEPENDENCY,
       "entryDate": values.ENTRY_DATE,
       "currentCustodian": getCustodianName(values),
       "locationId": values.LOCATION,
       "ip": values.IP,
-      "operativeSystem": values.OPERATIVE_SYSTEM
+      "operativeSystem": values.OPERATIVE_SYSTEM,
+      "borrowed": values.BORROWED,
+      "position": values.POSITION
     };
     const result: any = await addAsset(objectAdd);
     if (!result.success) {
-      setIsAddModalVisible(false);
       notification.error({
         message: 'Error de agregación',
         description: `No se pudo agregar el activo: ${result.error.message}`,
@@ -229,8 +240,10 @@ export const Inventario_Bienes = () => {
       return;
     }
 
+    setIsAddModalVisible(false);
     const newRecord = { ...values };
     newRecord.ASSET_KEY = result.asset.insertId;
+    newRecord.BORROWED = getColumnNameId(values, 'BORROWED', true, status);
 
     const updatedDataSource: any = [...dataSource, newRecord];
     setDataSource(updatedDataSource);
@@ -305,7 +318,7 @@ export const Inventario_Bienes = () => {
     {
       title: 'Fecha de Ingreso',
       dataIndex: 'ENTRY_DATE',
-      key: 'entry_date',
+      key: 'entryDate',
     },
     {
       title: 'Custodio Actual',
@@ -313,7 +326,7 @@ export const Inventario_Bienes = () => {
       key: 'current_custodian',
     },
     {
-      title: 'Localización',
+      title: 'Posición',
       dataIndex: 'POSITION',
       key: 'position',
       rules: [
@@ -326,13 +339,17 @@ export const Inventario_Bienes = () => {
       key: 'borrowed',
     },
     {
+      title: 'Característica',
+      dataIndex: 'FEATURE',
+      key: 'feature',
+    },
+    {
       title: 'Acciones',
       key: 'actions',
       render: (text: any, record: any) => (
         <Space size="middle">
           <Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)}></Button>
           <Button type="dashed" icon={<DeleteOutlined />} onClick={() => handleDelete(record)}></Button>
-          <Button type="dashed" icon={<ToolOutlined />} onClick={() => handleRepower(record)}></Button>
         </Space>
       ),
     },
@@ -342,27 +359,31 @@ export const Inventario_Bienes = () => {
     <Layout>
       <div style={{ padding: '20px' }}>
         <h1 style={{ marginBottom: '20px' }}>Inventario Bienes Generales</h1>
-        <Row gutter={[16, 16]}></Row>
-        <CustomTable dataSource={dataSource} columns={columns} rowKey="ASSET_KEY" searchFields={['NAME','CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} handleAdd={handleAdd}/>
+        <Row gutter={[16, 16]}>
+        </Row>
+        <CustomTable 
+          dataSource={dataSource} 
+          columns={columns} 
+          rowKey="ASSET_KEY" 
+          searchFields={['NAME', 'CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} handleAdd={handleAdd} />
       </div>
 
       {isEditModalVisible && (
         <CustomModal
-          modalTitle="Editar Activo"
-          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
-          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies],[8, custodians], [9, locations],[13, status]]}
-          isVisible={isEditModalVisible}
-          handleVisible={setIsEditModalVisible}
-          handleAddEdit={handleEditOk}
-          columns={columns}
-          selectedRecord={selectedRecord}
-          icon={<UserSwitchOutlined />}
-          iconColor={CustomColors.WHITE}
-          iconBackgroundColor={CustomColors.PRIMARY}
-        />
+        modalTitle="Editar Bien"
+        formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED','FEATURE']}
+        selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [8, custodians], [9, locations], [13, status]]}
+        dateTypeInputs={[7]}
+        isVisible={isEditModalVisible}
+        handleVisible={setIsEditModalVisible}
+        handleAddEdit={handleEditOk}
+        columns={columns}
+        selectedRecord={selectedRecord}
+        icon={<UserSwitchOutlined />}
+        iconColor={CustomColors.WHITE}
+        iconBackgroundColor={CustomColors.PRIMARY}
+      />
       )}
-
-
 
       <CustomModal
         text='¿Estás seguro de que deseas eliminar este activo?'
@@ -378,8 +399,9 @@ export const Inventario_Bienes = () => {
       {isAddModalVisible && (
         <CustomModal
           modalTitle="Agregar Activo"
-          formColumns={['ASSET_KEY','CATEGORY', 'NAME', 'BRAND', 'MODEL','SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED']}
-          selectTypeInputs={[[1, categories],[3,brands],[6, dependencies],[8, custodians],[9, locations],[13, status]]}
+          formColumns={['ASSET_KEY', 'CATEGORY', 'NAME', 'BRAND', 'MODEL', 'SERIES', 'ACQUISITION_DEPENDENCY', 'ENTRY_DATE', 'CURRENT_CUSTODIAN', 'LOCATION', 'IP', 'OPERATIVE_SYSTEM', 'POSITION', 'BORROWED','FEATURE']}
+          selectTypeInputs={[[1, categories], [3, brands], [6, dependencies], [9, locations]]}
+          dateTypeInputs={[7]}
           isVisible={isAddModalVisible}
           handleVisible={setIsAddModalVisible}
           isAdding={true}
