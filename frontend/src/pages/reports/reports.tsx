@@ -269,7 +269,8 @@ const Reports: React.FC = () => {
             >
                 <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} tip="Generando reporte..." />
             </Modal>
-        </>
+        </> 
+        
     );
 };
 
