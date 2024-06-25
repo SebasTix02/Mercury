@@ -6,7 +6,10 @@ const API_ASSET = `${API_URL}/asset`;
 export const getAllAssets = async () => {
     try {
         const response = await axios.get(`${API_ASSET}`);
-        const data = response.data;
+        const data = response.data.map((item:any) => ({
+            ...item,
+            ENTRY_DATE: new Date(item.ENTRY_DATE).toISOString().split('T')[0]
+        }));
         return {
             success: true,
             assets: data,
@@ -25,6 +28,7 @@ export const getAssetByAssetKey = async (assetKey: number) => {
     try {
         const response = await axios.get(`${API_ASSET}/${assetKey}`);
         const data = response.data;
+        data.ENTRY_DATE = new Date(data.ENTRY_DATE).toISOString().split('T')[0];
         return {
             success: true,
             asset: data,
