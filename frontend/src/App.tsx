@@ -1,20 +1,14 @@
-import { GitHubBanner, Refine, WelcomePage } from "@refinedev/core";
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Refine, WelcomePage } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
-
 import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
-
-import {authProvider, dataProvider,
-  liveProvider,
-} from "./providers";
-import routerBindings, {
-  DocumentTitleHandler,
-  UnsavedChangesNotifier,
-} from "@refinedev/react-router-v6";
+import { dataProvider, liveProvider } from "./providers";
+import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
-import {ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario} from "./pages"
+import { ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario } from "./pages";
 import Layout from "./components/layout";
 import { resources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
@@ -31,6 +25,7 @@ import Reports from "./pages/reports/reports";
 import { Repotenciacion } from "./pages/repower";
 import { QRScanner } from "./pages/qr_scanner/qr_scanner";
 import TransferAssets from "./pages/inventory/transfer/transfer";
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -44,7 +39,6 @@ function App() {
                 liveProvider={liveProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                authProvider={authProvider}
                 resources={resources}
                 options={{
                   syncWithLocation: true,
@@ -55,30 +49,30 @@ function App() {
                 }}
               >
                 <Routes>
-                  <Route path="/forgotPassword" element={<ForgotPassword/>}/>
-                  <Route path="/registrarse" element={<Register/>}/>
-                  <Route path="/login" element={<Login/>}/>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/usuarios" element={<ListaUsuarios />} />
-                  <Route path="/inventario" element={<Inventario />} />
-                  <Route path="/varios" element={<Many />} />
-                  <Route path="/categorias" element={<Categorias />} />
-                  <Route path="/etiquetas" element={<Etiquetas />} />
-                  <Route path="/bloques" element={<Buildings />} />
-                  <Route path="/ubicaciones" element={<Locations />} />
-                  <Route path="/marcas" element={<Brands />} />
-                  <Route path="/dependencias" element={<Dependency />} />
-                  <Route path="/software" element={<Software />} />
-                  <Route path="/computadores" element={<Inventario_Computadores />} />
-                  <Route path="/computadores/:scannedCode" element={<Inventario_Computadores />} />
-                  <Route path="/reportes" element={<Reports />} />
-                  <Route path="/repotenciar/:id" element={<Repotenciacion />} />
-                  <Route path="/escaner" element={<QRScanner />} />
-                  <Route path="/bienes" element={<Inventario_Bienes />} />
-                  <Route path="/bienes/:scannedCode" element={<Inventario_Bienes />} />
-                  <Route path="/reportes" element={<Reports />} />
-                  <Route path="/repotenciar/:id" element={<Repotenciacion />} />
-                  <Route path="/transferencia" element={<TransferAssets />} />
+                  <Route path="/forgotPassword" element={<ForgotPassword />} />
+                  <Route path="/registrarse" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                  <Route path="/usuarios" element={<ProtectedRoute><ListaUsuarios /></ProtectedRoute>} />
+                  <Route path="/inventario" element={<ProtectedRoute><Inventario /></ProtectedRoute>} />
+                  <Route path="/varios" element={<ProtectedRoute><Many /></ProtectedRoute>} />
+                  <Route path="/categorias" element={<ProtectedRoute><Categorias /></ProtectedRoute>} />
+                  <Route path="/etiquetas" element={<ProtectedRoute><Etiquetas /></ProtectedRoute>} />
+                  <Route path="/bloques" element={<ProtectedRoute><Buildings /></ProtectedRoute>} />
+                  <Route path="/ubicaciones" element={<ProtectedRoute><Locations /></ProtectedRoute>} />
+                  <Route path="/marcas" element={<ProtectedRoute><Brands /></ProtectedRoute>} />
+                  <Route path="/dependencias" element={<ProtectedRoute><Dependency /></ProtectedRoute>} />
+                  <Route path="/software" element={<ProtectedRoute><Software /></ProtectedRoute>} />
+                  <Route path="/computadores" element={<ProtectedRoute><Inventario_Computadores /></ProtectedRoute>} />
+                  <Route path="/computadores/:scannedCode" element={<ProtectedRoute><Inventario_Computadores /></ProtectedRoute>} />
+                  <Route path="/reportes" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                  <Route path="/repotenciar/:id" element={<ProtectedRoute><Repotenciacion /></ProtectedRoute>} />
+                  <Route path="/escaner" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
+                  <Route path="/bienes" element={<ProtectedRoute><Inventario_Bienes /></ProtectedRoute>} />
+                  <Route path="/bienes/:scannedCode" element={<ProtectedRoute><Inventario_Bienes /></ProtectedRoute>} />
+                  <Route path="/reportes" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+                  <Route path="/repotenciar/:id" element={<ProtectedRoute><Repotenciacion /></ProtectedRoute>} />
+                  <Route path="/transferencia" element={<ProtectedRoute><TransferAssets /></ProtectedRoute>} />
                 </Routes>
                 <RefineKbar />
                 <UnsavedChangesNotifier />

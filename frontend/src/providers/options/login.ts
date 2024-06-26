@@ -7,6 +7,7 @@ export const loginUser = async (loginData:any) => {
     try {
         const response = await axios.post(`${API_LOGIN}`, loginData);
         const data = response.data;
+        localStorage.setItem("auth_token", data.ROLE);
         return {
             success: true,
             user: data,
@@ -21,3 +22,13 @@ export const loginUser = async (loginData:any) => {
     }
 };
 
+export const logout = async (): Promise<any> => {
+    localStorage.removeItem("auth_token");
+    return { success: true };
+};
+
+export const getPermissions = () => {
+    const token:any = localStorage.getItem("auth_token");
+    console.log("El tokeeen: ", token)
+    return token;
+};

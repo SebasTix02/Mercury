@@ -5,6 +5,7 @@ import { useGetIdentity } from '@refinedev/core';
 import { Text } from '../text';
 import { LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../providers/options/login';
 
 const CurrentUser = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,10 +13,11 @@ const CurrentUser = () => {
 
     const nombreUsuario = "Sebas";
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         // Perform any logout operations here if needed
         setIsOpen(false); // Close the popover
-        navigate('/login'); // Redirect to the login page
+        await logout(); // Call the logout function
+        navigate('/login'); // Navigate to the login page
     };
 
     const content = (
