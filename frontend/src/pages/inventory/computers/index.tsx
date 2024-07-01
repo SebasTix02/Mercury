@@ -14,7 +14,10 @@ import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getPermissions } from '../../../providers/options/login';
+
 export const Inventario_Computadores = () => {
+  const role = getPermissions();
   var datos_a_guardar = {}
   const { scannedCode } = useParams();
   const navigate = useNavigate();
@@ -404,7 +407,13 @@ export const Inventario_Computadores = () => {
         <h1 style={{ marginBottom: '20px' }}>Inventario de Computadores</h1>
         <Row gutter={[16, 16]}>
         </Row>
-        <CustomTable dataSource={dataSource} columns={columns} rowKey="ASSET_KEY" searchFields={['NAME', 'CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN', 'BUILDING']} handleAdd={handleAdd} />
+        <CustomTable 
+        dataSource={dataSource} 
+        columns={columns} 
+        rowKey="ASSET_KEY" 
+        searchFields={['NAME', 'CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN', 'BUILDING']} 
+        handleAdd={handleAdd}
+        role={role} />
       </div>
 
       {isEditModalVisible && (

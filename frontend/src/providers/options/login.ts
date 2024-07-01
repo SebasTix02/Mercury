@@ -29,6 +29,5 @@ export const logout = async (): Promise<any> => {
 
 export const getPermissions = () => {
     const token:any = localStorage.getItem("auth_token");
-    console.log("El tokeeen: ", token)
     return token;
 };

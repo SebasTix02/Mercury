@@ -8,9 +8,10 @@ import CustomModal from '../../common/modal/custom_modal';
 import { getAllLocations, getLocation, addLocation, editLocation, deleteLocation } from '../../providers/options/location';
 import { getAllBuildings } from '../../providers/options/building';
 import { CustomColors } from '../../common/constantsCommon'
-
+import { getPermissions } from '../../providers/options/login';
 
 export const Locations = () => {
+  const role = getPermissions();
   const [dataSource, setDataSource] = useState([])
   const [buildings, setBuildings] = useState([])
   const [loading, setLoading] = useState(true);
@@ -176,7 +177,7 @@ export const Locations = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['NAME', 'BUILDING']}/>
+          searchFields={['NAME', 'BUILDING']} role={role}/>
       </div>
 
       {isEditModalVisible && (

@@ -7,9 +7,10 @@ import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { getAllSoftware, getSoftware, addSoftware, editSoftware, deleteSoftware } from '../../providers/options/software';
 import { CustomColors } from '../../common/constantsCommon'
-
+import { getPermissions } from '../../providers/options/login';
 
 export const Software = () => {
+  const role = getPermissions();
   const [dataSource, setDataSource] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -248,7 +249,7 @@ export const Software = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['NAME', 'BUILDING']}/>
+          searchFields={['NAME', 'BUILDING']} role={role}/>
       </div>
 
       {isEditModalVisible && (

@@ -14,8 +14,10 @@ import { getAllBrands } from '../../../providers/options/brand';
 import { getAllDependencies } from '../../../providers/options/dependency';
 import { getAllUsers } from '../../../providers/options/users';
 import { useNavigate, useParams } from 'react-router-dom';
+import { getPermissions } from '../../../providers/options/login';
 
 export const Inventario_Bienes = () => {
+  const role = getPermissions();
   const { scannedCode } = useParams();
   const navigate = useNavigate();
   const [dataSource, setDataSource] = useState([]);
@@ -365,7 +367,9 @@ export const Inventario_Bienes = () => {
           dataSource={dataSource} 
           columns={columns} 
           rowKey="ASSET_KEY" 
-          searchFields={['NAME', 'CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} handleAdd={handleAdd} />
+          searchFields={['NAME', 'CATEGORY', 'BRAND', 'MODEL', 'CURRENT_CUSTODIAN']} 
+          handleAdd={handleAdd} 
+          role={role}/>
       </div>
 
       {isEditModalVisible && (

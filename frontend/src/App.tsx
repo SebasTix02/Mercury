@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Refine, WelcomePage } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
@@ -10,7 +10,7 @@ import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@r
 import { App as AntdApp } from "antd";
 import { ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario } from "./pages";
 import Layout from "./components/layout";
-import { resources } from "./config/resources";
+import { resources as allResources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
 import { Etiquetas } from "./pages/labels/labels";
 import { Many } from "./pages/many/many";
@@ -26,8 +26,20 @@ import { Repotenciacion } from "./pages/repower";
 import { QRScanner } from "./pages/qr_scanner/qr_scanner";
 import TransferAssets from "./pages/inventory/transfer/transfer";
 import ProtectedRoute from './components/ProtectedRoute';
+import { getPermissions } from './providers/options/login';
 
-function App() {
+const App = () => {
+  const [filteredResources, setFilteredResources] = useState([]);
+
+  useEffect(() => {
+    const role = getPermissions();
+    const allowedResources = allResources.filter((resource:any) => {
+      if (!resource.roles) return true;
+      return resource.roles.includes(role);
+    });
+    setFilteredResources(allowedResources);
+  }, []);
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -39,7 +51,7 @@ function App() {
                 liveProvider={liveProvider}
                 notificationProvider={useNotificationProvider}
                 routerProvider={routerBindings}
-                resources={resources}
+                resources={filteredResources}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
@@ -53,7 +65,7 @@ function App() {
                   <Route path="/registrarse" element={<Register />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-                  <Route path="/usuarios" element={<ProtectedRoute><ListaUsuarios /></ProtectedRoute>} />
+                  <Route path="/usuarios" element={<ProtectedRoute roles={['ADMIN']}><ListaUsuarios /></ProtectedRoute>} />
                   <Route path="/inventario" element={<ProtectedRoute><Inventario /></ProtectedRoute>} />
                   <Route path="/varios" element={<ProtectedRoute><Many /></ProtectedRoute>} />
                   <Route path="/categorias" element={<ProtectedRoute><Categorias /></ProtectedRoute>} />
@@ -70,8 +82,6 @@ function App() {
                   <Route path="/escaner" element={<ProtectedRoute><QRScanner /></ProtectedRoute>} />
                   <Route path="/bienes" element={<ProtectedRoute><Inventario_Bienes /></ProtectedRoute>} />
                   <Route path="/bienes/:scannedCode" element={<ProtectedRoute><Inventario_Bienes /></ProtectedRoute>} />
-                  <Route path="/reportes" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
-                  <Route path="/repotenciar/:id" element={<ProtectedRoute><Repotenciacion /></ProtectedRoute>} />
                   <Route path="/transferencia" element={<ProtectedRoute><TransferAssets /></ProtectedRoute>} />
                 </Routes>
                 <RefineKbar />
@@ -84,6 +94,6 @@ function App() {
       </RefineKbarProvider>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

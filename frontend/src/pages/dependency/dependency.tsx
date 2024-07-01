@@ -7,9 +7,10 @@ import CustomTable from '../../common/table/custom_table';
 import CustomModal from '../../common/modal/custom_modal';
 import { getAllDependencies, getDependency, addDependency, editDependency, deleteDependency } from '../../providers/options/dependency';
 import { CustomColors } from '../../common/constantsCommon'
-
+import { getPermissions } from '../../providers/options/login';
 
 export const Dependency = () => {
+  const role = getPermissions();
   const [dataSource, setDataSource] = useState([])
   const [loading, setLoading] = useState(true);
 
@@ -162,7 +163,7 @@ export const Dependency = () => {
         <Row gutter={[16, 16]}>
         </Row>
         <CustomTable dataSource={dataSource} columns={columns} rowKey="ID" handleAdd={handleAdd} 
-          searchFields={['NAME', 'CREATION_DATE']}/>
+          searchFields={['NAME', 'CREATION_DATE']} role={role}/>
       </div>
 
       {isEditModalVisible && (

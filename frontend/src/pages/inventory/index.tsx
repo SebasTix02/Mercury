@@ -7,8 +7,10 @@ import FormularioBG from "./formBG";
 import FormComp from "./formComp";
 import FormSoft from "./formSoft";
 import { useNavigate } from "react-router-dom";
+import { getPermissions } from '../../providers/options/login';
 
 export const Inventario = () => {
+  const role = getPermissions();
   const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -86,14 +88,18 @@ export const Inventario = () => {
                 >
                 Software
               </Button>
-              <Button 
-                type="primary" 
-                icon={<SwapOutlined />} 
-                className="custom-button"
-                onClick={() => navigate("/transferencia")}
-                >
-                Transferencias
-              </Button>
+              {
+                role === 'ADMIN' && (
+                  <Button 
+                    type="primary" 
+                    icon={<SwapOutlined />} 
+                    className="custom-button"
+                    onClick={() => navigate("/transferencia")}
+                    >
+                    Transferencias
+                  </Button>
+                ) 
+              }
             </div>
           </Space>
         </Row>

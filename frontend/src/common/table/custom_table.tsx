@@ -11,6 +11,7 @@ interface Props {
   rowKey: string;
   handleAdd?: () => void;
   searchFields: string[];
+  role: string;
 }
 
 interface Filter {
@@ -18,7 +19,7 @@ interface Filter {
   value: string;
 }
 
-const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, searchFields }) => {
+const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, searchFields, role }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [currentFilter, setCurrentFilter] = useState<Filter>({ column: '', value: '' });
 
@@ -56,6 +57,9 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
     setFilters([]);
   };
 
+  // Conditionally remove the "Acciones" column if the role is 'USUARIO'
+  const filteredColumns = role === 'USUARIO' ? columns.filter(col => col.key !== 'actions') : columns;
+
   return (
     <div>
       <div className="search-bar-container">
@@ -88,7 +92,7 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
             Limpiar
           </Button>
         </div>
-        {handleAdd && (
+        {handleAdd && role !== 'USUARIO' && (
           <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd} className="add-button">
             Agregar
           </Button>
@@ -107,7 +111,7 @@ const CustomTable: React.FC<Props> = ({ dataSource, columns, rowKey, handleAdd, 
       </div>
       <Table
         dataSource={handleSearch()}
-        columns={columns}
+        columns={filteredColumns}
         scroll={{ x: '100%' }}
         style={{ overflowX: 'auto', marginTop: '20px' }}
         pagination={{ pageSize: 6 }}
