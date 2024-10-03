@@ -1,13 +1,23 @@
-import React, { useRef } from 'react';
-import { Button, message } from 'antd';
+import React, { useRef, useEffect, useState } from 'react';
+import { Button, message, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../providers/options/login';
 import './login.css';
 
 export const Login = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (sessionStorage.getItem('hasReloaded')) {
+      sessionStorage.removeItem('hasReloaded');
+      navigate("/");
+    } else {
+      setIsLoading(false);
+    }
+  }, [navigate]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -21,16 +31,25 @@ export const Login = () => {
 
     const values = { username, password };
 
-    const result:any = await loginUser(values);
+    const result: any = await loginUser(values);
 
     if (result.success) {
-      message.success('¡Bienvenido a Mercury!');
-      navigate('/');
+      message.info('Cargando...');
+      sessionStorage.setItem('hasReloaded', 'true');
+      window.location.reload();
     } else {
       console.log("Error");
       message.error(result.error.message || 'Error al loguearse');
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="login-container">
+        <Spin size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">

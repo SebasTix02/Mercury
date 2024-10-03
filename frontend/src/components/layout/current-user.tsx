@@ -18,6 +18,7 @@ const CurrentUser = () => {
         setIsOpen(false); // Close the popover
         await logout(); // Call the logout function
         navigate('/login'); // Navigate to the login page
+        sessionStorage.clear();
     };
 
     const content = (

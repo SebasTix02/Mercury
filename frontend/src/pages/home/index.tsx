@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Row, notification } from 'antd';
+import { Col, Row, notification, Spin, message } from 'antd';
 import Layout from '../../components/layout';
 import { Charts, ChartsLabs, DashboardCards } from '../../components';
 import { BookOutlined, CodeOutlined, FundProjectionScreenOutlined, UsbOutlined, UserOutlined } from '@ant-design/icons';
@@ -16,6 +16,11 @@ export const Home = () => {
             .then((result: any) => {
                 if (result.success) {
                     setData(result.dashboard);
+
+                    if (!sessionStorage.getItem('homeMessageShown')) {
+                        message.success('¡Bienvenido a Mercury!');
+                        sessionStorage.setItem('homeMessageShown', 'true');
+                    }
                 } else {
                     console.error(result.error.message);
                     notification.error({
@@ -109,17 +114,8 @@ export const Home = () => {
                     </Col>
                 </Row>
 
-                <Row
-                    gutter={[32, 32]}
-                    style={{ marginTop: '32px' }}
-                >
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                <Row gutter={[32, 32]} style={{ marginTop: '32px' }}>
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByCategory ? (
                             <ChartsLabs 
                                 title={data.countByCategory.title}
@@ -132,13 +128,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByBrand ? (
                             <Charts 
                                 title={data.countByBrand.title}
@@ -151,13 +141,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByLocation ? (
                             <BarChartPro
                                 title={data.countByLocation.title}
@@ -169,13 +153,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByBuilding ? (
                             <CategoriesChart
                                 data={data.countByBuilding.values}
@@ -187,13 +165,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByLicense ? (
                             <CategoriesChart
                                 data={data.countByLicense.values}
@@ -205,13 +177,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByAge ? (
                             <BarChartPro
                                 title={data.countByAge.title}
@@ -223,13 +189,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByBrand ? (
                             <Charts 
                                 title={data.countByCustodian.title}
@@ -242,13 +202,7 @@ export const Home = () => {
                         )}
                     </Col>
 
-                    <Col
-                        xs={24}
-                        sm={12}
-                        lg={8}
-                        xl={6}
-                        style={{ height: '460px' }}
-                    >
+                    <Col xs={24} sm={12} lg={8} xl={6} style={{ height: '460px' }}>
                         {data.countByCategory ? (
                             <ChartsLabs 
                                 title={data.countByYear.title}
@@ -260,7 +214,6 @@ export const Home = () => {
                             <div>Cargando...</div>
                         )}
                     </Col>
-                    
                 </Row>
             </div>
         </Layout>

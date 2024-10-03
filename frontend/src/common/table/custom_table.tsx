@@ -11,7 +11,7 @@ interface Props {
   rowKey: string;
   handleAdd?: () => void;
   searchFields: string[];
-  role: string;
+  role?: string;
 }
 
 interface Filter {

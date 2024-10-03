@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Refine, WelcomePage } from "@refinedev/core";
-import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
+import { Refine } from "@refinedev/core";
+import { DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import { useNotificationProvider } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
@@ -9,7 +9,6 @@ import { dataProvider, liveProvider } from "./providers";
 import routerBindings, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router-v6";
 import { App as AntdApp } from "antd";
 import { ForgotPassword, Login, Register, Home, ListaUsuarios, Inventario } from "./pages";
-import Layout from "./components/layout";
 import { resources as allResources } from "./config/resources";
 import { Categorias } from "./pages/category/category";
 import { Etiquetas } from "./pages/labels/labels";
@@ -61,8 +60,8 @@ const App = () => {
                 }}
               >
                 <Routes>
-                  <Route path="/forgotPassword" element={<ForgotPassword />} />
-                  <Route path="/registrarse" element={<Register />} />
+                  {/* <Route path="/forgotPassword" element={<ForgotPassword />} /> */}
+                  {/* <Route path="/registrarse" element={<Register />} /> */}
                   <Route path="/login" element={<Login />} />
                   <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                   <Route path="/usuarios" element={<ProtectedRoute roles={['ADMIN']}><ListaUsuarios /></ProtectedRoute>} />
