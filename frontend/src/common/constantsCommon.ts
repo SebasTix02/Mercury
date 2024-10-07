@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 export const CustomColors = {
     WHITE: 'white',
     PRIMARY: '#0096FF',
@@ -44,3 +46,14 @@ export const verifyIdNumber = (rule:any, value:any, callback:any) => {
         callback('¡La cédula debe tener 10 dígitos!');
     }
 };
+
+const secretKey = "6tjil7ucNyu7HP6c.&T4";
+
+export const encryptData = (data: any) => {
+    return CryptoJS.AES.encrypt(data, secretKey).toString();
+}
+
+export const decryptData = (ciphertext: any) => {
+    const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);
+}

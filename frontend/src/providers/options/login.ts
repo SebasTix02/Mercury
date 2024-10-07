@@ -1,5 +1,6 @@
 import { API_URL } from "../data";
 import axios from 'axios';
+import { encryptData, decryptData } from '../../common/constantsCommon'
 
 const API_LOGIN = `${API_URL}/login`
 
@@ -7,7 +8,7 @@ export const loginUser = async (loginData:any) => {
     try {
         const response = await axios.post(`${API_LOGIN}`, loginData);
         const data = response.data;
-        localStorage.setItem("auth_token", data.ROLE);
+        localStorage.setItem("auth_token", encryptData(data.ROLE));
         return {
             success: true,
             user: data,
@@ -29,5 +30,5 @@ export const logout = async (): Promise<any> => {
 
 export const getPermissions = () => {
     const token:any = localStorage.getItem("auth_token");
-    return token;
+    return decryptData(token);
 };
